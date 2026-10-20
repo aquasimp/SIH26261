@@ -101,7 +101,7 @@ export function LeftGlassRail() {
       <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
         {/* Emblem SVG */}
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-600 to-indigo-800 flex items-center justify-center shadow-md shadow-sky-600/20 shrink-0 text-white">
-          <svg viewBox="0 0 48 48" className="w-6 h-6 fill-none stroke-current" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg viewBox="0 0 48 48" width={24} height={24} style={{ width: '24px', height: '24px' }} className="w-6 h-6 fill-none stroke-current" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             {/* Emblem stylized Ashok wheel + open book + lamp */}
             <circle cx="24" cy="24" r="18" className="opacity-40" strokeDasharray="3 3" />
             <path d="M12 34C18 31 24 33 24 33C24 33 30 31 36 34" />
