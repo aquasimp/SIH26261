@@ -35,27 +35,30 @@ export default function ApplicationsPage() {
 
   // Export functions
   const handleExportCSV = () => {
+    const escapeCsv = (val: string | number | boolean) => `"${String(val).replace(/"/g, '""')}"`;
     const headers = ['ID', 'PID', 'Name', 'Region', 'State', 'Category', 'Status', 'ICI Score', 'Max RPN', 'Fatal Veto'];
     const rows = sortedApplications.map((app) => [
-      app.id,
-      app.pid,
-      `"${app.nameEn}"`,
-      app.region,
-      app.state,
-      `"${app.applicationCategory}"`,
-      app.scrutinyStatus,
-      app.iciScore,
-      app.maxRpn,
-      app.fatalGateTriggered ? 'YES' : 'NO',
+      escapeCsv(app.id),
+      escapeCsv(app.pid),
+      escapeCsv(app.nameEn),
+      escapeCsv(app.region),
+      escapeCsv(app.state),
+      escapeCsv(app.applicationCategory),
+      escapeCsv(app.scrutinyStatus),
+      escapeCsv(app.iciScore),
+      escapeCsv(app.maxRpn),
+      escapeCsv(app.fatalGateTriggered ? 'YES' : 'NO'),
     ]);
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = [headers.map(escapeCsv).join(','), ...rows.map((e) => e.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', url);
     link.setAttribute('download', `AICTE_Scrutiny_Registry_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
     toast.success('Exported registry records to CSV successfully');
   };
 
@@ -373,7 +376,7 @@ export default function ApplicationsPage() {
                           key={anom.id}
                           className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700"
                         >
-                          {anom.category.replace('_', ' ')}
+                          {anom.category.replace(/_/g, ' ')}
                         </span>
                       ))}
                       {app.anomalies.length > 2 && (

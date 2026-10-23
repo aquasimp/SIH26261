@@ -146,11 +146,11 @@ export default function InfrastructureStudioPage() {
             >
               {/* Background blueprint grid */}
               <defs>
-                <pattern id="cadGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <pattern id="cadGridInfra" width="20" height="20" patternUnits="userSpaceOnUse">
                   <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(30, 41, 59, 0.6)" strokeWidth="0.5" />
                 </pattern>
               </defs>
-              <rect width="620" height="300" fill="url(#cadGrid)" />
+              <rect width="620" height="300" fill="url(#cadGridInfra)" />
 
               {/* Outer structural perimeter walls */}
               {showWalls && (
@@ -348,7 +348,7 @@ export default function InfrastructureStudioPage() {
                     <span>APH Chapter VII Clause 7.1 Deficiency Detected</span>
                   </div>
                   <p className="text-[11px] leading-snug">
-                    Text label on blueprint claims 66.0 m² to falsely satisfy AICTE lab norms, but calibrated Shoelace polygon measures only {selectedRoom.computedAreaSqm.toFixed(1)} m² (29.1% shortfall).
+                    Text label on blueprint claims {selectedRoom.declaredAreaSqm.toFixed(1)} m² to falsely satisfy AICTE lab norms, but calibrated Shoelace polygon measures only {selectedRoom.computedAreaSqm.toFixed(1)} m² ({selectedRoom.declaredAreaSqm > 0 ? Math.max(0, ((1 - selectedRoom.computedAreaSqm / selectedRoom.declaredAreaSqm) * 100)).toFixed(1) : '0.0'}% shortfall).
                   </p>
                 </div>
               )}

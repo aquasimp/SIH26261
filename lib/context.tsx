@@ -87,6 +87,7 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
           return {
             ...app,
             scrutinyStatus: status,
+            ...(officerNote !== undefined ? { officerNote } : {}),
           };
         }
         return app;

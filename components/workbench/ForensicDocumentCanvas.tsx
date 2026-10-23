@@ -74,7 +74,7 @@ export function ForensicDocumentCanvas({
     } else if (activeLayer === 'ELA') {
       renderElaOverlay(ctx, jpegQuality, elaGamma);
     }
-  }, [document, activeLayer, jpegQuality, elaGamma, showConfidenceMask]);
+  }, [document, activeLayer, jpegQuality, elaGamma, showConfidenceMask, anomalies, activeAnomalyId]);
 
   // Document Drawing Helpers
   const renderFireNocDocument = (ctx: CanvasRenderingContext2D) => {
@@ -547,7 +547,11 @@ export function ForensicDocumentCanvas({
             >
               {document.extractedFields.map((field, fIdx) => {
                 const [x0, y0, x1, y1] = field.bbox;
-                const isSelected = activeAnomalyId && anomalies.some((a) => a.boundingBox[0] === x0);
+                const isSelected =
+                  activeAnomalyId === field.nameEn ||
+                  anomalies.some(
+                    (a) => a.id === activeAnomalyId && a.boundingBox[0] === x0 && a.boundingBox[1] === y0
+                  );
 
                 return (
                   <g key={fIdx} className="cursor-pointer group" onClick={() => onSelectAnomaly(field.nameEn)}>

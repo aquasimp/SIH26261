@@ -9,8 +9,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
-import numpy as np
-import math
 import datetime
 
 app = FastAPI(
@@ -21,7 +19,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -135,19 +138,25 @@ def compute_floorplan_polygon(req: FloorPlanRequest):
 
 @app.post("/api/v1/authority/verify")
 def verify_authority_payload(payload: Dict[str, Any]):
+    authority = payload.get("authority", "Haryana Directorate of Fire Services")
+    doc_uri = payload.get("doc_uri", "in.gov.har.fire-NOC-2021-8841")
+    uploaded_expiry = payload.get("uploaded_expiry_date", "30-06-2027")
+    authoritative_expiry = payload.get("authoritative_expiry_date", "30-06-2024")
+
+    is_mismatch = uploaded_expiry != authoritative_expiry
     return {
-        "status": "MISMATCH_DETECTED",
-        "authority": "Haryana Directorate of Fire Services",
-        "doc_uri": "in.gov.har.fire-NOC-2021-8841",
-        "uploaded_expiry_date": "30-06-2027",
-        "authoritative_expiry_date": "30-06-2024",
+        "status": "MISMATCH_DETECTED" if is_mismatch else "VERIFIED_VALID",
+        "authority": authority,
+        "doc_uri": doc_uri,
+        "uploaded_expiry_date": uploaded_expiry,
+        "authoritative_expiry_date": authoritative_expiry,
         "hmac_signature_valid": True,
         "latency_ms": 118
     }
 
 @app.post("/api/v1/scrutiny/override")
 def record_officer_override(req: OverrideRequest):
-    timestamp = datetime.datetime.utcnow().isoformat() + "Z"
+    timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     return {
         "status": "RECORDED",
         "application_id": req.application_id,

@@ -49,20 +49,23 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
   // Officer Decision Handler
   const handleOfficerDecision = (decision: 'APPROVE' | 'DEFICIENCY' | 'SHC') => {
     if (decision === 'APPROVE') {
-      updateApplicationStatus(application.id, 'Auto-Pre-Cleared');
+      const note = 'Statutory approval logged in SHA-256 Scrutiny Ledger with Officer DSC sign-off.';
+      updateApplicationStatus(application.id, 'Auto-Pre-Cleared', note);
       toast.success(`Extension of Approval (EoA) Approved for ${application.nameEn}`, {
-        description: 'Statutory approval logged in SHA-256 Scrutiny Ledger with Officer DSC sign-off.',
+        description: note,
       });
     } else if (decision === 'DEFICIENCY') {
-      updateApplicationStatus(application.id, 'Deficiency Issued');
+      const note = 'Auto-compiled APH Chapter VII shortfall notice dispatched to institutional portal.';
+      updateApplicationStatus(application.id, 'Deficiency Issued', note);
       toast.warning(`15-Day EVC Rectification Notice Generated for ${application.nameEn}`, {
-        description: 'Auto-compiled APH Chapter VII shortfall notice dispatched to institutional portal.',
+        description: note,
       });
       setTimeout(() => router.push('/deficiencies'), 1000);
     } else {
-      updateApplicationStatus(application.id, 'Fatal Fraud Alert');
+      const note = 'Fatal fraud flag confirmed via TruFor & API Setu. Hearing summons drafted.';
+      updateApplicationStatus(application.id, 'Fatal Fraud Alert', note);
       toast.error(`Escalated to Standing Hearing Committee (SHC) for ${application.nameEn}`, {
-        description: 'Fatal fraud flag confirmed via TruFor & API Setu. Hearing summons drafted.',
+        description: note,
       });
       setTimeout(() => router.push('/deficiencies'), 1000);
     }

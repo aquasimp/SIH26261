@@ -78,7 +78,7 @@ export function calculateBuiltUpNorms(
   const legacyFloor = legacyFloorAcres[zoneType] || 2.5;
   const landByFsiAcres = totalBuiltUpRequiredSqm / (fsiLoc * 4046.86);
   const landRequiredAcres = Math.max(Math.round(landByFsiAcres * 100) / 100, legacyFloor);
-  const fsiRatioAchieved = fsiLoc;
+  const fsiRatioAchieved = Math.round((totalBuiltUpRequiredSqm / (landRequiredAcres * 4046.86)) * 100) / 100;
 
   return {
     inaRequiredSqm,

@@ -27,13 +27,9 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const { t } = useLanguage();
 
   useEffect(() => {
+    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent handles toggle
-      }
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
@@ -83,11 +79,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     onClose();
   };
 
-
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150">
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150 cursor-pointer"
+      onClick={onClose}
+    >
       <div
-        className="w-full max-w-2xl liquid-glass-card rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+        className="w-full max-w-2xl liquid-glass-card rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 cursor-default"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}

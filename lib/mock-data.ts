@@ -142,6 +142,7 @@ export interface InstitutionalApplication {
   blueprintRooms: BlueprintRoom[];
   facultyRoster: FacultyRecord[];
   documents: DocumentArtifact[];
+  officerNote?: string;
 }
 
 export const MOCK_APPLICATIONS: InstitutionalApplication[] = [

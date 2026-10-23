@@ -79,7 +79,7 @@ export default function OverviewPage() {
       authorityRate: '98.4%',
       authorityLatency: '142ms avg',
     };
-  }, [activeRegionStat, filters]);
+  }, [activeRegionStat]);
 
   // High risk applications sorted by RPN
   const highRiskQueue = [...filteredApplications].sort((a, b) => b.maxRpn - a.maxRpn);

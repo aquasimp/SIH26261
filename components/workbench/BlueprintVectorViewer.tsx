@@ -182,11 +182,11 @@ export function BlueprintVectorViewer({
           <svg viewBox="0 0 800 520" className="w-[720px] h-[468px] select-none">
             {/* Grid Lines */}
             <defs>
-              <pattern id="cadGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <pattern id="cadGridBlueprint" width="40" height="40" patternUnits="userSpaceOnUse">
                 <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
               </pattern>
             </defs>
-            <rect width="800" height="520" fill="url(#cadGrid)" />
+            <rect width="800" height="520" fill="url(#cadGridBlueprint)" />
 
             {/* Perimeter & Structural Walls */}
             {showWalls && (

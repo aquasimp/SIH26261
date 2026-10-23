@@ -131,7 +131,10 @@ export function LeftGlassRail() {
             </div>
             {group.items.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || (item.href !== '/overview' && pathname.startsWith(item.href));
+              const isActive =
+                pathname === item.href ||
+                (item.href !== '/overview' && item.href !== '/applications' && pathname.startsWith(item.href)) ||
+                (item.href.startsWith('/applications/') && pathname.startsWith('/applications/'));
 
               return (
                 <Link
