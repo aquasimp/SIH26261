@@ -111,22 +111,22 @@ export default function AuditTrailPage() {
   }, [auditLogs, filterType, searchQuery]);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="space-y-6 animate-glass-in">
       {/* Title & Verify Trigger */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-widest">
-              CRYPTOGRAPHICALLY IMMUTABLE SCRUTINY LOG
+            <span className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
+              Cryptographically Immutable Scrutiny Log
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             Immutable Scrutiny{' '}
-            <span className="font-serif italic font-normal text-sky-700 dark:text-sky-400">
+            <span className="title-serif-italic text-sky-600 dark:text-sky-400">
               Audit Ledger
             </span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 max-w-3xl leading-relaxed">
             Cryptographically linked SHA-256 blocks logging every AI inference, DPI handshake, and officer sign-off.
           </p>
         </div>
@@ -134,7 +134,7 @@ export default function AuditTrailPage() {
         <button
           onClick={handleVerifyChain}
           disabled={isVerifying}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 transition-all hover:-translate-y-0.5 disabled:opacity-50 cursor-pointer"
+          className="btn-liquid-primary cursor-pointer px-4 py-2.5 rounded-xl text-xs font-semibold inline-flex items-center gap-2 disabled:opacity-50"
         >
           {isVerifying ? (
             <>
@@ -153,16 +153,16 @@ export default function AuditTrailPage() {
       {/* Real-time Verification Progress Bar */}
       {isVerifying && (
         <div className="p-4 rounded-2xl liquid-glass-card border border-emerald-500/30 bg-emerald-500/5 space-y-2">
-          <div className="flex items-center justify-between text-xs font-mono">
-            <span className="font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
-              <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-600" />
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
               <span>Iterating Through SHA-256 Chain Links...</span>
             </span>
-            <span className="font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
               {verificationProgress}% Completed
             </span>
           </div>
-          <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+          <div className="w-full h-2 rounded-full glass-well overflow-hidden">
             <div
               className="h-full bg-emerald-500 transition-all duration-200 ease-out"
               style={{ width: `${verificationProgress}%` }}
@@ -172,28 +172,28 @@ export default function AuditTrailPage() {
       )}
 
       {/* Chain Status Bar */}
-      <div className="p-4 rounded-2xl liquid-glass-card border border-emerald-500/30 bg-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-5 h-5" />
+      <div className="p-5 rounded-2xl liquid-glass-card border border-emerald-500/30 bg-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+            <div className="text-xs font-semibold text-emerald-900 dark:text-emerald-200">
               {verificationResult?.verified
                 ? '100% Chain Integrity Verified • Zero Collisions'
                 : 'Verifying Chain Integrity...'}
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+            <div className="text-xs text-[var(--text-muted)] mt-0.5">
               Root Trust CCA India PKI • SHA-256 Merkle Proof Linked •{' '}
               {auditLogs.length} Blocks Registered in React Store
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 font-mono text-xs text-slate-700 dark:text-slate-300">
+        <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)]">
           <div className="text-right">
-            <div className="text-[10px] text-slate-400 uppercase">Latest Ledger Block</div>
-            <div className="font-bold text-slate-900 dark:text-white">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-semibold">Latest Ledger Block</div>
+            <div className="metric-value font-bold text-sm text-[var(--text-primary)]">
               BLOCK #{auditLogs[0]?.blockIndex.toString().padStart(3, '0')}
             </div>
           </div>
@@ -203,16 +203,16 @@ export default function AuditTrailPage() {
       {/* Filter Tabs & Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Event Type Filter Tabs */}
-        <div className="flex items-center gap-1.5 text-xs font-semibold overflow-x-auto pb-1">
+        <div className="inline-flex rounded-xl p-1 glass-well text-xs font-medium overflow-x-auto">
           {['ALL', 'AI_INFERENCE', 'DPI_HANDSHAKE', 'OFFICER_SIGN_OFF', 'DEFICIENCY_DISPATCH'].map(
             (f) => (
               <button
                 key={f}
                 onClick={() => setFilterType(f)}
-                className={`px-3 py-1.5 rounded-xl border transition-all shrink-0 ${
+                className={`px-3 py-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
                   filterType === f
-                    ? 'bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/30 font-bold'
-                    : 'bg-white/60 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-white'
+                    ? 'btn-liquid-primary shadow-xs font-semibold'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 {f}
@@ -222,14 +222,14 @@ export default function AuditTrailPage() {
         </div>
 
         {/* Search Input */}
-        <div className="relative min-w-[240px]">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <div className="relative min-w-[260px]">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
           <input
             type="text"
             placeholder="Search by App ID, Artifact, Hash..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+            className="w-full pl-9 pr-3.5 py-2 rounded-xl glass-well text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
           />
         </div>
       </div>
@@ -237,7 +237,7 @@ export default function AuditTrailPage() {
       {/* Chained Blocks List */}
       <div className="space-y-4">
         {filteredBlocks.length === 0 ? (
-          <div className="p-8 text-center text-xs font-mono text-slate-400 liquid-glass-card rounded-2xl">
+          <div className="p-8 text-center text-xs text-[var(--text-muted)] liquid-glass-card rounded-2xl">
             No audit ledger blocks match the selected query.
           </div>
         ) : (
@@ -247,37 +247,37 @@ export default function AuditTrailPage() {
             return (
               <div
                 key={block.blockIndex}
-                className="liquid-glass-card rounded-2xl p-5 space-y-3 relative group hover:-translate-y-0.5 transition-all shadow-sm border border-slate-200/80 dark:border-slate-800"
+                className="liquid-glass-card glass-interactive rounded-2xl p-5 space-y-3.5 shadow-sm"
               >
                 {/* Top Row: Block Index & Timestamp */}
                 <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2 font-mono">
-                    <span className="px-2.5 py-0.5 rounded-md bg-slate-900 text-white font-bold text-[11px]">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-md bg-slate-900 text-white font-mono font-bold text-[11px] shadow-xs">
                       BLOCK #{block.blockIndex.toString().padStart(3, '0')}
                     </span>
                     <span
-                      className={`font-semibold px-2 py-0.5 rounded text-[10.5px] ${
+                      className={`font-semibold px-2.5 py-0.5 rounded-full text-[10.5px] ${
                         block.eventType === 'OFFICER_SIGN_OFF'
-                          ? 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20'
+                          ? 'pill-registry'
                           : block.eventType === 'DEFICIENCY_DISPATCH'
-                          ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20'
+                          ? 'pill-deficiency'
                           : block.eventType === 'DPI_HANDSHAKE'
-                          ? 'bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/20'
-                          : 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20'
+                          ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30'
+                          : 'pill-verified'
                       }`}
                     >
                       {block.eventType}
                     </span>
 
                     {isBlockVerified && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">
+                      <span className="pill-verified inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full">
                         <CheckCircle2 className="w-3 h-3" />
                         <span>SHA-256 VALIDATED</span>
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-slate-400 text-[11px] font-mono">
+                  <div className="flex items-center gap-1.5 text-[var(--text-muted)] text-xs font-mono">
                     <Clock className="w-3.5 h-3.5" />
                     <span>{block.timestamp}</span>
                   </div>
@@ -285,42 +285,42 @@ export default function AuditTrailPage() {
 
                 {/* Middle Row: Target Application & Actor */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">
+                  <div className="p-3.5 rounded-xl glass-well">
+                    <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-semibold block">
                       Target Application / Artifact
                     </span>
-                    <span className="font-bold text-slate-800 dark:text-slate-200">
+                    <span className="font-semibold text-[var(--text-primary)] block mt-0.5">
                       {block.applicationId}
                     </span>
-                    <span className="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                    <span className="block text-[11px] text-[var(--text-muted)] mt-0.5 font-mono">
                       {block.targetArtifact}
                     </span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">
+                  <div className="p-3.5 rounded-xl glass-well">
+                    <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-semibold block">
                       Actor / Neural Model Engine
                     </span>
-                    <span className="font-bold text-slate-800 dark:text-slate-200">
+                    <span className="font-semibold text-[var(--text-primary)] block mt-0.5">
                       {block.actorOrModel}
                     </span>
-                    <span className="block text-[11px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-mono">
+                    <span className="block text-[11px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-medium">
                       Status: {block.status}
                     </span>
                   </div>
                 </div>
 
                 {/* Cryptographic Hashes Link */}
-                <div className="pt-2.5 border-t border-slate-200 dark:border-slate-800 text-[11px] font-mono space-y-1.5">
-                  <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 truncate">
-                    <span className="w-24 shrink-0 font-semibold text-slate-400">Previous Hash:</span>
-                    <span className="truncate select-all">{block.previousHash}</span>
+                <div className="pt-3 border-t border-[var(--glass-border)] text-xs font-mono space-y-1.5">
+                  <div className="flex items-center gap-2 text-[var(--text-muted)] truncate">
+                    <span className="w-24 shrink-0 font-sans text-[11px] font-semibold text-[var(--text-muted)]">Previous Hash:</span>
+                    <span className="truncate select-all text-xs">{block.previousHash}</span>
                   </div>
 
                   <div className="flex items-center justify-between gap-2 text-emerald-600 dark:text-emerald-400">
-                    <div className="flex items-center gap-2 truncate font-bold">
-                      <span className="w-24 shrink-0 text-slate-400 font-normal">Block Hash:</span>
-                      <span className="truncate select-all">{block.currentHash}</span>
+                    <div className="flex items-center gap-2 truncate font-semibold">
+                      <span className="w-24 shrink-0 font-sans text-[11px] text-[var(--text-muted)] font-normal">Block Hash:</span>
+                      <span className="truncate select-all text-xs">{block.currentHash}</span>
                     </div>
 
                     <button
@@ -328,7 +328,7 @@ export default function AuditTrailPage() {
                         navigator.clipboard.writeText(block.currentHash);
                         toast.success('Block SHA-256 Hash copied to clipboard');
                       }}
-                      className="shrink-0 inline-flex items-center gap-1 text-[10px] text-slate-500 hover:text-sky-600 dark:hover:text-sky-400 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-colors cursor-pointer"
+                      className="btn-liquid-secondary cursor-pointer shrink-0 inline-flex items-center gap-1 text-[11px] text-[var(--text-secondary)] px-2.5 py-1 rounded-lg"
                     >
                       <Copy className="w-3 h-3" />
                       <span>Copy</span>

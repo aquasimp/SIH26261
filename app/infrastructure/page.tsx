@@ -551,38 +551,38 @@ export default function InfrastructureStudioPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="space-y-6 animate-glass-in">
       {/* =========================================================================
           TOP INSTITUTION SELECTOR & SPATIAL SUMMARY STRIP
           ========================================================================= */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-1">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-widest">
-              AICTE SPATIAL COMPLIANCE &amp; COMPUTER VISION STUDIO
+            <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
+              AICTE Spatial Compliance &amp; Computer Vision Studio
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)]">
             Architectural Blueprint &amp;{' '}
             <span className="title-serif-italic text-sky-700 dark:text-sky-400">
               Campus Telemetry Studio
             </span>
           </h1>
-          <p className="text-xs text-[var(--text-muted)] mt-0.5">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
             CubiCasa5K Mask2Former CAD vectorizer, RT-DETR-L laboratory asset audit, DINOv2 duplicate detector, and Cadastral GIS Haversine checks
           </p>
         </div>
 
         {/* Institution Dropdown Selector */}
-        <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold text-[var(--text-muted)] font-mono whitespace-nowrap">
+        <div className="flex items-center gap-2.5">
+          <label className="text-xs font-semibold text-[var(--text-muted)] whitespace-nowrap">
             Selected Dossier:
           </label>
           <div className="relative min-w-[280px]">
             <select
               value={currentAppId}
               onChange={(e) => handleSelectInstitution(e.target.value)}
-              className="w-full appearance-none pl-3 pr-8 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-100 shadow-2xs cursor-pointer focus:outline-none focus:ring-1 focus:ring-sky-500 font-mono"
+              className="w-full appearance-none pl-3.5 pr-9 py-2 rounded-xl glass-well text-xs font-semibold text-[var(--text-primary)] shadow-2xs cursor-pointer focus:outline-none"
             >
               {applications.map((app) => (
                 <option key={app.id} value={app.id}>
@@ -590,40 +590,40 @@ export default function InfrastructureStudioPage() {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-faint)]" />
           </div>
         </div>
       </div>
 
       {/* 4-Cell Liquid Glass Metric Strip with 2px Top Severity Rules */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Cell 1: Total Built-up Area */}
         <div
-          className={`p-3.5 rounded-xl liquid-glass-card flex flex-col justify-between ${
+          className={`p-4 rounded-2xl liquid-glass-card flex flex-col justify-between shadow-md ${
             selectedApp.landAndBuiltUp.totalBuiltUpAvailableSqm < selectedApp.landAndBuiltUp.totalBuiltUpRequiredSqm
               ? 'top-rule-deficiency'
               : 'top-rule-verified'
           }`}
         >
-          <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            Total Built-Up Area (TB_req vs Avail)
+          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+            Total Built-Up Area
           </div>
-          <div className="my-1.5">
+          <div className="my-2">
             <div className="flex items-baseline gap-2">
-              <span className="metric-value text-[var(--text-primary)]">
+              <span className="metric-value">
                 {selectedApp.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()}
               </span>
-              <span className="text-xs font-mono text-[var(--text-muted)]">
+              <span className="text-xs text-[var(--text-muted)] font-medium">
                 / {selectedApp.landAndBuiltUp.totalBuiltUpRequiredSqm.toLocaleString()} m²
               </span>
             </div>
-            <div className="text-[10.5px] font-mono mt-0.5 flex items-center justify-between">
-              <span className="text-slate-500">INA + ADA + AMA + ACA (25%)</span>
+            <div className="text-xs mt-1 flex items-center justify-between">
+              <span className="text-[var(--text-muted)]">INA + ADA + AMA + ACA</span>
               <span
-                className={`font-bold ${
+                className={`font-bold px-2 py-0.5 rounded-full text-[10px] ${
                   selectedApp.landAndBuiltUp.totalBuiltUpAvailableSqm < selectedApp.landAndBuiltUp.totalBuiltUpRequiredSqm
-                    ? 'text-amber-600 dark:text-amber-400'
-                    : 'text-emerald-600 dark:text-emerald-400'
+                    ? 'pill-deficiency'
+                    : 'pill-verified'
                 }`}
               >
                 {selectedApp.landAndBuiltUp.totalBuiltUpAvailableSqm >= selectedApp.landAndBuiltUp.totalBuiltUpRequiredSqm
@@ -632,108 +632,104 @@ export default function InfrastructureStudioPage() {
               </span>
             </div>
           </div>
-          <div className="text-[9.5px] font-mono text-[var(--text-faint)]">
+          <div className="text-[11px] text-[var(--text-muted)]">
             Carpet: {selectedApp.landAndBuiltUp.inaAvailableSqm + selectedApp.landAndBuiltUp.adaAvailableSqm + selectedApp.landAndBuiltUp.amaAvailableSqm} m² • Circulation: {selectedApp.landAndBuiltUp.acaAvailableSqm} m²
           </div>
         </div>
 
         {/* Cell 2: FSI & Land Norm */}
         <div
-          className={`p-3.5 rounded-xl liquid-glass-card flex flex-col justify-between ${
+          className={`p-4 rounded-2xl liquid-glass-card flex flex-col justify-between shadow-md ${
             selectedApp.landAndBuiltUp.landAvailableAcres < selectedApp.landAndBuiltUp.landRequiredAcres
               ? 'top-rule-fatal'
               : 'top-rule-verified'
           }`}
         >
-          <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            Municipal FSI / FAR &amp; Land Norm
+          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+            Municipal FSI / FAR &amp; Land
           </div>
-          <div className="my-1.5">
+          <div className="my-2">
             <div className="flex items-baseline gap-2">
-              <span className="metric-value text-[var(--text-primary)]">
+              <span className="metric-value">
                 {selectedApp.landAndBuiltUp.landAvailableAcres.toFixed(2)}
               </span>
-              <span className="text-xs font-mono text-[var(--text-muted)]">
+              <span className="text-xs text-[var(--text-muted)] font-medium">
                 / {selectedApp.landAndBuiltUp.landRequiredAcres.toFixed(2)} Acres
               </span>
             </div>
-            <div className="text-[10.5px] font-mono mt-0.5 flex items-center justify-between">
-              <span className="text-slate-500">Φ_loc = {selectedApp.landAndBuiltUp.applicableFsi.toFixed(1)} FSI</span>
+            <div className="text-xs mt-1 flex items-center justify-between">
+              <span className="text-[var(--text-muted)]">FSI = {selectedApp.landAndBuiltUp.applicableFsi.toFixed(1)}</span>
               <span
-                className={`font-bold ${
+                className={`font-bold px-2 py-0.5 rounded-full text-[10px] ${
                   selectedApp.landAndBuiltUp.landAvailableAcres < selectedApp.landAndBuiltUp.landRequiredAcres
-                    ? 'text-red-600 dark:text-red-400'
-                    : 'text-emerald-600 dark:text-emerald-400'
+                    ? 'pill-fatal'
+                    : 'pill-verified'
                 }`}
               >
                 {selectedApp.landAndBuiltUp.landAvailableAcres >= selectedApp.landAndBuiltUp.landRequiredAcres
-                  ? 'VERIFIED TITLED'
+                  ? 'VERIFIED'
                   : `DEFICIT -${(selectedApp.landAndBuiltUp.landRequiredAcres - selectedApp.landAndBuiltUp.landAvailableAcres).toFixed(2)} Ac`}
               </span>
             </div>
           </div>
-          <div className="text-[9.5px] font-mono text-[var(--text-faint)]">
-            1 Acre = 4046.86 m² • Zone: {selectedApp.zoneType} Floor Mandate
+          <div className="text-[11px] text-[var(--text-muted)]">
+            Zone: {selectedApp.zoneType} Floor Mandate
           </div>
         </div>
 
         {/* Cell 3: CubiCasa5K Wall Continuity */}
-        <div className="p-3.5 rounded-xl liquid-glass-card flex flex-col justify-between top-rule-registry">
-          <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            CubiCasa5K Wall Continuity Score
+        <div className="p-4 rounded-2xl liquid-glass-card flex flex-col justify-between top-rule-registry shadow-md">
+          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+            CubiCasa5K Wall Continuity
           </div>
-          <div className="my-1.5">
+          <div className="my-2">
             <div className="flex items-baseline gap-2">
-              <span className="metric-value text-indigo-700 dark:text-indigo-400">98.4%</span>
-              <span className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold">
+              <span className="metric-value">98.4%</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold">
                 AP@50: 0.620
               </span>
             </div>
-            <div className="text-[10.5px] font-mono mt-0.5 flex items-center justify-between">
-              <span className="text-slate-500">RDP Poly Simplify</span>
-              <span className="font-bold text-slate-800 dark:text-slate-200">ε = 2.0 px (Manifold)</span>
+            <div className="text-xs mt-1 flex items-center justify-between">
+              <span className="text-[var(--text-muted)]">RDP Poly Simplify</span>
+              <span className="font-semibold text-[var(--text-primary)]">ε = 2.0 px</span>
             </div>
           </div>
-          <div className="text-[9.5px] font-mono text-[var(--text-faint)]">
-            Mask2Former Swin-Base + RMBG-1.4 Binary Wall Branch
+          <div className="text-[11px] text-[var(--text-muted)]">
+            Mask2Former Swin-Base + RMBG-1.4
           </div>
         </div>
 
         {/* Cell 4: Multi-Plot Contiguity & Haversine */}
         <div
-          className={`p-3.5 rounded-xl liquid-glass-card flex flex-col justify-between ${
+          className={`p-4 rounded-2xl liquid-glass-card flex flex-col justify-between shadow-md ${
             isDistanceViolated ? 'top-rule-fatal' : 'top-rule-verified'
           }`}
         >
-          <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            Multi-Plot Contiguity &amp; Haversine
+          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+            Multi-Plot Contiguity (Haversine)
           </div>
-          <div className="my-1.5">
+          <div className="my-2">
             <div className="flex items-baseline gap-2">
-              <span
-                className={`metric-value ${
-                  isDistanceViolated ? 'text-red-600 dark:text-red-400' : 'text-emerald-700 dark:text-emerald-400'
-                }`}
-              >
+              <span className="metric-value">
                 {plotValidation.maxDistanceKm.toFixed(2)} km
               </span>
-              <span className="text-xs font-mono text-[var(--text-muted)]">
+              <span className="text-xs text-[var(--text-muted)] font-medium">
                 (Plots: {spatialProfile.plots.length} / ≤ 3)
               </span>
             </div>
-            <div className="text-[10.5px] font-mono mt-0.5 flex items-center justify-between">
-              <span className="text-slate-500">Statutory Distance Limit</span>
+            <div className="text-xs mt-1 flex items-center justify-between">
+              <span className="text-[var(--text-muted)]">Limit: ≤ 2.0 km</span>
               <span
-                className={`font-bold ${
-                  isDistanceViolated ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'
+                className={`font-bold px-2 py-0.5 rounded-full text-[10px] ${
+                  isDistanceViolated ? 'pill-fatal' : 'pill-verified'
                 }`}
               >
-                {isDistanceViolated ? 'VIOLATION (> 2.0 km)' : 'COMPLIANT (≤ 2.0 km)'}
+                {isDistanceViolated ? 'VIOLATION' : 'COMPLIANT'}
               </span>
             </div>
           </div>
-          <div className="text-[9.5px] font-mono text-[var(--text-faint)]">
-            APH 2024–27 Chapter I Clause 1.4 Contiguity Norm
+          <div className="text-[11px] text-[var(--text-muted)]">
+            APH 2024–27 Chapter I Clause 1.4 Norm
           </div>
         </div>
       </div>
@@ -742,16 +738,16 @@ export default function InfrastructureStudioPage() {
           SECTION 1: INTERACTIVE ARCHITECTURAL BLUEPRINT VECTORIZER & WHAT-IF SIMULATOR
           ========================================================================= */}
       <section className="space-y-3">
-        <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2">
+        <div className="flex items-center justify-between border-b border-[var(--glass-well-border)] pb-2.5">
           <div>
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-              SECTION 01 / ARCHITECTURAL VECTORIZATION &amp; DETERMINISTIC MATH
+            <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
+              Architectural Vectorization &amp; Deterministic Math
             </span>
-            <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
+            <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-0.5">
               Interactive Blueprint Vectorizer &amp; APH Chapter VII What-If Simulator
             </h2>
           </div>
-          <span className="text-xs font-mono px-2 py-0.5 rounded bg-[var(--glass-bg-subtle)] text-[var(--text-muted)] border border-[var(--glass-border)]">
+          <span className="text-xs px-2.5 py-1 rounded-full glass-well text-[var(--text-muted)]">
             Shoelace Formula: Area = s² × 0.5 × |∑(x_i y_i+1 - x_i+1 y_i)|
           </span>
         </div>
@@ -992,24 +988,24 @@ export default function InfrastructureStudioPage() {
           (RT-DETR-L + YOLOv8x + pHash / DINOv2 Deduplication)
           ========================================================================= */}
       <section className="space-y-3 pt-2">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--glass-border)] pb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--glass-well-border)] pb-2.5">
           <div>
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-              SECTION 02 / GEOTAGGED PHYSICAL FACILITY AUDIT
+            <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
+              Geotagged Physical Facility Audit
             </span>
-            <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
+            <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-0.5">
               Geotagged Laboratory &amp; Barrier-Free PWD Computer Vision Audit
             </h2>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowBoundingBoxes(!showBoundingBoxes)}
-              className="btn-glass-subtle px-2.5 py-1 rounded-lg text-xs font-mono font-medium inline-flex items-center gap-1.5 cursor-pointer"
+              className="btn-liquid-secondary px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
               {showBoundingBoxes ? <Eye className="w-3.5 h-3.5 text-sky-600" /> : <EyeOff className="w-3.5 h-3.5 text-slate-400" />}
               <span>{showBoundingBoxes ? 'Hide CV BBoxes' : 'Show CV BBoxes'}</span>
             </button>
-            <span className="text-xs font-mono px-2 py-0.5 rounded bg-[var(--glass-bg-subtle)] text-[var(--text-muted)] border border-[var(--glass-border)]">
+            <span className="text-xs px-2.5 py-1 rounded-full glass-well text-[var(--text-muted)] font-semibold">
               RT-DETR-L + YOLOv8x Ensemble
             </span>
           </div>
@@ -1272,65 +1268,65 @@ export default function InfrastructureStudioPage() {
       {/* =========================================================================
           SECTION 3: EXIF GPS METADATA & MULTI-PLOT CADASTRAL HAVERSINE MAP
           ========================================================================= */}
-      <section className="space-y-3 pt-2">
-        <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2">
+      <section className="space-y-4 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--glass-border)] pb-3">
           <div>
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-              SECTION 03 / GEOGRAPHIC TRIANGULATION &amp; GIS AUDIT
+            <span className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
+              Section 03 / Geographic Triangulation &amp; GIS Audit
             </span>
-            <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
+            <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] tracking-tight">
               EXIF GPS Metadata &amp; Multi-Plot Cadastral Haversine Triangulation
             </h2>
           </div>
           <div className="flex items-center gap-2">
             <span
-              className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
+              className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                 isDistanceViolated ? 'pill-fatal' : 'pill-verified'
               }`}
             >
-              {isDistanceViolated ? 'INTER-PLOT DISTANCE VIOLATION' : 'CADASTRAL CONTIGUOUS'}
+              {isDistanceViolated ? 'Inter-Plot Distance Violation' : 'Cadastral Contiguous Verified'}
             </span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left: Interactive SVG Cadastral GIS Survey Map (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-4 space-y-3">
+          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-xs uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-1.5 font-mono">
-                <Compass className="w-3.5 h-3.5 text-emerald-600" />
+              <h3 className="font-semibold text-xs uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-2">
+                <Compass className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Cadastral GIS Jamabandi Overlay &amp; Photo GPS Pins</span>
               </h3>
-              <span className="text-[10px] font-mono text-[var(--text-muted)]">
+              <span className="text-xs text-[var(--text-muted)]">
                 Shapely Point-in-Polygon Check
               </span>
             </div>
 
             {/* Cadastral SVG Map Scene */}
-            <div className="relative h-80 rounded-xl bg-slate-900 overflow-hidden border border-[var(--glass-border)]">
+            <div className="relative h-84 rounded-xl bg-slate-950 overflow-hidden border border-white/10 shadow-inner">
               <svg className="w-full h-full" viewBox="0 0 600 320">
                 <defs>
                   <pattern id="gis-grid" width="30" height="30" patternUnits="userSpaceOnUse">
-                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
                   </pattern>
                 </defs>
 
-                <rect width="600" height="320" fill="#0b1120" />
+                <rect width="600" height="320" fill="#090d16" />
                 <rect width="600" height="320" fill="url(#gis-grid)" />
 
                 {/* Cadastral Khasra Boundary Polygons */}
                 {/* Plot 1 Polygon */}
                 <polygon
                   points="80,60 260,50 280,200 90,210"
-                  fill="rgba(14, 165, 233, 0.15)"
+                  fill="rgba(14, 165, 233, 0.18)"
                   stroke="#0284c7"
                   strokeWidth="2"
                   strokeDasharray={isDistanceViolated ? 'none' : '4 2'}
                 />
-                <text x="95" y="85" fill="#38bdf8" fontSize="11" fontFamily="monospace" fontWeight="bold">
+                <text x="95" y="85" fill="#38bdf8" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
                   PLOT 1: Primary Academic Block
                 </text>
-                <text x="95" y="102" fill="#94a3b8" fontSize="9" fontFamily="monospace">
+                <text x="95" y="102" fill="#94a3b8" fontSize="9.5" fontFamily="sans-serif">
                   Khasra #{spatialProfile.plots[0]?.khasraNo} • {spatialProfile.plots[0]?.areaAcres} Acres
                 </text>
 
@@ -1344,7 +1340,7 @@ export default function InfrastructureStudioPage() {
                           ? '420,110 570,100 580,250 430,260'
                           : '340,90 480,80 490,210 350,220'
                       }
-                      fill={isDistanceViolated ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)'}
+                      fill={isDistanceViolated ? 'rgba(239, 68, 68, 0.18)' : 'rgba(16, 185, 129, 0.18)'}
                       stroke={isDistanceViolated ? '#dc2626' : '#059669'}
                       strokeWidth="2"
                     />
@@ -1353,7 +1349,7 @@ export default function InfrastructureStudioPage() {
                       y={isDistanceViolated ? 135 : 115}
                       fill={isDistanceViolated ? '#f87171' : '#34d399'}
                       fontSize="11"
-                      fontFamily="monospace"
+                      fontFamily="sans-serif"
                       fontWeight="bold"
                     >
                       PLOT 2: Hostel &amp; Sports
@@ -1362,8 +1358,8 @@ export default function InfrastructureStudioPage() {
                       x={isDistanceViolated ? 435 : 355}
                       y={isDistanceViolated ? 152 : 132}
                       fill="#94a3b8"
-                      fontSize="9"
-                      fontFamily="monospace"
+                      fontSize="9.5"
+                      fontFamily="sans-serif"
                     >
                       Khasra #{spatialProfile.plots[1]?.khasraNo} • {spatialProfile.plots[1]?.areaAcres} Acres
                     </text>
@@ -1380,21 +1376,21 @@ export default function InfrastructureStudioPage() {
                     />
                     {/* Distance Tag */}
                     <rect
-                      x={isDistanceViolated ? 310 : 270}
-                      y={isDistanceViolated ? 140 : 125}
-                      width="105"
-                      height="24"
-                      rx="4"
+                      x={isDistanceViolated ? 305 : 265}
+                      y={isDistanceViolated ? 138 : 123}
+                      width="116"
+                      height="26"
+                      rx="6"
                       fill="#0f172a"
                       stroke={isDistanceViolated ? '#ef4444' : '#10b981'}
                       strokeWidth="1.5"
                     />
                     <text
-                      x={isDistanceViolated ? 316 : 276}
-                      y={isDistanceViolated ? 156 : 141}
+                      x={isDistanceViolated ? 313 : 273}
+                      y={isDistanceViolated ? 155 : 140}
                       fill={isDistanceViolated ? '#f87171' : '#34d399'}
-                      fontSize="10"
-                      fontFamily="monospace"
+                      fontSize="10.5"
+                      fontFamily="sans-serif"
                       fontWeight="bold"
                     >
                       d = {plotValidation.maxDistanceKm.toFixed(2)} km
@@ -1406,78 +1402,78 @@ export default function InfrastructureStudioPage() {
                 {/* Photo 1 pin */}
                 <g className="cursor-pointer">
                   <circle cx="150" cy="140" r="7" fill="#38bdf8" stroke="#ffffff" strokeWidth="2" />
-                  <text x="162" y="144" fill="#e2e8f0" fontSize="9" fontFamily="monospace">
+                  <text x="162" y="144" fill="#e2e8f0" fontSize="9.5" fontFamily="sans-serif">
                     Photo 1 (Lab)
                   </text>
                 </g>
                 {/* Photo 2 pin */}
                 <g className="cursor-pointer">
                   <circle cx="200" cy="160" r="7" fill="#38bdf8" stroke="#ffffff" strokeWidth="2" />
-                  <text x="212" y="164" fill="#e2e8f0" fontSize="9" fontFamily="monospace">
+                  <text x="212" y="164" fill="#e2e8f0" fontSize="9.5" fontFamily="sans-serif">
                     Photo 2 (Workshop)
                   </text>
                 </g>
                 {/* Photo 3 pin */}
                 <g className="cursor-pointer">
                   <circle cx="120" cy="170" r="7" fill="#34d399" stroke="#ffffff" strokeWidth="2" />
-                  <text x="132" y="174" fill="#e2e8f0" fontSize="9" fontFamily="monospace">
+                  <text x="132" y="174" fill="#e2e8f0" fontSize="9.5" fontFamily="sans-serif">
                     Photo 3 (PWD Ramp)
                   </text>
                 </g>
                 {/* Photo 4 pin */}
                 <g className="cursor-pointer">
                   <circle cx="230" cy="90" r="7" fill="#f87171" stroke="#ffffff" strokeWidth="2" />
-                  <text x="242" y="94" fill="#e2e8f0" fontSize="9" fontFamily="monospace">
+                  <text x="242" y="94" fill="#e2e8f0" fontSize="9.5" fontFamily="sans-serif">
                     Photo 4 (Fire Safety)
                   </text>
                 </g>
               </svg>
 
               {/* In-Map Telemetry Hud */}
-              <div className="absolute bottom-2.5 left-2.5 px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-md border border-white/10 text-[10.5px] font-mono text-slate-300">
-                <span>Centroid Coordinates: </span>
-                <span className="font-bold text-sky-400">
+              <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/10 text-xs text-slate-300 flex items-center gap-2 shadow-lg">
+                <span className="text-slate-400">Centroid:</span>
+                <span className="font-mono font-semibold text-sky-400">
                   {spatialProfile.plots[0]?.lat.toFixed(4)}°N, {spatialProfile.plots[0]?.lon.toFixed(4)}°E
                 </span>
-                <span className="mx-2">•</span>
-                <span>WGS84 Datum</span>
+                <span className="text-slate-500">•</span>
+                <span className="text-slate-400 text-[11px]">WGS84 Datum</span>
               </div>
             </div>
           </div>
 
           {/* Right: Multi-Plot Distance Diagnostics & Shapely Verification (5 cols) */}
-          <div className="lg:col-span-5 space-y-3">
+          <div className="lg:col-span-5 space-y-4">
             {/* Plot Breakdown Cards */}
-            <div className="liquid-glass-card rounded-2xl p-4 space-y-3">
-              <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2">
-                <h4 className="font-bold text-xs uppercase tracking-wider text-[var(--text-primary)] font-mono">
+            <div className="liquid-glass-card rounded-2xl p-5 space-y-3.5">
+              <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2.5">
+                <h4 className="font-semibold text-xs uppercase tracking-wider text-[var(--text-primary)]">
                   Cadastral Plot Schedule (Jamabandi Records)
                 </h4>
-                <span className="text-[10px] font-mono font-bold text-sky-700 dark:text-sky-400">
+                <span className="text-xs font-medium text-sky-600 dark:text-sky-400">
                   {spatialProfile.plots.length} Registered Plots
                 </span>
               </div>
 
-              <div className="space-y-2 font-mono text-xs">
-                {spatialProfile.plots.map((plot, idx) => (
+              <div className="space-y-2 text-xs">
+                {spatialProfile.plots.map((plot) => (
                   <div
                     key={plot.id}
-                    className="p-2.5 rounded-xl bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] flex items-center justify-between"
+                    className="p-3 rounded-xl glass-well flex items-center justify-between gap-3"
                   >
                     <div>
-                      <div className="font-bold text-slate-800 dark:text-slate-200 text-xs">
+                      <div className="font-semibold text-[var(--text-primary)] text-xs">
                         {plot.name}
                       </div>
-                      <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
+                      <div className="text-[11px] text-[var(--text-muted)] mt-0.5">
                         Khasra #{plot.khasraNo} • {plot.areaAcres} Acres • ({plot.lat.toFixed(4)}°N, {plot.lon.toFixed(4)}°E)
                       </div>
                     </div>
                     <span
-                      className={`text-[9.5px] font-bold px-2 py-0.5 rounded ${
+                      className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full shrink-0 ${
                         plot.containsAcademicBuiltUp ? 'pill-verified' : 'pill-deficiency'
                       }`}
                     >
-                      {plot.containsAcademicBuiltUp ? 'Academic Core' : 'Sports/Annex'}
+                      {plot.containsAcademicBuiltUp ? 'Academic Core' : 'Sports / Annex'}
                     </span>
                   </div>
                 ))}
@@ -1485,24 +1481,26 @@ export default function InfrastructureStudioPage() {
 
               {/* Haversine Math Telemetry */}
               <div
-                className={`p-3 rounded-xl border space-y-1.5 font-mono text-xs ${
+                className={`p-3.5 rounded-xl border space-y-1.5 text-xs ${
                   isDistanceViolated
-                    ? 'bg-red-500/10 border-red-500/30 text-red-800 dark:text-red-200'
+                    ? 'bg-rose-500/10 border-rose-500/30 text-rose-800 dark:text-rose-200'
                     : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-200'
                 }`}
               >
-                <div className="flex items-center justify-between text-[11px] font-bold">
+                <div className="flex items-center justify-between text-xs font-semibold">
                   <span>Haversine Geodesic Inter-Plot Distance:</span>
-                  <span className="text-sm">d = {plotValidation.maxDistanceKm.toFixed(2)} km</span>
+                  <span className="metric-value text-sm font-bold">
+                    d = {plotValidation.maxDistanceKm.toFixed(2)} km
+                  </span>
                 </div>
-                <div className="text-[10px] leading-relaxed">
+                <div className="text-[11px] leading-relaxed text-[var(--text-secondary)]">
                   {isDistanceViolated ? (
                     <span>
-                      <strong>CRITICAL NON-COMPLIANCE:</strong> Plot 2 is {plotValidation.maxDistanceKm.toFixed(2)} km from Plot 1. AICTE APH Chapter VII Clause 1.4 strictly mandates inter-plot separation $d \le 2.0$ km. Discontinuous campus cannot be sanctioned.
+                      <strong className="text-rose-600 dark:text-rose-400">CRITICAL NON-COMPLIANCE:</strong> Plot 2 is {plotValidation.maxDistanceKm.toFixed(2)} km from Plot 1. AICTE APH Chapter VII Clause 1.4 strictly mandates inter-plot separation d ≤ 2.0 km. Discontinuous campus cannot be sanctioned.
                     </span>
                   ) : (
                     <span>
-                      <strong>COMPLIANT:</strong> Inter-plot separation $d = {plotValidation.maxDistanceKm.toFixed(2)}$ km falls strictly within statutory limit ($d \le 2.0$ km). All core instructional areas verified on Plot 1.
+                      <strong className="text-emerald-600 dark:text-emerald-400">COMPLIANT:</strong> Inter-plot separation d = {plotValidation.maxDistanceKm.toFixed(2)} km falls strictly within statutory limit (d ≤ 2.0 km). All core instructional areas verified on Plot 1.
                     </span>
                   )}
                 </div>
@@ -1510,30 +1508,42 @@ export default function InfrastructureStudioPage() {
             </div>
 
             {/* Shapely Point-in-Polygon Results */}
-            <div className="liquid-glass-card rounded-2xl p-4 space-y-2 text-xs font-mono">
-              <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-1.5">
-                <span className="font-bold text-[var(--text-primary)] uppercase text-[10px] tracking-wider">
+            <div className="liquid-glass-card rounded-2xl p-5 space-y-3 text-xs">
+              <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2.5">
+                <span className="font-semibold text-[var(--text-primary)] uppercase text-[11px] tracking-wider">
                   Shapely Point-in-Polygon Boundary Verification
                 </span>
-                <span className="text-[9.5px] text-emerald-600 font-bold">4/4 Validated</span>
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">4 / 4 Validated</span>
               </div>
 
-              <div className="space-y-1.5 text-[10.5px]">
-                <div className="flex justify-between items-center py-1 border-b border-[var(--glass-border)]">
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between items-center py-1.5 border-b border-[var(--glass-border)]">
                   <span className="text-[var(--text-secondary)]">Photo 1 (VLSI Lab EXIF):</span>
-                  <span className="text-emerald-600 font-bold">INSIDE Plot 1 Polygon (Δ=0.00m)</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    INSIDE Plot 1 Polygon (Δ=0.00m)
+                  </span>
                 </div>
-                <div className="flex justify-between items-center py-1 border-b border-[var(--glass-border)]">
+                <div className="flex justify-between items-center py-1.5 border-b border-[var(--glass-border)]">
                   <span className="text-[var(--text-secondary)]">Photo 2 (CAD Workshop):</span>
-                  <span className="text-emerald-600 font-bold">INSIDE Plot 1 Polygon (Δ=0.00m)</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    INSIDE Plot 1 Polygon (Δ=0.00m)
+                  </span>
                 </div>
-                <div className="flex justify-between items-center py-1 border-b border-[var(--glass-border)]">
+                <div className="flex justify-between items-center py-1.5 border-b border-[var(--glass-border)]">
                   <span className="text-[var(--text-secondary)]">Photo 3 (PWD Ramp EXIF):</span>
-                  <span className="text-emerald-600 font-bold">INSIDE Plot 1 Polygon (Δ=0.00m)</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    INSIDE Plot 1 Polygon (Δ=0.00m)
+                  </span>
                 </div>
-                <div className="flex justify-between items-center py-1">
+                <div className="flex justify-between items-center py-1.5">
                   <span className="text-[var(--text-secondary)]">Photo 4 (Fire Safety EXIF):</span>
-                  <span className="text-emerald-600 font-bold">INSIDE Plot 1 Polygon (Δ=0.00m)</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    INSIDE Plot 1 Polygon (Δ=0.00m)
+                  </span>
                 </div>
               </div>
             </div>

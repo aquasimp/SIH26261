@@ -524,22 +524,22 @@ export default function AuthorityBridgePage() {
   }, [qrTestUrl]);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="space-y-6 animate-glass-in">
       {/* Page Title & Handshake Trigger */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-widest">
-              NATIONAL DATA EMPOWERMENT &amp; PROTECTION ARCHITECTURE (DEPA)
+            <span className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
+              National Data Empowerment &amp; Protection Architecture (DEPA)
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             National DPI{' '}
-            <span className="font-serif italic font-normal text-sky-700 dark:text-sky-400">
+            <span className="title-serif-italic text-sky-600 dark:text-sky-400">
               Authority Bridge
             </span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 max-w-3xl leading-relaxed">
             Real-time mutual TLS 1.3, Web Crypto HMAC-SHA256 &amp; PKCE handshakes with DigiLocker, EPFO Shram Suvidha, and State Registries.
           </p>
         </div>
@@ -548,7 +548,7 @@ export default function AuthorityBridgePage() {
           <button
             onClick={handleRunSimulation}
             disabled={isSimulating}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-700 text-white shadow-md shadow-sky-600/20 transition-all hover:-translate-y-0.5 disabled:opacity-50 cursor-pointer"
+            className="btn-liquid-primary cursor-pointer px-4 py-2.5 rounded-xl text-xs font-semibold inline-flex items-center gap-2 disabled:opacity-50"
           >
             {isSimulating ? (
               <>
@@ -567,128 +567,128 @@ export default function AuthorityBridgePage() {
 
       {/* Live Handshake Stepper */}
       {simulationStep > 0 && (
-        <div className="liquid-glass-card rounded-2xl p-4 border border-sky-500/30 bg-sky-500/5 space-y-3">
+        <div className="liquid-glass-card rounded-2xl p-5 border border-sky-500/30 bg-sky-500/5 space-y-3.5">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <RefreshCw className={`w-3.5 h-3.5 text-sky-600 ${isSimulating ? 'animate-spin' : ''}`} />
+            <span className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
+              <RefreshCw className={`w-3.5 h-3.5 text-sky-600 dark:text-sky-400 ${isSimulating ? 'animate-spin' : ''}`} />
               <span>DPI Handshake Protocol Execution Pipeline</span>
             </span>
-            <span className="font-mono text-[11px] font-bold text-sky-600 dark:text-sky-400">
+            <span className="text-xs font-semibold text-sky-600 dark:text-sky-400">
               {simulationStep === 4 ? 'Handshake Finalized (118ms latency)' : `Phase ${simulationStep} of 4 Active`}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5 text-xs">
             <div
-              className={`p-2.5 rounded-xl border transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 simulationStep >= 1
-                  ? 'bg-sky-500/10 border-sky-500/30 text-sky-800 dark:text-sky-200 font-bold'
-                  : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400'
+                  ? 'bg-sky-500/10 border-sky-500/40 text-sky-900 dark:text-sky-200 font-semibold'
+                  : 'glass-well text-[var(--text-muted)]'
               }`}
             >
-              <div className="text-[10px] text-slate-400">Step 1 • RFC 7636</div>
-              <div>OAuth 2.0 PKCE Challenge</div>
+              <div className="text-[10px] text-[var(--text-muted)] font-mono">Step 1 • RFC 7636</div>
+              <div className="mt-0.5">OAuth 2.0 PKCE Challenge</div>
             </div>
 
             <div
-              className={`p-2.5 rounded-xl border transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 simulationStep >= 2
-                  ? 'bg-sky-500/10 border-sky-500/30 text-sky-800 dark:text-sky-200 font-bold'
-                  : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400'
+                  ? 'bg-sky-500/10 border-sky-500/40 text-sky-900 dark:text-sky-200 font-semibold'
+                  : 'glass-well text-[var(--text-muted)]'
               }`}
             >
-              <div className="text-[10px] text-slate-400">Step 2 • RFC 2104</div>
-              <div>Web Crypto HMAC-SHA256</div>
+              <div className="text-[10px] text-[var(--text-muted)] font-mono">Step 2 • RFC 2104</div>
+              <div className="mt-0.5">Web Crypto HMAC-SHA256</div>
             </div>
 
             <div
-              className={`p-2.5 rounded-xl border transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 simulationStep >= 3
-                  ? 'bg-sky-500/10 border-sky-500/30 text-sky-800 dark:text-sky-200 font-bold'
-                  : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400'
+                  ? 'bg-sky-500/10 border-sky-500/40 text-sky-900 dark:text-sky-200 font-semibold'
+                  : 'glass-well text-[var(--text-muted)]'
               }`}
             >
-              <div className="text-[10px] text-slate-400">Step 3 • API Setu</div>
-              <div>Pull URI XML Decryption</div>
+              <div className="text-[10px] text-[var(--text-muted)] font-mono">Step 3 • API Setu</div>
+              <div className="mt-0.5">Pull URI XML Decryption</div>
             </div>
 
             <div
-              className={`p-2.5 rounded-xl border transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 simulationStep >= 4
                   ? activePreset.state === 'MISMATCH_DETECTED'
-                    ? 'bg-red-500/10 border-red-500/30 text-red-700 dark:text-red-300 font-bold'
-                    : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold'
-                  : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400'
+                    ? 'bg-rose-500/10 border-rose-500/40 text-rose-800 dark:text-rose-200 font-semibold'
+                    : 'bg-emerald-500/10 border-emerald-500/40 text-emerald-800 dark:text-emerald-200 font-semibold'
+                  : 'glass-well text-[var(--text-muted)]'
               }`}
             >
-              <div className="text-[10px] text-slate-400">Step 4 • LayoutLMv3</div>
-              <div>{activePreset.state}</div>
+              <div className="text-[10px] text-[var(--text-muted)] font-mono">Step 4 • LayoutLMv3</div>
+              <div className="mt-0.5">{activePreset.state}</div>
             </div>
           </div>
         </div>
       )}
 
       {/* Deterministic Six-State FSM Grid */}
-      <div className="liquid-glass-card rounded-2xl p-4">
-        <div className="flex items-center justify-between mb-2.5">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+      <div className="liquid-glass-card rounded-2xl p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
             Deterministic Six-State Regulatory Verification Protocol
           </div>
-          <span className="text-[10.5px] font-mono text-slate-400">
-            Current Active State: <strong className="text-slate-900 dark:text-white">{activePreset.state}</strong>
+          <span className="text-xs text-[var(--text-muted)]">
+            Current Active State: <strong className="text-[var(--text-primary)] font-semibold">{activePreset.state}</strong>
           </span>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs font-mono text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs text-center font-medium">
           <div
-            className={`p-2 rounded-xl border transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activePreset.state === 'VERIFIED'
                 ? 'bg-emerald-500/20 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold ring-2 ring-emerald-500/40'
-                : 'bg-emerald-500/5 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
+                : 'glass-well text-emerald-700 dark:text-emerald-400'
             }`}
           >
             {t.statusVerified}
           </div>
           <div
-            className={`p-2 rounded-xl border transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activePreset.state === 'MISMATCH_DETECTED'
-                ? 'bg-red-500/20 border-red-500 text-red-800 dark:text-red-200 font-bold ring-2 ring-red-500/40'
-                : 'bg-red-500/5 border-red-500/20 text-red-700 dark:text-red-400'
+                ? 'bg-rose-500/20 border-rose-500 text-rose-800 dark:text-rose-200 font-bold ring-2 ring-rose-500/40'
+                : 'glass-well text-rose-700 dark:text-rose-400'
             }`}
           >
             {t.statusMismatchDetected}
           </div>
           <div
-            className={`p-2 rounded-xl border transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activePreset.state === 'EXPIRED'
                 ? 'bg-amber-500/20 border-amber-500 text-amber-800 dark:text-amber-200 font-bold ring-2 ring-amber-500/40'
-                : 'bg-amber-500/5 border-amber-500/20 text-amber-700 dark:text-amber-400'
+                : 'glass-well text-amber-700 dark:text-amber-400'
             }`}
           >
             {t.statusExpired}
           </div>
           <div
-            className={`p-2 rounded-xl border transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activePreset.state === 'VERIFICATION_PENDING'
                 ? 'bg-sky-500/20 border-sky-500 text-sky-800 dark:text-sky-200 font-bold ring-2 ring-sky-500/40'
-                : 'bg-sky-500/5 border-sky-500/20 text-sky-700 dark:text-sky-400'
+                : 'glass-well text-sky-700 dark:text-sky-400'
             }`}
           >
             {t.statusVerificationPending}
           </div>
           <div
-            className={`p-2 rounded-xl border transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activePreset.state === 'SOURCE_UNAVAILABLE'
                 ? 'bg-slate-500/20 border-slate-500 text-slate-800 dark:text-slate-200 font-bold ring-2 ring-slate-500/40'
-                : 'bg-slate-500/5 border-slate-500/20 text-slate-700 dark:text-slate-400'
+                : 'glass-well text-slate-700 dark:text-slate-400'
             }`}
           >
             {t.statusSourceUnavailable}
           </div>
           <div
-            className={`p-2 rounded-xl border transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activePreset.state === 'MANUAL_REVIEW_REQUIRED'
                 ? 'bg-violet-500/20 border-violet-500 text-violet-800 dark:text-violet-200 font-bold ring-2 ring-violet-500/40'
-                : 'bg-violet-500/5 border-violet-500/20 text-violet-700 dark:text-violet-400'
+                : 'glass-well text-violet-700 dark:text-violet-400'
             }`}
           >
             {t.statusManualReviewRequired}
@@ -698,41 +698,41 @@ export default function AuthorityBridgePage() {
 
       {/* Main Console Navigation Tabs */}
       <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
-        <div className="p-3 border-b border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 text-xs font-semibold">
-          <div className="inline-flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <div className="p-3 border-b border-[var(--glass-border)] glass-well flex flex-wrap items-center justify-between gap-3 text-xs font-semibold">
+          <div className="inline-flex rounded-xl p-1 glass-well">
             <button
               onClick={() => setActiveTab('DIGILOCKER')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === 'DIGILOCKER'
-                  ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 shadow-2xs font-bold'
-                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'btn-liquid-primary shadow-xs font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               1. DigiLocker Pull URI &amp; Web Crypto Inspector
             </button>
             <button
               onClick={() => setActiveTab('EPFO')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === 'EPFO'
-                  ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-2xs font-bold'
-                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'btn-liquid-primary shadow-xs font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               2. EPFO ECR 2.0 &amp; 50% Basic Wage Rule
             </button>
             <button
               onClick={() => setActiveTab('QR_CRYPTO')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === 'QR_CRYPTO'
-                  ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-2xs font-bold'
-                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'btn-liquid-primary shadow-xs font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               3. State e-District QR &amp; FQDN Whitelist
             </button>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-[11px] text-emerald-600 dark:text-emerald-400">
+          <div className="flex items-center gap-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -745,12 +745,12 @@ export default function AuthorityBridgePage() {
         {activeTab === 'DIGILOCKER' && (
           <div className="p-5 space-y-6">
             {/* Certificate Preset Selector Bar */}
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="p-4 rounded-xl glass-well flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div className="text-xs">
-                <span className="font-bold text-slate-900 dark:text-white block">
+                <span className="font-semibold text-[var(--text-primary)] block">
                   Select Institutional Document Certificate Preset:
                 </span>
-                <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+                <span className="text-[var(--text-muted)] text-[11px]">
                   Simulate live DPI Pull URI handshakes against state departments
                 </span>
               </div>
@@ -760,10 +760,10 @@ export default function AuthorityBridgePage() {
                   <button
                     key={p.id}
                     onClick={() => setSelectedPresetId(p.id)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                       selectedPresetId === p.id
-                        ? 'bg-sky-600 text-white font-bold shadow-xs'
-                        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                        ? 'btn-liquid-primary shadow-xs font-semibold'
+                        : 'btn-liquid-secondary text-[var(--text-secondary)]'
                     }`}
                   >
                     {p.issuerId.split('.').slice(-1)[0].toUpperCase()} ({p.docType})
@@ -775,176 +775,176 @@ export default function AuthorityBridgePage() {
             {/* Interactive Handshake Parameters Form */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
               <div>
-                <label className="text-[10.5px] font-mono text-slate-500 uppercase font-semibold block mb-1">
+                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
                   Issuer ID
                 </label>
                 <input
                   type="text"
                   value={issuerId}
                   onChange={(e) => setIssuerId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="text-[10.5px] font-mono text-slate-500 uppercase font-semibold block mb-1">
+                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
                   Doc Type
                 </label>
                 <input
                   type="text"
                   value={docType}
                   onChange={(e) => setDocType(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="text-[10.5px] font-mono text-slate-500 uppercase font-semibold block mb-1">
+                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
                   Doc ID / Cert No
                 </label>
                 <input
                   type="text"
                   value={docId}
                   onChange={(e) => setDocId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="text-[10.5px] font-mono text-slate-500 uppercase font-semibold block mb-1">
+                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
                   Client Secret (HMAC Key)
                 </label>
                 <input
                   type="password"
                   value={clientSecret}
                   onChange={(e) => setClientSecret(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
             </div>
 
             {/* Real Web Crypto Security Credentials Card */}
-            <div className="p-4 rounded-xl bg-slate-950 text-slate-200 font-mono text-xs border border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
-                <span className="flex items-center gap-1.5 text-sky-400 font-bold">
+            <div className="p-5 rounded-2xl bg-slate-950/90 backdrop-blur-md text-slate-200 text-xs border border-white/10 space-y-3.5 shadow-xl">
+              <div className="flex items-center justify-between text-slate-400 border-b border-white/10 pb-2.5">
+                <span className="flex items-center gap-2 text-sky-400 font-semibold">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Real Web Crypto Engine (window.crypto.subtle)</span>
                 </span>
-                <span className="text-[10.5px]">
+                <span className="text-[11px] font-mono text-slate-400">
                   {isComputingCrypto ? 'Recomputing Digest...' : 'SHA-256 / HMAC-SHA256 Active'}
                 </span>
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-2 font-mono">
                 <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300">Generated Pull URI:</strong>{' '}
+                  <strong className="text-slate-300 font-sans">Generated Pull URI:</strong>{' '}
                   <span className="text-amber-300 font-bold select-all">{pullUri}</span>
                 </div>
 
                 <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300">PKCE Code Verifier:</strong>{' '}
+                  <strong className="text-slate-300 font-sans">PKCE Code Verifier:</strong>{' '}
                   <span className="text-slate-300 select-all">{customVerifier}</span>
                 </div>
 
                 <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300">PKCE S256 Code Challenge:</strong>{' '}
+                  <strong className="text-slate-300 font-sans">PKCE S256 Code Challenge:</strong>{' '}
                   <span className="text-emerald-400 font-bold select-all">{pkceChallenge}</span>
                 </div>
 
                 <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300">Computed x-digilocker-hmac:</strong>{' '}
+                  <strong className="text-slate-300 font-sans">Computed x-digilocker-hmac:</strong>{' '}
                   <span className="text-sky-300 font-bold select-all break-all">{computedHmac}</span>
                 </div>
               </div>
             </div>
 
             {/* Side-by-Side Reconciliation Diff */}
-            <div className="space-y-3">
+            <div className="space-y-3.5">
               <div className="flex items-center justify-between text-xs">
-                <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <FileCode className="w-4 h-4 text-sky-600" />
+                <h3 className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                  <FileCode className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                   <span>Authoritative XML vs. Extracted Document JSON Diff</span>
                 </h3>
-                <span className="font-mono text-[11px] text-slate-400">
+                <span className="text-xs text-[var(--text-muted)]">
                   Issuing Authority: {activePreset.issuingAuthorityName}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Authoritative XML */}
-                <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-2xs">
-                  <div className="px-3.5 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 font-mono text-[11px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center justify-between">
+                <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
+                  <div className="px-4 py-2.5 border-b border-[var(--glass-border)] glass-well text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
                     <span>1. Authoritative DPI DataContent (Decoded XML)</span>
-                    <span className="text-[10px] text-slate-400">State Gateway Master</span>
+                    <span className="text-[10px] text-[var(--text-muted)]">State Gateway Master</span>
                   </div>
-                  <pre className="p-3.5 text-slate-800 dark:text-slate-200 font-mono text-[11px] overflow-x-auto whitespace-pre leading-relaxed">
+                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
                     {activePreset.authoritativeXml}
                   </pre>
                 </div>
 
                 {/* Uploaded Document JSON */}
-                <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-2xs">
-                  <div className="px-3.5 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 font-mono text-[11px] font-bold text-sky-700 dark:text-sky-400 flex items-center justify-between">
+                <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
+                  <div className="px-4 py-2.5 border-b border-[var(--glass-border)] glass-well text-xs font-semibold text-sky-600 dark:text-sky-400 flex items-center justify-between">
                     <span>2. Uploaded Institutional PDF (LayoutLMv3 OCR JSON)</span>
-                    <span className="text-[10px] text-slate-400">Applicant Submission</span>
+                    <span className="text-[10px] text-[var(--text-muted)]">Applicant Submission</span>
                   </div>
-                  <pre className="p-3.5 text-slate-800 dark:text-slate-200 font-mono text-[11px] overflow-x-auto whitespace-pre leading-relaxed">
+                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
                     {activePreset.uploadedJson}
                   </pre>
                 </div>
               </div>
 
               {/* Exact Attribute Reconciliation Table */}
-              <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden mt-3">
+              <div className="liquid-glass-card rounded-2xl overflow-hidden mt-4">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-100 dark:bg-slate-800 text-[10px] font-mono uppercase tracking-wider text-slate-500">
+                  <thead className="glass-well text-[10.5px] uppercase tracking-wider text-[var(--text-muted)] font-semibold border-b border-[var(--glass-border)]">
                     <tr>
-                      <th className="py-2.5 px-3">Statutory Attribute</th>
-                      <th className="py-2.5 px-3">Uploaded Claim (Applicant)</th>
-                      <th className="py-2.5 px-3">Authoritative Record (DPI)</th>
-                      <th className="py-2.5 px-3">Status</th>
+                      <th className="py-3 px-4">Statutory Attribute</th>
+                      <th className="py-3 px-4">Uploaded Claim (Applicant)</th>
+                      <th className="py-3 px-4">Authoritative Record (DPI)</th>
+                      <th className="py-3 px-4">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-mono">
+                  <tbody className="divide-y divide-[var(--glass-border)]">
                     {activePreset.evidenceDiff.map((diff, idx) => (
                       <tr
                         key={idx}
                         className={
                           diff.isMismatch
-                            ? 'bg-red-50/60 dark:bg-red-950/20'
-                            : 'bg-white dark:bg-slate-900'
+                            ? 'bg-rose-500/10'
+                            : 'hover:bg-black/5 dark:hover:bg-white/5 transition-colors'
                         }
                       >
-                        <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-white">
+                        <td className="py-3 px-4 font-semibold text-[var(--text-primary)]">
                           {diff.attribute}
-                          <span className="block text-[10px] font-normal text-slate-500 dark:text-slate-400 mt-0.5">
+                          <span className="block text-[11px] font-normal text-[var(--text-muted)] mt-0.5">
                             {diff.note}
                           </span>
                         </td>
                         <td
-                          className={`py-2.5 px-3 ${
-                            diff.isMismatch ? 'text-red-700 dark:text-red-400 font-bold' : 'text-slate-700 dark:text-slate-300'
+                          className={`py-3 px-4 font-mono text-xs ${
+                            diff.isMismatch ? 'text-rose-700 dark:text-rose-400 font-bold' : 'text-[var(--text-secondary)]'
                           }`}
                         >
                           {diff.uploadedValue}
                         </td>
                         <td
-                          className={`py-2.5 px-3 ${
+                          className={`py-3 px-4 font-mono text-xs ${
                             diff.isMismatch
                               ? 'text-emerald-700 dark:text-emerald-400 font-bold'
-                              : 'text-slate-700 dark:text-slate-300'
+                              : 'text-[var(--text-secondary)]'
                           }`}
                         >
                           {diff.authoritativeValue}
                         </td>
-                        <td className="py-2.5 px-3">
+                        <td className="py-3 px-4">
                           {diff.isMismatch ? (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600 dark:text-red-400">
+                            <span className="pill-fatal inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full">
                               <AlertOctagon className="w-3 h-3" />
                               <span>MISMATCH</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                            <span className="pill-verified inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full">
                               <CheckCircle2 className="w-3 h-3" />
                               <span>ALIGNED</span>
                             </span>
@@ -963,43 +963,43 @@ export default function AuthorityBridgePage() {
         {activeTab === 'EPFO' && (
           <div className="p-5 space-y-6">
             {/* Header with Statutory Legal Explainer */}
-            <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900/50 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="p-4 rounded-2xl glass-well border border-indigo-500/20 flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div className="text-xs">
-                <span className="font-bold text-indigo-900 dark:text-indigo-200 block text-sm">
+                <span className="font-semibold text-indigo-900 dark:text-indigo-200 block text-sm">
                   EPFO ECR 2.0 &amp; Code on Social Security (2026) 50% Wage Add-Back Audit
                 </span>
-                <p className="text-indigo-700 dark:text-indigo-300 text-[11px] mt-0.5 max-w-3xl leading-relaxed">
+                <p className="text-indigo-800 dark:text-indigo-300 text-[11.5px] mt-1 max-w-3xl leading-relaxed">
                   <strong>Statutory Mandate:</strong> Under Section 2(88) of the Social Security Code 2026, if excluded allowances (HRA, conveyance, special allowances) exceed 50% of gross remuneration, the excess amount is deemed as wages and added back to basic wages for the 12% EPF/EPS statutory contribution.
                 </p>
               </div>
 
-              <div className="shrink-0 font-mono text-[11px] text-right">
-                <span className="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold">
+              <div className="shrink-0 text-right">
+                <span className="px-3 py-1 rounded-full bg-indigo-600/15 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
                   EPFO Rule 28(3)
                 </span>
               </div>
             </div>
 
             {/* Interactive Wage & Shortfall Table */}
-            <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-x-auto shadow-2xs">
+            <div className="liquid-glass-card rounded-2xl overflow-x-auto shadow-sm">
               <table className="w-full text-left text-xs min-w-[950px]">
-                <thead className="bg-slate-100 dark:bg-slate-800 text-[10.5px] font-mono uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                <thead className="glass-well text-[10.5px] font-semibold uppercase tracking-wider text-[var(--text-muted)] border-b border-[var(--glass-border)]">
                   <tr>
-                    <th className="py-2.5 px-3">Faculty / 12-Digit UAN</th>
-                    <th className="py-2.5 px-3">Aadhaar Face Auth (FAT)</th>
-                    <th className="py-2.5 px-3">PF Code &amp; Dual Overlap</th>
-                    <th className="py-2.5 px-3">Gross Remuneration (₹)</th>
-                    <th className="py-2.5 px-3">Declared Basic + DA (₹)</th>
-                    <th className="py-2.5 px-3">Excluded Allowances (₹)</th>
-                    <th className="py-2.5 px-3 text-red-600 dark:text-red-400">
+                    <th className="py-3 px-3.5">Faculty / 12-Digit UAN</th>
+                    <th className="py-3 px-3.5">Aadhaar Face Auth (FAT)</th>
+                    <th className="py-3 px-3.5">PF Code &amp; Dual Overlap</th>
+                    <th className="py-3 px-3.5">Gross Remuneration (₹)</th>
+                    <th className="py-3 px-3.5">Declared Basic + DA (₹)</th>
+                    <th className="py-3 px-3.5">Excluded Allowances (₹)</th>
+                    <th className="py-3 px-3.5 text-rose-600 dark:text-rose-400">
                       Deemed Wage Add-Back (₹)
                     </th>
-                    <th className="py-2.5 px-3 text-emerald-600 dark:text-emerald-400">
+                    <th className="py-3 px-3.5 text-emerald-600 dark:text-emerald-400">
                       12% EPF Base / Shortfall (₹)
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-mono">
+                <tbody className="divide-y divide-[var(--glass-border)]">
                   {facultyRoster.map((fac) => {
                     const maxExcluded = 0.5 * fac.grossSalary;
                     const deemedAddBack = Math.max(0, fac.excludedAllowances - maxExcluded);
@@ -1014,36 +1014,36 @@ export default function AuthorityBridgePage() {
                         key={fac.id}
                         className={
                           fac.isGhost
-                            ? 'bg-red-50/70 dark:bg-red-950/30'
+                            ? 'bg-rose-500/15'
                             : isViolated
-                            ? 'bg-amber-50/40 dark:bg-amber-950/20'
-                            : 'bg-white dark:bg-slate-900'
+                            ? 'bg-amber-500/10'
+                            : 'hover:bg-black/5 dark:hover:bg-white/5 transition-colors'
                         }
                       >
                         {/* Name & UAN */}
-                        <td className="py-3 px-3">
-                          <div className="font-sans font-bold text-slate-900 dark:text-white">
+                        <td className="py-3 px-3.5">
+                          <div className="font-semibold text-[var(--text-primary)]">
                             {fac.name}
                           </div>
-                          <div className="text-[10px] text-slate-500 font-mono mt-0.5">
-                            UAN: {fac.uan} • {fac.designation}
+                          <div className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                            UAN: <span className="font-mono">{fac.uan}</span> • {fac.designation}
                           </div>
                         </td>
 
                         {/* Aadhaar FAT */}
-                        <td className="py-3 px-3">
+                        <td className="py-3 px-3.5">
                           {fac.aadhaarFatVerified ? (
                             <div>
-                              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                              <span className="pill-verified inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full">
                                 <CheckCircle2 className="w-3 h-3" />
                                 <span>FAT VERIFIED</span>
                               </span>
-                              <div className="text-[9.5px] text-slate-400 mt-0.5">
+                              <div className="text-[10px] text-[var(--text-muted)] mt-0.5 font-mono">
                                 Liveness: {(fac.fatLivenessScore * 100).toFixed(1)}%
                               </div>
                             </div>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                            <span className="pill-deficiency inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full">
                               <AlertTriangle className="w-3 h-3" />
                               <span>AUTH PENDING</span>
                             </span>
@@ -1051,86 +1051,86 @@ export default function AuthorityBridgePage() {
                         </td>
 
                         {/* PF Code & Dual Overlap */}
-                        <td className="py-3 px-3">
-                          <div className="text-slate-800 dark:text-slate-200">
+                        <td className="py-3 px-3.5">
+                          <div className="font-mono text-xs text-[var(--text-secondary)]">
                             {fac.primaryPfCode}
                           </div>
                           {fac.concurrentPfCode ? (
-                            <div className="mt-1 p-1 rounded bg-red-600/10 border border-red-500/30 text-[10px] text-red-700 dark:text-red-300 font-bold">
-                              DUAL OVERLAP: {fac.concurrentPfCode}
-                              <span className="block font-normal text-[9px] text-red-600 dark:text-red-400">
+                            <div className="mt-1 p-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-[10.5px] text-rose-700 dark:text-rose-300 font-semibold">
+                              DUAL OVERLAP: <span className="font-mono">{fac.concurrentPfCode}</span>
+                              <span className="block font-normal text-[10px] text-rose-600 dark:text-rose-400">
                                 {fac.concurrentEmployer}
                               </span>
                             </div>
                           ) : (
-                            <span className="text-[10px] text-emerald-600">Single Employer</span>
+                            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">Single Employer</span>
                           )}
                         </td>
 
                         {/* Gross Remuneration (Editable) */}
-                        <td className="py-3 px-3">
+                        <td className="py-3 px-3.5">
                           <input
                             type="number"
                             value={fac.grossSalary}
                             onChange={(e) =>
                               handleWageChange(fac.id, 'grossSalary', Number(e.target.value))
                             }
-                            className="w-24 px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white"
+                            className="w-24 px-2 py-1 rounded-lg glass-well text-xs font-mono font-bold text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
                           />
                         </td>
 
                         {/* Declared Basic + DA (Editable) */}
-                        <td className="py-3 px-3">
+                        <td className="py-3 px-3.5">
                           <input
                             type="number"
                             value={fac.declaredBasicDa}
                             onChange={(e) =>
                               handleWageChange(fac.id, 'declaredBasicDa', Number(e.target.value))
                             }
-                            className="w-24 px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white"
+                            className="w-24 px-2 py-1 rounded-lg glass-well text-xs font-mono font-bold text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
                           />
-                          <div className="text-[9.5px] text-slate-400 mt-0.5">
+                          <div className="text-[10px] text-[var(--text-muted)] mt-0.5 font-mono">
                             {((fac.declaredBasicDa / (fac.grossSalary || 1)) * 100).toFixed(1)}% of gross
                           </div>
                         </td>
 
                         {/* Excluded Allowances */}
-                        <td className="py-3 px-3 text-slate-700 dark:text-slate-300">
+                        <td className="py-3 px-3.5 text-[var(--text-secondary)] font-mono text-xs">
                           ₹ {fac.excludedAllowances.toLocaleString('en-IN')}
-                          <div className="text-[9.5px] text-slate-400 mt-0.5">
+                          <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
                             Max 50%: ₹ {maxExcluded.toLocaleString('en-IN')}
                           </div>
                         </td>
 
                         {/* Deemed Wage Add-Back */}
-                        <td className="py-3 px-3">
+                        <td className="py-3 px-3.5 font-mono text-xs">
                           {isViolated ? (
                             <div>
-                              <span className="text-red-700 dark:text-red-400 font-bold">
+                              <span className="text-rose-700 dark:text-rose-400 font-bold">
                                 + ₹ {deemedAddBack.toLocaleString('en-IN')}
                               </span>
-                              <span className="block text-[9.5px] text-red-500 font-sans">
+                              <span className="block text-[10px] text-rose-500 font-sans">
                                 (Excess over 50% threshold)
                               </span>
                             </div>
                           ) : (
-                            <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+                            <span className="text-emerald-600 dark:text-emerald-400 font-semibold font-sans text-xs">
                               ₹ 0 (Rule Compliant)
                             </span>
                           )}
                         </td>
 
                         {/* Statutory Remittance & Shortfall */}
-                        <td className="py-3 px-3">
-                          <div className="font-bold text-slate-900 dark:text-white">
-                            ₹ {statutoryEpfRemittance.toLocaleString('en-IN')} (Statutory 12%)
+                        <td className="py-3 px-3.5">
+                          <div className="font-semibold text-[var(--text-primary)] font-mono text-xs">
+                            ₹ {statutoryEpfRemittance.toLocaleString('en-IN')} <span className="font-sans text-[11px] text-[var(--text-muted)] font-normal">(12%)</span>
                           </div>
                           {shortfall > 0 ? (
-                            <div className="text-[10px] text-red-600 dark:text-red-400 font-bold">
-                              Remittance Shortfall: ₹ {shortfall.toLocaleString('en-IN')} / mo
+                            <div className="text-[10.5px] text-rose-600 dark:text-rose-400 font-semibold mt-0.5">
+                              Shortfall: ₹ {shortfall.toLocaleString('en-IN')} / mo
                             </div>
                           ) : (
-                            <div className="text-[10px] text-emerald-600">Zero Shortfall</div>
+                            <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">Zero Shortfall</div>
                           )}
                         </td>
                       </tr>
@@ -1141,32 +1141,32 @@ export default function AuthorityBridgePage() {
             </div>
 
             {/* Qdrant 512-D ArcFace HNSW ANN Search Simulator */}
-            <div className="p-4 rounded-xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/20 via-slate-900/40 to-slate-950/60 space-y-4">
+            <div className="p-5 rounded-2xl border border-indigo-500/20 bg-slate-950/85 backdrop-blur-md space-y-4 shadow-xl text-slate-200">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-500/20 pb-3">
                 <div>
-                  <h3 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
-                    <UserX className="w-4 h-4 text-red-500" />
+                  <h3 className="font-semibold text-white text-sm flex items-center gap-2">
+                    <UserX className="w-4 h-4 text-rose-400" />
                     <span>Qdrant 512-D ArcFace HNSW Vector Search Engine</span>
                   </h3>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Approximate Nearest Neighbor (ANN) biometric index querying 1.2M national faculty vectors in &lt;4ms
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3 font-mono text-xs">
-                  <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 font-mono text-[11px]">
                     M=32 • efConstruction=200 • efSearch={qdrantEfSearch}
                   </span>
-                  <span className="text-emerald-400 font-bold">Query Latency: 2.8ms</span>
+                  <span className="text-emerald-400 font-semibold text-xs">Latency: 2.8ms</span>
                 </div>
               </div>
 
               {/* Threshold Slider & Filter Controls */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-slate-400">Cosine Similarity Threshold (cos θ &gt; 0.78):</span>
-                    <span className="font-bold text-sky-400">{arcFaceThreshold.toFixed(2)}</span>
+                  <div className="flex items-center justify-between mb-1 text-slate-300">
+                    <span>Cosine Similarity Threshold (cos θ &gt; 0.78):</span>
+                    <span className="font-mono font-bold text-sky-400">{arcFaceThreshold.toFixed(2)}</span>
                   </div>
                   <input
                     type="range"
@@ -1185,9 +1185,9 @@ export default function AuthorityBridgePage() {
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-slate-400">HNSW efSearch Precision:</span>
-                    <span className="font-bold text-indigo-400">{qdrantEfSearch}</span>
+                  <div className="flex items-center justify-between mb-1 text-slate-300">
+                    <span>HNSW efSearch Precision:</span>
+                    <span className="font-mono font-bold text-indigo-400">{qdrantEfSearch}</span>
                   </div>
                   <input
                     type="range"
@@ -1208,41 +1208,41 @@ export default function AuthorityBridgePage() {
 
               {/* Nearest Neighbor Query Matches */}
               <div className="space-y-2 pt-2">
-                <div className="text-[10.5px] font-mono text-slate-400 uppercase font-semibold">
+                <div className="text-[11px] text-slate-400 uppercase font-semibold">
                   Query Results: Dr. Ramesh Chander Sharma (Embedding: RetinaFace + ArcFace IResNet-100)
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   {/* Match 1: Flagged Ghost Match */}
-                  <div className="p-3 rounded-xl bg-red-950/30 border border-red-500/40 text-slate-200 space-y-1">
+                  <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-500/40 text-slate-200 space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-red-400">Match #1 • GHOST FACULTY COINCIDENCE</span>
-                      <span className="font-bold text-red-400 text-sm">cos θ = 0.942</span>
+                      <span className="font-semibold text-rose-300">Match #1 • GHOST FACULTY COINCIDENCE</span>
+                      <span className="font-mono font-bold text-rose-400 text-sm">cos θ = 0.942</span>
                     </div>
                     <div className="text-[11px] text-slate-300">
                       <strong>Matched College:</strong> Noida Institute of Engg &amp; Tech (NIET)
                     </div>
-                    <div className="text-[10px] text-slate-400">
-                      Permanent ID (PID): 1-1092837419 • Region: Northern • Eucl. Dist: 0.058
+                    <div className="text-[10.5px] text-slate-400">
+                      Permanent ID (PID): <span className="font-mono">1-1092837419</span> • Region: Northern • Eucl. Dist: 0.058
                     </div>
-                    <div className="text-[10.5px] text-red-300 pt-1 border-t border-red-500/20">
+                    <div className="text-[11px] text-rose-300 pt-1 border-t border-rose-500/20">
                       Simultaneous full-time employment registered in AICTE Portal under duplicate PAN.
                     </div>
                   </div>
 
                   {/* Match 2: Current Node */}
-                  <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-700 text-slate-300 space-y-1">
+                  <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-700/60 text-slate-300 space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-300">Match #2 • Current Dossier</span>
-                      <span className="font-bold text-slate-300 text-sm">cos θ = 1.000</span>
+                      <span className="font-semibold text-slate-200">Match #2 • Current Dossier</span>
+                      <span className="font-mono font-bold text-slate-300 text-sm">cos θ = 1.000</span>
                     </div>
                     <div className="text-[11px] text-slate-300">
                       <strong>Institution:</strong> Apex Institute of Technology &amp; Management
                     </div>
-                    <div className="text-[10px] text-slate-400">
-                      PID: 1-9482710392 • Region: North-Western • Self-Reference
+                    <div className="text-[10.5px] text-slate-400">
+                      PID: <span className="font-mono">1-9482710392</span> • Region: North-Western • Self-Reference
                     </div>
-                    <div className="text-[10.5px] text-slate-400 pt-1 border-t border-slate-700">
+                    <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-700/60">
                       Subject enrollment dossier under scrutiny.
                     </div>
                   </div>
@@ -1256,20 +1256,20 @@ export default function AuthorityBridgePage() {
         {activeTab === 'QR_CRYPTO' && (
           <div className="p-5 space-y-6">
             {/* 2D QR Cryptographic JWS & XML Payload Decoder */}
-            <div className="space-y-3">
+            <div className="space-y-3.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>2D QR Digital Signature &amp; PKI X.509 Cryptographic Verification</span>
                 </span>
-                <span className="font-mono text-[11px] text-slate-400">ECDSA secp256r1 (88ms latency)</span>
+                <span className="text-xs text-[var(--text-muted)] font-mono">ECDSA secp256r1 (88ms latency)</span>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-950 text-slate-200 font-mono text-xs overflow-x-auto space-y-2 border border-slate-800">
+              <div className="p-5 rounded-2xl bg-slate-950/90 text-slate-200 font-mono text-xs overflow-x-auto space-y-2 border border-white/10 shadow-xl">
                 <div className="text-slate-500">
                   // Decoded JSON Web Signature (JWS) Payload from Fire NOC 2D QR Code Matrix
                 </div>
-                <div className="text-emerald-400">
+                <div className="text-emerald-400 leading-relaxed">
                   {`{
   "alg": "ES256",
   "typ": "JWT",
@@ -1288,48 +1288,48 @@ export default function AuthorityBridgePage() {
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 text-xs text-emerald-800 dark:text-emerald-300 flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                <div>
+              <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-900 dark:text-emerald-200 flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
+                <div className="leading-relaxed">
                   <strong>Cryptographic Integrity Verified:</strong> The QR matrix holds an authentic State CA ECDSA signature proving the document was originally issued with validity ending <strong>30-06-2024</strong>. This conclusively proves the printed PDF body date of 2027 was spliced post-issuance!
                 </div>
               </div>
             </div>
 
             {/* Strict FQDN Whitelist & Domain Spoofing Inspector */}
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-3">
-              <div className="flex items-center justify-between text-xs">
+            <div className="liquid-glass-card rounded-2xl p-5 space-y-3.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white">
+                  <h4 className="font-semibold text-[var(--text-primary)]">
                     Strict Government FQDN Whitelist &amp; Anti-Phishing Domain Filter
                   </h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">
                     Enforces that all digital certificate verification URLs resolve strictly to MeitY registered <strong>*.gov.in</strong> or <strong>*.nic.in</strong> domains.
                   </p>
                 </div>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold border border-emerald-500/30">
+                <span className="font-mono text-[10.5px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/30">
                   REGEX: ^https?://([a-zA-Z0-9-]+\.)*(gov\.in|nic\.in)
                 </span>
               </div>
 
               {/* Interactive Domain Input */}
-              <div className="space-y-2">
-                <label className="text-[10.5px] font-mono text-slate-500 uppercase font-semibold block">
+              <div className="space-y-2.5">
+                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block">
                   Test Document Verification URL:
                 </label>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                   <input
                     type="text"
                     value={qrTestUrl}
                     onChange={(e) => setQrTestUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-mono text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    className="flex-1 px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
                   />
                   <button
                     onClick={() => {
                       setQrTestUrl('https://edistrict-haryana.com/verify?id=HR-DFS-2021-8841');
                       toast.warning('Loaded Phishing / Domain Spoof Simulation');
                     }}
-                    className="px-3 py-2 rounded-xl text-xs font-mono font-semibold bg-red-600/10 border border-red-500/30 text-red-600 hover:bg-red-600/20 transition-colors"
+                    className="btn-liquid-secondary cursor-pointer px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:text-rose-700"
                   >
                     Simulate Spoof
                   </button>
@@ -1338,7 +1338,7 @@ export default function AuthorityBridgePage() {
                       setQrTestUrl('https://edistrict.haryana.gov.in/verify?id=HR-DFS-2021-8841');
                       toast.success('Loaded Genuine *.gov.in Domain');
                     }}
-                    className="px-3 py-2 rounded-xl text-xs font-mono font-semibold bg-emerald-600/10 border border-emerald-500/30 text-emerald-600 hover:bg-emerald-600/20 transition-colors"
+                    className="btn-liquid-secondary cursor-pointer px-3.5 py-2 rounded-xl text-xs font-semibold text-emerald-600 hover:text-emerald-700"
                   >
                     Reset Genuine
                   </button>
@@ -1346,25 +1346,25 @@ export default function AuthorityBridgePage() {
 
                 {/* Validation Result Box */}
                 <div
-                  className={`p-3 rounded-xl border text-xs font-mono flex items-start gap-2.5 ${
+                  className={`p-3.5 rounded-xl border text-xs flex items-start gap-2.5 ${
                     qrDomainCheck.status === 'TRUSTED_GOV_ROOT'
-                      ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-300'
-                      : 'bg-red-50 dark:bg-red-950/30 border-red-300 dark:border-red-900/60 text-red-800 dark:text-red-300'
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-200'
+                      : 'bg-rose-500/10 border-rose-500/30 text-rose-900 dark:text-rose-200'
                   }`}
                 >
                   {qrDomainCheck.status === 'TRUSTED_GOV_ROOT' ? (
-                    <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
+                    <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
                   ) : (
-                    <AlertOctagon className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+                    <AlertOctagon className="w-4 h-4 shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
                   )}
                   <div>
-                    <div className="font-bold flex items-center gap-2">
+                    <div className="font-semibold flex items-center gap-2">
                       <span>Status: {qrDomainCheck.status}</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/10 dark:bg-white/10">
+                      <span className="text-[10.5px] px-2 py-0.5 rounded-md glass-well font-mono">
                         Hostname: {qrDomainCheck.hostname || 'None'}
                       </span>
                     </div>
-                    <div className="text-[11px] mt-0.5 font-sans">
+                    <div className="text-[11.5px] mt-1 leading-relaxed text-[var(--text-secondary)]">
                       {qrDomainCheck.details}
                     </div>
                   </div>

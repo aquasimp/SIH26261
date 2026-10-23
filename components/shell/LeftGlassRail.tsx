@@ -94,11 +94,11 @@ export function LeftGlassRail() {
   ];
 
   return (
-    <aside className="w-64 fixed inset-y-0 left-0 z-40 flex flex-col border-r border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-2xl shadow-[var(--glass-shadow)] transition-colors">
+    <aside className="w-64 fixed top-3 bottom-3 left-3 z-40 flex flex-col liquid-glass-card rounded-2xl overflow-hidden shadow-2xl transition-all">
       {/* Brand Header */}
-      <div className="h-14 px-3.5 border-b border-[var(--glass-border)] flex items-center gap-2.5">
+      <div className="h-14 px-3.5 border-b border-[var(--glass-well-border)] flex items-center gap-2.5">
         {/* Emblem: Tactile Obsidian Seal with Specular Rim and Gold AICTE Glyph */}
-        <div className="w-8 h-8 rounded-lg bg-slate-950 dark:bg-slate-900 border border-slate-800 dark:border-slate-700/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_1px_3px_rgba(0,0,0,0.3)] flex items-center justify-center shrink-0 text-amber-400">
+        <div className="w-8 h-8 rounded-xl bg-slate-950 dark:bg-slate-900 border border-slate-800 dark:border-slate-700/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_1px_3px_rgba(0,0,0,0.3)] flex items-center justify-center shrink-0 text-amber-400">
           <svg viewBox="0 0 48 48" width={18} height={18} className="fill-none stroke-current" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             {/* Emblem stylized Ashok wheel + open book + lamp */}
             <circle cx="24" cy="24" r="18" className="opacity-40" strokeDasharray="3 3" />
@@ -114,17 +114,17 @@ export function LeftGlassRail() {
               {t.portalTitle}
             </span>
           </div>
-          <span className="text-[9.5px] font-mono tracking-widest font-semibold text-[var(--text-muted)] uppercase truncate">
+          <span className="text-[10px] tracking-wider font-semibold text-[var(--text-muted)] uppercase truncate">
             {t.portalSubtitle}
           </span>
         </div>
       </div>
 
-      {/* Navigation Groups - Dense Workstation Spacing */}
+      {/* Navigation Groups */}
       <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-4">
         {navGroups.map((group, gIdx) => (
-          <div key={gIdx} className="space-y-0.5">
-            <div className="px-2.5 text-[9.5px] font-mono font-semibold uppercase tracking-wider text-[var(--text-faint)] mb-1.5">
+          <div key={gIdx} className="space-y-1">
+            <div className="px-2.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-faint)] mb-1.5">
               {group.label}
             </div>
             {group.items.map((item) => {
@@ -138,15 +138,15 @@ export function LeftGlassRail() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`group relative flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${
+                  className={`group relative flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 ${
                     isActive
-                      ? 'bg-slate-900 text-white dark:bg-white/12 dark:text-white font-semibold shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_1px_2px_rgba(0,0,0,0.12)] border border-slate-800 dark:border-white/15'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
+                      ? 'btn-liquid-primary font-semibold shadow-sm'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-200/50 dark:hover:bg-slate-800/40'
                   }`}
                 >
-                  <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <Icon
-                      className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                      className={`w-4 h-4 shrink-0 transition-transform ${
                         isActive ? 'text-amber-400 dark:text-sky-300' : 'text-[var(--text-faint)] group-hover:text-[var(--text-secondary)]'
                       }`}
                     />
@@ -154,7 +154,7 @@ export function LeftGlassRail() {
                   </div>
 
                   {item.badge && (
-                    <span className={`text-[9.5px] font-mono font-semibold px-1.5 py-0.5 rounded ${item.badgeColor}`}>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full tabular-nums ${item.badgeColor}`}>
                       {item.badge}
                     </span>
                   )}
@@ -165,10 +165,10 @@ export function LeftGlassRail() {
         ))}
       </div>
 
-      {/* Officer Credential Footer - De-AI-ified, Sharp Typographic Credential */}
-      <div className="p-2.5 border-t border-[var(--glass-border)] bg-[var(--glass-bg-subtle)]">
-        <div className="flex items-center gap-2 p-1.5 rounded-lg bg-[var(--glass-bg)] border border-[var(--glass-border)] shadow-2xs">
-          <div className="relative w-7 h-7 rounded-md bg-slate-900 dark:bg-slate-800 text-slate-200 flex items-center justify-center font-mono font-bold text-[10px] shrink-0 border border-slate-700/60 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]">
+      {/* Officer Credential Footer - Floating Glass Well safely positioned away from screen edges */}
+      <div className="p-2.5 border-t border-[var(--glass-well-border)]">
+        <div className="flex items-center gap-2.5 p-2 rounded-xl glass-well shadow-2xs">
+          <div className="relative w-7 h-7 rounded-lg bg-slate-900 dark:bg-slate-800 text-slate-200 flex items-center justify-center font-bold text-[10px] shrink-0 border border-slate-700/60 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]">
             RO
             <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
           </div>
@@ -176,7 +176,7 @@ export function LeftGlassRail() {
             <div className="text-[11px] font-semibold text-[var(--text-primary)] truncate">
               Shri R.K. Verma (RO-04)
             </div>
-            <div className="text-[9.5px] font-mono text-[var(--text-muted)] truncate">
+            <div className="text-[10px] text-[var(--text-muted)] truncate">
               Regional Scrutiny Officer
             </div>
           </div>

@@ -147,22 +147,22 @@ function DeficienciesContent() {
   const isFatal = formType === 'FORM_B';
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="space-y-6 animate-glass-in">
       {/* Top Header & Application Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-widest">
-              AICTE REGULATION &amp; APPROVAL PROCESS BUREAU
+            <span className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
+              AICTE Regulation &amp; Approval Process Bureau
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             Statutory Notice &amp;{' '}
-            <span className="font-serif italic font-normal text-sky-700 dark:text-sky-400">
+            <span className="title-serif-italic text-sky-600 dark:text-sky-400">
               Deficiency Generator
             </span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 max-w-3xl leading-relaxed">
             Bilingual Government of India official orders with itemized APH 2024–27 citations, Class-3 DSC, and 15-day statutory clock.
           </p>
         </div>
@@ -178,7 +178,7 @@ function DeficienciesContent() {
                 setIsDispatched(false);
                 router.push(`/deficiencies?appId=${e.target.value}`);
               }}
-              className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white shadow-2xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="appearance-none pl-3.5 pr-9 py-2 rounded-xl glass-well text-xs font-semibold text-[var(--text-primary)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500 shadow-xs"
             >
               {applications.map((app) => (
                 <option key={app.id} value={app.id}>
@@ -186,29 +186,29 @@ function DeficienciesContent() {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
           </div>
         </div>
       </div>
 
       {/* Control Strip: Document Type Toggle & Language Selector */}
-      <div className="p-4 rounded-2xl liquid-glass-card border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-2xl liquid-glass-card flex flex-wrap items-center justify-between gap-3 shadow-xs">
         {/* Form A / Form B Toggle */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+        <div className="flex items-center gap-2.5">
+          <span className="text-xs font-semibold text-[var(--text-secondary)]">
             Document Order Type:
           </span>
-          <div className="inline-flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono">
+          <div className="inline-flex rounded-xl p-1 glass-well text-xs">
             <button
               onClick={() => {
                 setFormType('FORM_A');
                 setIsDscSigned(false);
                 setIsDispatched(false);
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 formType === 'FORM_A'
-                  ? 'bg-amber-600 text-white font-bold shadow-2xs'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                  ? 'bg-amber-600 text-white font-semibold shadow-xs'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               Form-A: 15-Day EVC Rectifiable Notice
@@ -219,10 +219,10 @@ function DeficienciesContent() {
                 setIsDscSigned(false);
                 setIsDispatched(false);
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 formType === 'FORM_B'
-                  ? 'bg-red-600 text-white font-bold shadow-2xs'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                  ? 'bg-rose-600 text-white font-semibold shadow-xs'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               Form-B: Standing Hearing Committee (SHC) Show-Cause
@@ -232,34 +232,34 @@ function DeficienciesContent() {
 
         {/* Language Toggle */}
         <div className="flex items-center gap-2">
-          <Languages className="w-4 h-4 text-slate-400" />
-          <div className="inline-flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+          <Languages className="w-4 h-4 text-[var(--text-muted)]" />
+          <div className="inline-flex rounded-xl p-1 glass-well text-xs font-medium">
             <button
               onClick={() => setNoticeLang('en')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 noticeLang === 'en'
-                  ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 font-bold shadow-2xs'
-                  : 'text-slate-500'
+                  ? 'btn-liquid-primary shadow-xs font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               English
             </button>
             <button
               onClick={() => setNoticeLang('hi')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 noticeLang === 'hi'
-                  ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 font-bold shadow-2xs'
-                  : 'text-slate-500'
+                  ? 'btn-liquid-primary shadow-xs font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               हिन्दी (Hindi)
             </button>
             <button
               onClick={() => setNoticeLang('bilingual')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                 noticeLang === 'bilingual'
-                  ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 font-bold shadow-2xs'
-                  : 'text-slate-500'
+                  ? 'btn-liquid-primary shadow-xs font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               Bilingual (द्विभाषी)
@@ -270,136 +270,130 @@ function DeficienciesContent() {
 
       {/* 15-Day EVC Rectification Countdown Clock */}
       <div
-        className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+        className={`p-5 rounded-2xl liquid-glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 border ${
           isFatal
-            ? 'border-red-500/30 bg-red-500/10'
-            : 'border-amber-500/30 bg-amber-500/10'
+            ? 'border-rose-500/30'
+            : 'border-amber-500/30'
         }`}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3.5">
           <div
-            className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
+            className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
               isFatal
-                ? 'bg-red-500/10 border-red-500/20 text-red-700 dark:text-red-400'
-                : 'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400'
+                ? 'bg-rose-500/15 border-rose-500/30 text-rose-600 dark:text-rose-400'
+                : 'bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-400'
             }`}
           >
             <Clock className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div
-              className={`text-xs font-bold uppercase tracking-wider ${
+              className={`text-xs font-semibold uppercase tracking-wider ${
                 isFatal
-                  ? 'text-red-800 dark:text-red-300'
-                  : 'text-amber-800 dark:text-amber-300'
+                  ? 'text-rose-700 dark:text-rose-300'
+                  : 'text-amber-700 dark:text-amber-300'
               }`}
             >
               {isFatal
                 ? 'Standing Hearing Committee (SHC) Statutory Summons Window'
                 : '15-Day Expert Visit Committee (EVC) Rectification Clock'}
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">
+            <div className="text-xs text-[var(--text-muted)] mt-0.5">
               APH 2024–27 Chapter {isFatal ? 'VIII Clause 8.2' : 'VII Clause 2.1'} Statutory Compliance Deadline: 07-11-2026 23:59 IST
             </div>
           </div>
         </div>
 
         {/* Big Countdown Numerals */}
-        <div className="flex items-center gap-2 font-mono text-center">
-          <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div className="text-lg font-bold text-slate-900 dark:text-white">{timeLeft.days}</div>
-            <div className="text-[9px] uppercase font-semibold text-slate-400">Days</div>
+        <div className="flex items-center gap-2 text-center">
+          <div className="px-3.5 py-2 rounded-xl glass-well min-w-[56px]">
+            <div className="metric-value text-xl font-bold">{timeLeft.days}</div>
+            <div className="text-[10px] uppercase font-semibold text-[var(--text-muted)] mt-0.5">Days</div>
           </div>
-          <span className="font-bold text-slate-400">:</span>
-          <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div className="text-lg font-bold text-slate-900 dark:text-white">{timeLeft.hours}</div>
-            <div className="text-[9px] uppercase font-semibold text-slate-400">Hours</div>
+          <span className="font-bold text-[var(--text-muted)] text-base">:</span>
+          <div className="px-3.5 py-2 rounded-xl glass-well min-w-[56px]">
+            <div className="metric-value text-xl font-bold">{timeLeft.hours}</div>
+            <div className="text-[10px] uppercase font-semibold text-[var(--text-muted)] mt-0.5">Hours</div>
           </div>
-          <span className="font-bold text-slate-400">:</span>
-          <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div className="text-lg font-bold text-slate-900 dark:text-white">{timeLeft.minutes}</div>
-            <div className="text-[9px] uppercase font-semibold text-slate-400">Mins</div>
+          <span className="font-bold text-[var(--text-muted)] text-base">:</span>
+          <div className="px-3.5 py-2 rounded-xl glass-well min-w-[56px]">
+            <div className="metric-value text-xl font-bold">{timeLeft.minutes}</div>
+            <div className="text-[10px] uppercase font-semibold text-[var(--text-muted)] mt-0.5">Mins</div>
           </div>
-          <span className="font-bold text-slate-400">:</span>
-          <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div
-              className={`text-lg font-bold ${
-                isFatal
-                  ? 'text-red-600 dark:text-red-400'
-                  : 'text-amber-600 dark:text-amber-400'
-              }`}
-            >
+          <span className="font-bold text-[var(--text-muted)] text-base">:</span>
+          <div className="px-3.5 py-2 rounded-xl glass-well min-w-[56px]">
+            <div className="metric-value text-xl font-bold">
               {timeLeft.seconds}
             </div>
-            <div className="text-[9px] uppercase font-semibold text-slate-400">Secs</div>
+            <div className="text-[10px] uppercase font-semibold text-[var(--text-muted)] mt-0.5">Secs</div>
           </div>
         </div>
       </div>
 
       {/* Official Government Order Sheet */}
-      <div className="rounded-2xl p-8 sm:p-12 space-y-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl print:border-none print:shadow-none">
+      <div className="rounded-3xl p-8 sm:p-12 space-y-6 liquid-glass-card shadow-2xl print:border-none print:shadow-none">
         {/* National Emblem & AICTE Official Header */}
-        <div className="text-center pb-6 border-b-2 border-slate-900/10 dark:border-slate-100/10 space-y-1">
+        <div className="text-center pb-6 border-b border-[var(--glass-border)] space-y-1.5">
           {/* Ashoka Lion Emblem Representation */}
-          <div className="w-14 h-14 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-800 dark:text-slate-200 mb-2 border border-slate-300 dark:border-slate-700 shadow-xs">
-            <Building className="w-7 h-7 text-amber-700 dark:text-amber-400" />
+          <div className="w-14 h-14 mx-auto rounded-full glass-well flex items-center justify-center text-[var(--text-primary)] mb-2 shadow-xs">
+            <Building className="w-7 h-7 text-amber-600 dark:text-amber-400" />
           </div>
 
-          <div className="font-serif font-extrabold text-sm sm:text-base text-slate-900 dark:text-white tracking-wide uppercase">
+          <div className="font-serif font-extrabold text-sm sm:text-base text-[var(--text-primary)] tracking-wide uppercase">
             {noticeLang !== 'en' && (
-              <span className="block font-sans text-xs text-slate-700 dark:text-slate-300 mb-0.5">
+              <span className="block font-sans text-xs text-[var(--text-secondary)] mb-0.5">
                 अखिल भारतीय तकनीकी शिक्षा परिषद
               </span>
             )}
             ALL INDIA COUNCIL FOR TECHNICAL EDUCATION
           </div>
 
-          <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold tracking-wider">
+          <p className="text-xs text-[var(--text-secondary)] font-medium tracking-wider">
             {noticeLang !== 'en' && 'शिक्षा मंत्रालय, भारत सरकार • '}
             (A Statutory Body Under Ministry of Education, Govt. of India)
           </p>
-          <p className="text-[11px] text-slate-400 font-mono">
+          <p className="text-[11px] text-[var(--text-muted)] font-mono">
             Nelson Mandela Marg, Vasant Kunj, New Delhi - 110070 • Telephone: 011-29581000 • www.aicte-india.org
           </p>
         </div>
 
         {/* Notice Dispatch Identification Details */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-slate-600 dark:text-slate-400 gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-[var(--text-muted)] gap-2 border-b border-[var(--glass-border)] pb-3">
           <div>
-            <strong>File No / पत्रांक संख्या:</strong> AICTE/UB/SCRUTINY/{application.id}/2026-27
+            <strong>File No / पत्रांक संख्या:</strong> <span className="font-mono">AICTE/UB/SCRUTINY/{application.id}/2026-27</span>
           </div>
           <div>
-            <strong>Date of Dispatch / निर्गमन तिथि:</strong> 23-10-2026
+            <strong>Date of Dispatch / निर्गमन तिथि:</strong> <span className="font-mono">23-10-2026</span>
           </div>
         </div>
 
         {/* Addressee Section */}
-        <div className="text-xs text-slate-800 dark:text-slate-200 space-y-0.5">
-          <p className="font-bold">To / सेवा में,</p>
-          <p className="font-semibold">The Chairman / Secretary / Director / Principal,</p>
-          <p className="font-bold text-sm text-slate-900 dark:text-white">
+        <div className="text-xs text-[var(--text-secondary)] space-y-1">
+          <p className="font-semibold text-[var(--text-primary)]">To / सेवा में,</p>
+          <p className="font-medium">The Chairman / Secretary / Director / Principal,</p>
+          <p className="font-bold text-sm text-[var(--text-primary)]">
             {application.nameEn}
             {noticeLang !== 'en' && ` (${application.nameHi})`}
           </p>
-          <p className="text-slate-500 dark:text-slate-400">
+          <p className="text-[var(--text-muted)]">
             {application.city}, {application.state} • Permanent Institution ID (PID):{' '}
-            <strong className="text-slate-800 dark:text-slate-200 font-mono">{application.pid}</strong>
+            <strong className="text-[var(--text-primary)] font-mono">{application.pid}</strong>
           </p>
-          <p className="text-slate-500 dark:text-slate-400">
+          <p className="text-[var(--text-muted)]">
             Trust / Society: {application.trustName} • Region: {application.region}
           </p>
         </div>
 
         {/* Subject Line */}
         <div
-          className={`p-3.5 rounded-xl text-xs font-bold leading-relaxed border ${
+          className={`p-4 rounded-xl text-xs font-semibold leading-relaxed border ${
             isFatal
-              ? 'bg-red-50/80 dark:bg-red-950/30 border-red-200 dark:border-red-900/60 text-red-900 dark:text-red-200'
-              : 'bg-amber-50/80 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/60 text-amber-900 dark:text-amber-200'
+              ? 'bg-rose-500/10 border-rose-500/30 text-rose-900 dark:text-rose-200'
+              : 'bg-amber-500/10 border-amber-500/30 text-amber-900 dark:text-amber-200'
           }`}
         >
           {noticeLang !== 'en' && (
-            <div className="mb-1 text-[11.5px] font-sans">
+            <div className="mb-1 text-xs">
               {isFatal
                 ? 'विषय: एआईसीटीई अनुमोदन प्रक्रिया पुस्तिका (APH 2024–27) के अध्याय VIII के तहत स्थायी सुनवाई समिति (SHC) हेतु कारण बताओ नोटिस — प्रमाणित दस्तावेजी जालसाजी एवं फर्जी संकाय भर्ती।'
                 : 'विषय: एआईसीटीई अनुमोदन प्रक्रिया पुस्तिका (APH 2024–27) के अध्याय VII के तहत 15-दिवसीय ई०वी०सी० त्रुटि निवारण सूचना पत्र (शैक्षणिक सत्र 2026–27 अनुमोदन विस्तार)।'}
@@ -415,16 +409,16 @@ function DeficienciesContent() {
         </div>
 
         {/* Formal Legal Body */}
-        <div className="text-xs text-slate-700 dark:text-slate-300 space-y-3 leading-relaxed">
+        <div className="text-xs text-[var(--text-secondary)] space-y-3.5 leading-relaxed">
           <p>Sir / Madam (महोदय/महोदया),</p>
           <p>
             The statutory scrutiny dossier submitted by your institution for Application ID{' '}
-            <strong className="font-mono text-slate-900 dark:text-white">{application.id}</strong>{' '}
+            <strong className="font-mono text-[var(--text-primary)]">{application.id}</strong>{' '}
             has undergone multi-modal neural evidence auditing, forensic tampering localization, computer-vision architectural compliance check, and National DPI Authority Bridge reconciliation under the statutory provisions of the AICTE Approval Process Handbook (APH 2024–2027).
           </p>
           <p>
             {isFatal ? (
-              <span className="text-red-700 dark:text-red-400 font-semibold">
+              <span className="text-rose-700 dark:text-rose-400 font-semibold">
                 The automated forensic scrutiny pipeline and DigiLocker/EPFO Authority verification have detected FATAL FRAUDULENT TAMPERING and/or GHOST FACULTY ENROLLMENTS violating APH Chapter VIII Clause 8.2 and Bharatiya Nyaya Sanhita (BNS) provisions.
               </span>
             ) : (
@@ -439,21 +433,21 @@ function DeficienciesContent() {
             {application.anomalies.map((anom, idx) => (
               <div
                 key={anom.id}
-                className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 space-y-2"
+                className="p-4 rounded-xl glass-well space-y-2.5"
               >
-                <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
-                  <span className="font-bold text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <span className="font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
                     <AlertTriangle className="w-3.5 h-3.5" />
                     <span>
                       Item #{idx + 1}: {anom.category} (Risk Priority Number: {anom.rpnScore})
                     </span>
                   </span>
-                  <span className="text-slate-500">
-                    Neural Model: {anom.modelUsed} • Tamper Conf: {(anom.tamperProbability * 100).toFixed(1)}%
+                  <span className="text-[var(--text-muted)] text-[11px]">
+                    Neural Model: <span className="font-mono">{anom.modelUsed}</span> • Tamper Conf: {(anom.tamperProbability * 100).toFixed(1)}%
                   </span>
                 </div>
 
-                <div className="font-bold text-xs text-slate-900 dark:text-white">
+                <div className="font-semibold text-xs text-[var(--text-primary)]">
                   {noticeLang === 'hi'
                     ? anom.titleHi
                     : noticeLang === 'en'
@@ -461,7 +455,7 @@ function DeficienciesContent() {
                     : `${anom.titleEn} / ${anom.titleHi}`}
                 </div>
 
-                <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-[11.5px] text-[var(--text-secondary)] leading-relaxed">
                   {noticeLang === 'hi'
                     ? anom.descriptionHi
                     : noticeLang === 'en'
@@ -470,26 +464,26 @@ function DeficienciesContent() {
                 </p>
 
                 {/* Evidence Diff Details */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10.5px] font-mono pt-1">
-                  <div className="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                    <span className="text-slate-400 block text-[9.5px]">Uploaded Value:</span>
-                    <span className="text-red-600 dark:text-red-400 font-bold">{anom.extractedValue}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono pt-1">
+                  <div className="p-2.5 rounded-lg bg-black/5 dark:bg-white/5 border border-[var(--glass-border)]">
+                    <span className="text-[var(--text-muted)] block text-[10px] font-sans">Uploaded Value:</span>
+                    <span className="text-rose-600 dark:text-rose-400 font-bold">{anom.extractedValue}</span>
                   </div>
-                  <div className="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                    <span className="text-slate-400 block text-[9.5px]">Authoritative Record / Statutory Norm:</span>
+                  <div className="p-2.5 rounded-lg bg-black/5 dark:bg-white/5 border border-[var(--glass-border)]">
+                    <span className="text-[var(--text-muted)] block text-[10px] font-sans">Authoritative Record / Statutory Norm:</span>
                     <span className="text-emerald-600 dark:text-emerald-400 font-bold">{anom.authorityValue}</span>
                   </div>
                 </div>
 
-                <div className="text-[10.5px] font-mono text-sky-700 dark:text-sky-400 pt-1">
-                  <strong>Statutory Clause Citation:</strong> {anom.aphClause}
+                <div className="text-xs text-sky-600 dark:text-sky-400 pt-1 font-medium">
+                  <strong>Statutory Clause Citation:</strong> <span className="font-mono">{anom.aphClause}</span>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Statutory Directives */}
-          <div className="p-4 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 text-xs text-slate-800 dark:text-slate-200 space-y-1.5 leading-relaxed">
+          <div className="p-4 rounded-xl glass-well text-xs text-[var(--text-primary)] space-y-1.5 leading-relaxed">
             {isFatal ? (
               <p>
                 <strong>DIRECTIVE:</strong> You are hereby summoned to appear before the Standing Hearing Committee (SHC) at AICTE Headquarters, New Delhi within <strong>15 days</strong> of this notice, failing which an ex-parte decision shall be passed placing the institution under <em>NO ADMISSION STATUS</em> and initiating criminal proceedings under relevant statutory provisions.
@@ -503,25 +497,25 @@ function DeficienciesContent() {
         </div>
 
         {/* Digital Signature Certificate (DSC) & Officer Verification Block */}
-        <div className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="pt-6 border-t border-[var(--glass-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             {isDscSigned ? (
-              <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 flex items-center gap-3">
-                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
+              <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 dark:text-emerald-200 flex items-center gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <div className="text-xs">
-                  <div className="font-bold font-mono">
+                  <div className="font-semibold">
                     Digitally Signed with Class 3 DSC (eMudhra CCA India)
                   </div>
-                  <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+                  <div className="text-[11px] text-[var(--text-muted)] mt-0.5">
                     Signatory: Shri R.K. Verma (RO-04, North-Western Region) • Signed: {dscSigningTime}
                   </div>
-                  <div className="text-[9.5px] text-emerald-600 font-mono select-all mt-0.5">
+                  <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono select-all mt-0.5">
                     Certificate SHA-256: {dscSignatureDigest}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="text-xs text-slate-500 flex items-center gap-2">
+              <div className="text-xs text-[var(--text-muted)] flex items-center gap-2">
                 <Lock className="w-4 h-4 text-amber-500" />
                 <span>Pending Officer Digital Signature Certificate (Class 3 DSC) Sign-off</span>
               </div>
@@ -532,7 +526,7 @@ function DeficienciesContent() {
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 transition-all shadow-2xs cursor-pointer"
+              className="btn-liquid-secondary cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[var(--text-primary)]"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print Official Order</span>
@@ -541,7 +535,7 @@ function DeficienciesContent() {
             {!isDscSigned ? (
               <button
                 onClick={() => setIsDscModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 transition-all hover:-translate-y-0.5 cursor-pointer"
+                className="btn-liquid-primary cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold"
               >
                 <KeyRound className="w-3.5 h-3.5" />
                 <span>Sign with Officer DSC</span>
@@ -550,7 +544,7 @@ function DeficienciesContent() {
               <button
                 onClick={handleDispatch}
                 disabled={isDispatched}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-700 text-white shadow-md shadow-sky-600/20 transition-all hover:-translate-y-0.5 disabled:opacity-50 cursor-pointer"
+                className="btn-liquid-primary cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{isDispatched ? 'Dispatched & Logged' : 'Dispatch Order to Institution'}</span>
@@ -563,49 +557,49 @@ function DeficienciesContent() {
       {/* Class 3 Officer DSC Signing Modal */}
       {isDscModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-glass-in"
           onClick={() => setIsDscModalOpen(false)}
         >
           <div
-            className="w-full max-w-lg liquid-glass-card rounded-2xl overflow-hidden shadow-2xl border border-indigo-500/30 bg-white dark:bg-slate-900 p-6 space-y-4"
+            className="w-full max-w-lg liquid-glass-card rounded-2xl overflow-hidden shadow-2xl p-6 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-3">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+                <ShieldCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <h3 className="font-semibold text-sm text-[var(--text-primary)]">
                   Class 3 Digital Signature Certificate (DSC) Authentication
                 </h3>
               </div>
               <button
                 onClick={() => setIsDscModalOpen(false)}
-                className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"
+                className="p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-[var(--text-muted)] cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Certificate Details */}
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 font-mono text-xs space-y-1.5">
+            <div className="p-4 rounded-xl glass-well text-xs space-y-2">
               <div>
-                <span className="text-slate-400">Certifying Authority:</span>{' '}
-                <strong className="text-slate-800 dark:text-slate-200">
+                <span className="text-[var(--text-muted)]">Certifying Authority:</span>{' '}
+                <strong className="text-[var(--text-primary)]">
                   eMudhra Sub-CA Class 3 Individual 2024 (CCA India)
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400">Signatory Officer:</span>{' '}
-                <strong className="text-slate-800 dark:text-slate-200">
+                <span className="text-[var(--text-muted)]">Signatory Officer:</span>{' '}
+                <strong className="text-[var(--text-primary)]">
                   Shri R.K. Verma (Regional Scrutiny Officer, RO-04)
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400">Crypto Algorithm:</span>{' '}
-                <strong className="text-emerald-600">RSA-2048 / SHA-256 Digest</strong>
+                <span className="text-[var(--text-muted)]">Crypto Algorithm:</span>{' '}
+                <strong className="text-emerald-600 dark:text-emerald-400 font-mono">RSA-2048 / SHA-256 Digest</strong>
               </div>
               <div>
-                <span className="text-slate-400">Hardware Crypto Token:</span>{' '}
-                <span className="text-slate-600 dark:text-slate-300">
+                <span className="text-[var(--text-muted)]">Hardware Crypto Token:</span>{' '}
+                <span className="text-[var(--text-secondary)]">
                   SafeNet eToken 5110 (FIPS 140-2 Level 3 Validated)
                 </span>
               </div>
@@ -613,7 +607,7 @@ function DeficienciesContent() {
 
             {/* Token PIN Entry */}
             <div className="space-y-1.5 text-xs">
-              <label className="font-semibold text-slate-700 dark:text-slate-300">
+              <label className="font-semibold text-[var(--text-secondary)]">
                 Enter USB Crypto Token User PIN:
               </label>
               <input
@@ -622,24 +616,24 @@ function DeficienciesContent() {
                 value={tokenPin}
                 onChange={(e) => setTokenPin(e.target.value)}
                 placeholder="Enter 6-digit cryptographic PIN"
-                className="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-sm tracking-widest text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl glass-well font-mono text-sm tracking-widest text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              <p className="text-[10.5px] text-slate-400">
+              <p className="text-[11px] text-[var(--text-muted)]">
                 Statutory requirement under Information Technology Act 2000 Section 35.
               </p>
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-[var(--glass-border)]">
               <button
                 onClick={() => setIsDscModalOpen(false)}
-                className="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800"
+                className="btn-liquid-secondary cursor-pointer px-3.5 py-2 rounded-xl text-xs font-semibold text-[var(--text-secondary)]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDscSign}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20"
+                className="btn-liquid-primary cursor-pointer px-4 py-2 rounded-xl text-xs font-semibold"
               >
                 Sign &amp; Attach Digital Certificate
               </button>

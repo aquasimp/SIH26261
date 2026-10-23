@@ -11,10 +11,7 @@ import {
   Building,
   CheckCircle2,
   AlertTriangle,
-  ArrowUpDown,
-  Filter,
   Eye,
-  ChevronRight,
   ChevronDown,
   LayoutGrid,
   List,
@@ -22,9 +19,6 @@ import {
   Scale,
   X,
   ArrowUpRight,
-  ShieldAlert,
-  RotateCcw,
-  Check,
 } from 'lucide-react';
 
 const SYNTHETIC_COLLEGE_NAMES = [
@@ -243,47 +237,47 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <div className="space-y-4 animate-in fade-in duration-150">
+    <div className="space-y-4 animate-glass-in">
       {/* Top Header & Workstation Action Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-widest">
-              NATIONAL INSTITUTIONAL DOSSIER REGISTRY
+            <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
+              National Institutional Dossier Registry
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)]">
             Institutional Scrutiny{' '}
             <span className="title-serif-italic text-sky-700 dark:text-sky-400">
               Registry
             </span>
           </h1>
-          <p className="text-xs text-[var(--text-muted)] mt-0.5">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
             Searchable statutory repository across all 8 AICTE regions with 5-component ICI sub-scores and forensic flags
           </p>
         </div>
 
         {/* Action Controls Toolbar */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Card / Table view toggle */}
-          <div className="inline-flex rounded-lg p-0.5 bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)]">
+          <div className="glass-well inline-flex rounded-xl p-0.5 shadow-2xs">
             <button
               onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-md transition-all cursor-pointer ${
-                viewMode === 'table' ? 'bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-400 shadow-2xs font-bold' : 'text-slate-400 hover:text-slate-600'
+              className={`p-2 rounded-lg transition-all cursor-pointer ${
+                viewMode === 'table' ? 'btn-liquid-primary shadow-xs' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
               title="Table view"
             >
-              <List className="w-3.5 h-3.5" />
+              <List className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('cards')}
-              className={`p-1.5 rounded-md transition-all cursor-pointer ${
-                viewMode === 'cards' ? 'bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-400 shadow-2xs font-bold' : 'text-slate-400 hover:text-slate-600'
+              className={`p-2 rounded-lg transition-all cursor-pointer ${
+                viewMode === 'cards' ? 'btn-liquid-primary shadow-xs' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
               title="Card view"
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
+              <LayoutGrid className="w-4 h-4" />
             </button>
           </div>
 
@@ -292,60 +286,60 @@ export default function ApplicationsPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="appearance-none pl-2.5 pr-7 py-1.5 rounded-lg bg-[var(--glass-bg)] border border-[var(--glass-border)] text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-2xs cursor-pointer focus:outline-none font-mono"
+              className="appearance-none pl-3 pr-8 py-2 rounded-xl glass-well text-xs font-semibold text-[var(--text-primary)] shadow-2xs cursor-pointer focus:outline-none"
             >
               <option value="rpn">Sort: Highest Risk (RPN)</option>
               <option value="ici">Sort: Compliance Index (ICI)</option>
               <option value="date">Sort: Submission Date</option>
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-faint)]" />
           </div>
 
-          {/* + Simulate New Dossier Ingestion (AICTE-SynDoc-10K) */}
+          {/* Simulate New Dossier Ingestion */}
           <button
             onClick={handleSimulateSynDocIngestion}
-            className="btn-obsidian inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer"
+            className="btn-liquid-primary inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold cursor-pointer shadow-sm"
             title="Generate synthetic adversarial application using AICTE-SynDoc-10K generator"
           >
             <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-            <span>+ Simulate Ingestion (SynDoc-10K)</span>
+            <span>+ Simulate Ingestion</span>
           </button>
 
           {/* Export buttons */}
           <button
             onClick={handleExportCSV}
-            className="btn-glass-subtle inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer font-mono"
+            className="btn-liquid-secondary inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer shadow-2xs"
             title="Export filtered registry to CSV"
           >
-            <Download className="w-3 h-3 text-slate-500" />
+            <Download className="w-3.5 h-3.5 text-[var(--text-muted)]" />
             <span>CSV</span>
           </button>
           <button
             onClick={handleExportJSON}
-            className="btn-glass-subtle inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer font-mono"
+            className="btn-liquid-secondary inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer shadow-2xs"
             title="Export filtered registry to JSON"
           >
-            <Download className="w-3 h-3 text-slate-500" />
+            <Download className="w-3.5 h-3.5 text-[var(--text-muted)]" />
             <span>JSON</span>
           </button>
         </div>
       </div>
 
       {/* Quick Search & Compare Indicator Strip */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
-        <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl liquid-glass-card flex-1">
-          <Search className="w-4 h-4 text-slate-400 shrink-0" />
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl liquid-glass-card flex-1 shadow-sm">
+          <Search className="w-4 h-4 text-[var(--text-muted)] shrink-0" />
           <input
             type="text"
             placeholder="Filter registry by Institution Name, Permanent ID (PID), City, or Trust..."
             value={filters.searchQuery}
             onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
-            className="w-full bg-transparent text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
+            className="w-full bg-transparent text-xs sm:text-sm font-medium text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:outline-none"
           />
           {filters.searchQuery && (
             <button
               onClick={() => setFilters((prev) => ({ ...prev, searchQuery: '' }))}
-              className="text-xs text-slate-400 hover:text-slate-600 font-mono px-1 cursor-pointer"
+              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] px-1.5 cursor-pointer"
             >
               Clear
             </button>
@@ -354,25 +348,25 @@ export default function ApplicationsPage() {
 
         {/* Compare 2 Institutions Indicator / Button */}
         {selectedForCompare.length > 0 && (
-          <div className="p-2 px-3 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-between gap-3 animate-in fade-in shrink-0">
-            <div className="text-xs font-mono">
+          <div className="p-2.5 px-4 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-between gap-3 shrink-0 shadow-2xs">
+            <div className="text-xs">
               <span className="font-bold text-sky-700 dark:text-sky-300">
                 {selectedForCompare.length} / 2 Selected for Comparison
               </span>
               {selectedForCompare.length === 1 && (
-                <span className="text-[10px] text-[var(--text-muted)] block">
+                <span className="text-[11px] text-[var(--text-muted)] block">
                   Select 1 more dossier to unlock comparison matrix
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <button
                 disabled={selectedForCompare.length !== 2}
                 onClick={() => setIsCompareModalOpen(true)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer inline-flex items-center gap-1 ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                   selectedForCompare.length === 2
-                    ? 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs'
-                    : 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed opacity-60'
+                    ? 'btn-liquid-primary shadow-xs'
+                    : 'bg-slate-300/40 dark:bg-slate-700/40 text-slate-500 cursor-not-allowed opacity-60'
                 }`}
               >
                 <Scale className="w-3.5 h-3.5" />
@@ -380,10 +374,10 @@ export default function ApplicationsPage() {
               </button>
               <button
                 onClick={() => setSelectedForCompare([])}
-                className="p-1 rounded text-slate-400 hover:text-slate-600 cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
                 title="Clear comparison selection"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -392,24 +386,24 @@ export default function ApplicationsPage() {
 
       {/* Table View */}
       {viewMode === 'table' ? (
-        <div className="liquid-glass-card rounded-xl overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
+        <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-md">
+          <div className="overflow-x-auto rounded-xl glass-well">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-[var(--glass-border)] text-[10px] font-mono font-semibold uppercase tracking-wider text-[var(--text-muted)] bg-[var(--glass-bg-subtle)]">
-                  <th className="py-2.5 px-3 w-8 text-center">Cmp</th>
-                  <th className="py-2.5 px-3">Application &amp; Institution</th>
-                  <th className="py-2.5 px-3">Category &amp; Zone</th>
-                  <th className="py-2.5 px-3">ICI &amp; 5-Domain Profile</th>
-                  <th className="py-2.5 px-3">Risk (RPN)</th>
-                  <th className="py-2.5 px-3">Scrutiny Status</th>
-                  <th className="py-2.5 px-3 text-right">Actions</th>
+                <tr className="border-b border-[var(--glass-well-border)] text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  <th className="py-3 px-3.5 w-10 text-center">Cmp</th>
+                  <th className="py-3 px-3.5">Application &amp; Institution</th>
+                  <th className="py-3 px-3.5">Category &amp; Zone</th>
+                  <th className="py-3 px-3.5">ICI &amp; 5-Domain Profile</th>
+                  <th className="py-3 px-3.5">Risk (RPN)</th>
+                  <th className="py-3 px-3.5">Scrutiny Status</th>
+                  <th className="py-3 px-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--glass-border)]">
+              <tbody className="divide-y divide-[var(--glass-well-border)]">
                 {sortedApplications.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-10 text-center text-[var(--text-muted)] font-mono text-xs">
+                    <td colSpan={7} className="py-12 text-center text-[var(--text-muted)] text-xs font-medium">
                       No applications match the current search or regional criteria.
                     </td>
                   </tr>
@@ -423,90 +417,82 @@ export default function ApplicationsPage() {
                     return (
                       <tr
                         key={app.id}
-                        className={`hover:bg-[var(--glass-bg-elevated)] transition-colors group ${
-                          isChecked ? 'bg-sky-500/5' : ''
+                        className={`hover:bg-white/40 dark:hover:bg-white/5 transition-colors group ${
+                          isChecked ? 'bg-sky-500/10' : ''
                         }`}
                       >
                         {/* Compare Checkbox */}
-                        <td className="py-3 px-3 text-center">
+                        <td className="py-3 px-3.5 text-center">
                           <input
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => handleToggleCompare(app.id)}
-                            className="rounded accent-sky-600 cursor-pointer w-3.5 h-3.5"
+                            className="rounded accent-sky-600 cursor-pointer w-4 h-4"
                             title="Select to compare side-by-side"
                           />
                         </td>
 
                         {/* Institution Name & IDs */}
-                        <td className="py-3 px-3">
+                        <td className="py-3 px-3.5">
                           <div className="font-semibold text-xs text-[var(--text-primary)] group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
                             {language === 'hi' ? app.nameHi : app.nameEn}
                           </div>
-                          <div className="text-[10px] font-mono text-[var(--text-muted)] flex items-center gap-1.5 mt-0.5">
-                            <span className="font-bold text-slate-700 dark:text-slate-300">{app.id}</span>
+                          <div className="text-[11px] text-[var(--text-muted)] flex items-center gap-2 mt-0.5">
+                            <span className="font-mono font-semibold text-[var(--text-secondary)]">{app.id}</span>
                             <span>•</span>
-                            <span>PID: {app.pid}</span>
+                            <span>PID: <span className="font-mono">{app.pid}</span></span>
                             <span>•</span>
                             <span>{app.city}, {app.state}</span>
                           </div>
                         </td>
 
                         {/* Category & Region */}
-                        <td className="py-3 px-3">
+                        <td className="py-3 px-3.5">
                           <div className="font-medium text-[var(--text-primary)] text-xs">
                             {app.applicationCategory}
                           </div>
-                          <div className="text-[10px] text-[var(--text-muted)] font-mono">
+                          <div className="text-[11px] text-[var(--text-muted)]">
                             {app.region} • {app.zoneType} ({app.institutionType.split(' ')[0]})
                           </div>
                         </td>
 
                         {/* ICI Score & 5-Domain Spark Bar */}
-                        <td className="py-3 px-3">
-                          <div className="flex items-center gap-1.5">
-                            <span
-                              className={`font-mono font-bold text-xs ${
-                                isFatal
-                                  ? 'text-red-600 dark:text-red-400'
-                                  : isCleared
-                                  ? 'text-emerald-600 dark:text-emerald-400'
-                                  : 'text-amber-600 dark:text-amber-400'
-                              }`}
-                            >
+                        <td className="py-3 px-3.5">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-xs tabular-nums text-[var(--text-primary)]">
                               {app.iciScore.toFixed(1)}
                             </span>
                             {app.fatalGateTriggered && (
-                              <span className="text-[9px] font-mono font-bold px-1 py-0.2 rounded bg-red-600 text-white">
+                              <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-rose-600 text-white">
                                 FATAL VETO
                               </span>
                             )}
                           </div>
 
                           {/* 5-Component Spark Bar */}
-                          <div className="flex items-center gap-1 mt-1 w-28" title="Infra, Faculty, Legal, Authority, Financial">
-                            <div className="h-1 rounded-full bg-sky-500" style={{ width: `${app.subScores.infra}%` }} title={`Infra: ${app.subScores.infra}`} />
-                            <div className="h-1 rounded-full bg-indigo-500" style={{ width: `${app.subScores.faculty}%` }} title={`Faculty: ${app.subScores.faculty}`} />
-                            <div className="h-1 rounded-full bg-violet-500" style={{ width: `${app.subScores.legal}%` }} title={`Legal: ${app.subScores.legal}`} />
-                            <div className="h-1 rounded-full bg-emerald-500" style={{ width: `${app.subScores.authority}%` }} title={`Authority: ${app.subScores.authority}`} />
-                            <div className="h-1 rounded-full bg-amber-500" style={{ width: `${app.subScores.financial}%` }} title={`Financial: ${app.subScores.financial}`} />
+                          <div className="flex items-center gap-1 mt-1.5 w-28" title="Infra, Faculty, Legal, Authority, Financial">
+                            <div className="h-1.5 rounded-full bg-sky-500" style={{ width: `${app.subScores.infra}%` }} title={`Infra: ${app.subScores.infra}`} />
+                            <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${app.subScores.faculty}%` }} title={`Faculty: ${app.subScores.faculty}`} />
+                            <div className="h-1.5 rounded-full bg-violet-500" style={{ width: `${app.subScores.legal}%` }} title={`Legal: ${app.subScores.legal}`} />
+                            <div className="h-1.5 rounded-full bg-emerald-500" style={{ width: `${app.subScores.authority}%` }} title={`Authority: ${app.subScores.authority}`} />
+                            <div className="h-1.5 rounded-full bg-amber-500" style={{ width: `${app.subScores.financial}%` }} title={`Financial: ${app.subScores.financial}`} />
                           </div>
                         </td>
 
                         {/* Risk RPN */}
-                        <td className="py-3 px-3">
-                          <div className="font-mono font-bold text-xs text-slate-800 dark:text-slate-200">
+                        <td className="py-3 px-3.5">
+                          <div className="font-bold text-xs tabular-nums text-[var(--text-primary)]">
                             RPN {app.maxRpn}
                           </div>
-                          <div className="text-[9.5px] text-[var(--text-muted)] font-mono">
+                          <div className="text-[11px] text-[var(--text-muted)]">
                             {app.anomalies.length} Anomaly Triggers
                           </div>
                         </td>
 
                         {/* Scrutiny Status Pill */}
-                        <td className="py-3 px-3">
+                        <td className="py-3 px-3.5">
                           <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
                               isFatal
                                 ? 'pill-fatal'
                                 : isCleared
@@ -516,18 +502,18 @@ export default function ApplicationsPage() {
                                 : 'bg-slate-500/10 text-slate-600'
                             }`}
                           >
-                            {isFatal && <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />}
+                            {isFatal && <span className="h-1.5 w-1.5 rounded-full bg-rose-600 animate-pulse" />}
                             {app.scrutinyStatus}
                           </span>
                         </td>
 
                         {/* Action Link */}
-                        <td className="py-3 px-3 text-right">
+                        <td className="py-3 px-3.5 text-right">
                           <Link
                             href={`/applications/${app.id}`}
-                            className="btn-obsidian inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-mono text-[10.5px] font-semibold shadow-2xs"
+                            className="btn-liquid-primary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-2xs"
                           >
-                            <Eye className="w-3 h-3" />
+                            <Eye className="w-3.5 h-3.5" />
                             <span>Workbench</span>
                           </Link>
                         </td>
@@ -545,24 +531,23 @@ export default function ApplicationsPage() {
           {sortedApplications.map((app) => {
             const isFatal = app.scrutinyStatus === 'Fatal Fraud Alert';
             const isCleared = app.scrutinyStatus === 'Auto-Pre-Cleared';
-            const isDeficiency = app.scrutinyStatus === 'Deficiency Issued';
             const isChecked = selectedForCompare.includes(app.id);
 
             return (
               <div
                 key={app.id}
-                className={`liquid-glass-card rounded-2xl p-4 flex flex-col justify-between space-y-3 transition-all ${
+                className={`liquid-glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3.5 transition-all shadow-md ${
                   isFatal
                     ? 'top-rule-fatal'
                     : isCleared
                     ? 'top-rule-verified'
                     : 'top-rule-deficiency'
-                } ${isChecked ? 'ring-2 ring-sky-500 shadow-md' : ''}`}
+                } ${isChecked ? 'ring-2 ring-sky-500 shadow-xl' : ''}`}
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <span
-                      className={`text-[9.5px] font-mono font-bold px-2 py-0.5 rounded ${
+                      className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
                         isFatal
                           ? 'pill-fatal'
                           : isCleared
@@ -573,8 +558,8 @@ export default function ApplicationsPage() {
                       {app.scrutinyStatus}
                     </span>
 
-                    <div className="flex items-center gap-2">
-                      <label className="flex items-center gap-1 text-[10px] font-mono text-[var(--text-muted)] cursor-pointer">
+                    <div className="flex items-center gap-2.5">
+                      <label className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] cursor-pointer">
                         <input
                           type="checkbox"
                           checked={isChecked}
@@ -583,60 +568,60 @@ export default function ApplicationsPage() {
                         />
                         <span>Compare</span>
                       </label>
-                      <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200">
+                      <span className="text-xs font-bold tabular-nums text-[var(--text-primary)]">
                         RPN {app.maxRpn}
                       </span>
                     </div>
                   </div>
 
-                  <h3 className="text-sm font-bold text-[var(--text-primary)] mt-2 line-clamp-1">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)] mt-2.5 line-clamp-1">
                     {language === 'hi' ? app.nameHi : app.nameEn}
                   </h3>
-                  <p className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
-                    {app.id} • {app.city}, {app.state}
+                  <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                    <span className="font-mono">{app.id}</span> • {app.city}, {app.state}
                   </p>
 
-                  <div className="mt-2.5 p-2 rounded-lg bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] flex items-center justify-between text-xs font-mono">
+                  <div className="mt-3 p-3 rounded-xl glass-well flex items-center justify-between text-xs">
                     <div>
-                      <div className="text-[9px] uppercase text-[var(--text-faint)] font-bold">ICI Score</div>
-                      <div className="text-base font-bold text-[var(--text-primary)] flex items-center gap-1">
-                        <span>{app.iciScore.toFixed(1)}</span>
+                      <div className="text-[10px] uppercase text-[var(--text-faint)] font-bold">ICI Score</div>
+                      <div className="text-base font-bold text-[var(--text-primary)] flex items-center gap-1 mt-0.5">
+                        <span className="tabular-nums">{app.iciScore.toFixed(1)}</span>
                         {app.fatalGateTriggered && (
-                          <span className="text-[8.5px] px-1 rounded bg-red-600 text-white font-bold">
+                          <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-rose-600 text-white font-bold">
                             VETO
                           </span>
                         )}
                       </div>
                     </div>
                     <div>
-                      <div className="text-[9px] uppercase text-[var(--text-faint)] font-bold">Total Built-up</div>
-                      <div className="text-xs font-bold text-[var(--text-secondary)]">
+                      <div className="text-[10px] uppercase text-[var(--text-faint)] font-bold">Total Built-up</div>
+                      <div className="text-xs font-bold text-[var(--text-secondary)] mt-0.5 tabular-nums">
                         {app.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()} m²
                       </div>
                     </div>
                   </div>
 
                   {/* 5-Component Spark Bar */}
-                  <div className="mt-2">
-                    <div className="flex items-center justify-between text-[9px] text-[var(--text-faint)] font-mono mb-1">
+                  <div className="mt-2.5">
+                    <div className="flex items-center justify-between text-[10px] text-[var(--text-faint)] mb-1">
                       <span>5-COMP ICI</span>
                       <span>Infra • Fac • Leg • Auth • Fin</span>
                     </div>
                     <div className="flex items-center gap-1 w-full">
-                      <div className="h-1 rounded-full bg-sky-500" style={{ width: `${app.subScores.infra}%` }} />
-                      <div className="h-1 rounded-full bg-indigo-500" style={{ width: `${app.subScores.faculty}%` }} />
-                      <div className="h-1 rounded-full bg-violet-500" style={{ width: `${app.subScores.legal}%` }} />
-                      <div className="h-1 rounded-full bg-emerald-500" style={{ width: `${app.subScores.authority}%` }} />
-                      <div className="h-1 rounded-full bg-amber-500" style={{ width: `${app.subScores.financial}%` }} />
+                      <div className="h-1.5 rounded-full bg-sky-500" style={{ width: `${app.subScores.infra}%` }} />
+                      <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${app.subScores.faculty}%` }} />
+                      <div className="h-1.5 rounded-full bg-violet-500" style={{ width: `${app.subScores.legal}%` }} />
+                      <div className="h-1.5 rounded-full bg-emerald-500" style={{ width: `${app.subScores.authority}%` }} />
+                      <div className="h-1.5 rounded-full bg-amber-500" style={{ width: `${app.subScores.financial}%` }} />
                     </div>
                   </div>
                 </div>
 
                 <Link
                   href={`/applications/${app.id}`}
-                  className="btn-obsidian w-full inline-flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold cursor-pointer"
+                  className="btn-liquid-primary w-full inline-flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold cursor-pointer shadow-sm"
                 >
-                  <Eye className="w-3.5 h-3.5" />
+                  <Eye className="w-4 h-4" />
                   <span>Open Scrutiny Workbench</span>
                 </Link>
               </div>
@@ -650,26 +635,26 @@ export default function ApplicationsPage() {
           (Side-by-side comparison of 2 selected institutions)
           ========================================================================= */}
       {isCompareModalOpen && compareApps && (
-        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="liquid-glass-card rounded-2xl max-w-5xl w-full max-h-[92vh] overflow-y-auto p-5 space-y-4 shadow-2xl border border-[var(--glass-border-strong)]">
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 animate-glass-in">
+          <div className="liquid-glass-card rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto p-6 space-y-4 shadow-2xl">
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-3">
+            <div className="flex items-center justify-between border-b border-[var(--glass-well-border)] pb-3.5">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.2 rounded bg-sky-600 text-white font-mono text-[9.5px] font-bold">
-                    SIDE-BY-SIDE STATUTORY COMPARISON MATRIX
+                  <span className="px-2.5 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                    Statutory Comparison Matrix
                   </span>
-                  <span className="text-xs font-mono text-[var(--text-muted)]">
+                  <span className="text-xs text-[var(--text-muted)]">
                     Cross-Institutional Forensic &amp; APH Chapter VII Benchmarking
                   </span>
                 </div>
-                <h2 className="text-base font-bold text-[var(--text-primary)] mt-1">
+                <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-1">
                   Comparative Analysis: {compareApps[0].nameEn} vs. {compareApps[1].nameEn}
                 </h2>
               </div>
               <button
                 onClick={() => setIsCompareModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer"
+                className="btn-liquid-secondary p-1.5 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -678,14 +663,14 @@ export default function ApplicationsPage() {
             {/* Comparison Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Institution A Card */}
-              <div className="p-4 rounded-xl bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] space-y-3">
-                <div className="border-b border-[var(--glass-border)] pb-2">
+              <div className="p-4 rounded-2xl glass-well space-y-3 shadow-inner">
+                <div className="border-b border-[var(--glass-well-border)] pb-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-sky-700 dark:text-sky-400">
-                      DOSSIER A: {compareApps[0].id}
+                    <span className="text-xs font-bold text-sky-700 dark:text-sky-400">
+                      DOSSIER A: <span className="font-mono">{compareApps[0].id}</span>
                     </span>
                     <span
-                      className={`text-[9.5px] font-mono font-bold px-2 py-0.2 rounded ${
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         compareApps[0].scrutinyStatus === 'Fatal Fraud Alert'
                           ? 'pill-fatal'
                           : compareApps[0].scrutinyStatus === 'Auto-Pre-Cleared'
@@ -699,93 +684,93 @@ export default function ApplicationsPage() {
                   <h3 className="font-bold text-sm text-[var(--text-primary)] mt-1">
                     {compareApps[0].nameEn}
                   </h3>
-                  <p className="text-[10px] font-mono text-[var(--text-muted)]">
-                    PID: {compareApps[0].pid} • {compareApps[0].region} • {compareApps[0].city}, {compareApps[0].state}
+                  <p className="text-[11px] text-[var(--text-muted)]">
+                    PID: <span className="font-mono">{compareApps[0].pid}</span> • {compareApps[0].region} • {compareApps[0].city}, {compareApps[0].state}
                   </p>
                 </div>
 
                 {/* KPI Metrics */}
-                <div className="grid grid-cols-2 gap-2 text-center font-mono text-xs">
-                  <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)]">
-                    <span className="text-[9.5px] text-[var(--text-faint)] block uppercase">ICI Score</span>
-                    <span className="font-bold text-base text-[var(--text-primary)]">
+                <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                  <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                    <span className="text-[10px] text-[var(--text-faint)] block uppercase font-semibold">ICI Score</span>
+                    <span className="font-bold text-lg text-[var(--text-primary)] tabular-nums">
                       {compareApps[0].iciScore.toFixed(1)} / 100
                     </span>
                   </div>
-                  <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)]">
-                    <span className="text-[9.5px] text-[var(--text-faint)] block uppercase">Max Risk (RPN)</span>
-                    <span className="font-bold text-base text-red-600 dark:text-red-400">
+                  <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                    <span className="text-[10px] text-[var(--text-faint)] block uppercase font-semibold">Max Risk (RPN)</span>
+                    <span className="font-bold text-lg text-rose-600 dark:text-rose-400 tabular-nums">
                       RPN {compareApps[0].maxRpn}
                     </span>
                   </div>
                 </div>
 
                 {/* 5-Domain Subscores */}
-                <div className="space-y-1.5 font-mono text-[11px]">
-                  <div className="text-[9.5px] text-[var(--text-faint)] uppercase font-bold">5-Domain Breakdown</div>
+                <div className="space-y-1.5 text-xs">
+                  <div className="text-[10px] text-[var(--text-faint)] uppercase font-bold">5-Domain Breakdown</div>
                   <div className="flex justify-between">
                     <span>Infrastructure:</span>
-                    <span className="font-bold">{compareApps[0].subScores.infra}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].subScores.infra}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Faculty Cadre:</span>
-                    <span className="font-bold">{compareApps[0].subScores.faculty}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].subScores.faculty}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Legal &amp; Land:</span>
-                    <span className="font-bold">{compareApps[0].subScores.legal}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].subScores.legal}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Authority DPI:</span>
-                    <span className="font-bold">{compareApps[0].subScores.authority}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].subScores.authority}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Financial Audit:</span>
-                    <span className="font-bold">{compareApps[0].subScores.financial}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].subScores.financial}%</span>
                   </div>
                 </div>
 
                 {/* Land & Built-up */}
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)] space-y-1 font-mono text-[10.5px]">
-                  <div className="text-[9.5px] text-sky-700 dark:text-sky-400 font-bold uppercase">Land &amp; Spatial</div>
+                <div className="p-3 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)] space-y-1 text-xs">
+                  <div className="text-[10px] text-sky-700 dark:text-sky-400 font-bold uppercase">Land &amp; Spatial</div>
                   <div className="flex justify-between">
                     <span>Total Built-up:</span>
-                    <span className="font-bold">{compareApps[0].landAndBuiltUp.totalBuiltUpAvailableSqm} / {compareApps[0].landAndBuiltUp.totalBuiltUpRequiredSqm} m²</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].landAndBuiltUp.totalBuiltUpAvailableSqm} / {compareApps[0].landAndBuiltUp.totalBuiltUpRequiredSqm} m²</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Land Acres:</span>
-                    <span className="font-bold">{compareApps[0].landAndBuiltUp.landAvailableAcres} / {compareApps[0].landAndBuiltUp.landRequiredAcres} Ac</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].landAndBuiltUp.landAvailableAcres} / {compareApps[0].landAndBuiltUp.landRequiredAcres} Ac</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Plots:</span>
-                    <span className="font-bold">{compareApps[0].landAndBuiltUp.plotCount} plot(s) • d={compareApps[0].landAndBuiltUp.maxInterPlotDistanceKm} km</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].landAndBuiltUp.plotCount} plot(s) • d={compareApps[0].landAndBuiltUp.maxInterPlotDistanceKm} km</span>
                   </div>
                 </div>
 
                 {/* Faculty & Anomalies */}
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)] space-y-1 font-mono text-[10.5px]">
-                  <div className="text-[9.5px] text-sky-700 dark:text-sky-400 font-bold uppercase">Faculty &amp; Forensics</div>
+                <div className="p-3 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)] space-y-1 text-xs">
+                  <div className="text-[10px] text-sky-700 dark:text-sky-400 font-bold uppercase">Faculty &amp; Forensics</div>
                   <div className="flex justify-between">
                     <span>Faculty:</span>
-                    <span className="font-bold">{compareApps[0].facultyMetrics.availableVerified} / {compareApps[0].facultyMetrics.requiredTotal}</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].facultyMetrics.availableVerified} / {compareApps[0].facultyMetrics.requiredTotal}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>UG SFR:</span>
-                    <span className="font-bold">{compareApps[0].facultyMetrics.sfrUG}</span>
+                    <span className="font-bold tabular-nums">{compareApps[0].facultyMetrics.sfrUG}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Ghost Faculty:</span>
-                    <span className="font-bold text-red-600">{compareApps[0].facultyMetrics.ghostFlaggedCount} detected</span>
+                    <span className="font-bold text-rose-600 tabular-nums">{compareApps[0].facultyMetrics.ghostFlaggedCount} detected</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Total Anomalies:</span>
-                    <span className="font-bold text-amber-600">{compareApps[0].anomalies.length} flag(s)</span>
+                    <span className="font-bold text-amber-600 tabular-nums">{compareApps[0].anomalies.length} flag(s)</span>
                   </div>
                 </div>
 
                 <Link
                   href={`/applications/${compareApps[0].id}`}
-                  className="btn-obsidian w-full inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-bold"
+                  className="btn-liquid-primary w-full inline-flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold"
                 >
                   <span>Launch Workbench for {compareApps[0].id}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
@@ -793,14 +778,14 @@ export default function ApplicationsPage() {
               </div>
 
               {/* Institution B Card */}
-              <div className="p-4 rounded-xl bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] space-y-3">
-                <div className="border-b border-[var(--glass-border)] pb-2">
+              <div className="p-4 rounded-2xl glass-well space-y-3 shadow-inner">
+                <div className="border-b border-[var(--glass-well-border)] pb-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-indigo-700 dark:text-indigo-400">
-                      DOSSIER B: {compareApps[1].id}
+                    <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">
+                      DOSSIER B: <span className="font-mono">{compareApps[1].id}</span>
                     </span>
                     <span
-                      className={`text-[9.5px] font-mono font-bold px-2 py-0.2 rounded ${
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         compareApps[1].scrutinyStatus === 'Fatal Fraud Alert'
                           ? 'pill-fatal'
                           : compareApps[1].scrutinyStatus === 'Auto-Pre-Cleared'
@@ -814,93 +799,93 @@ export default function ApplicationsPage() {
                   <h3 className="font-bold text-sm text-[var(--text-primary)] mt-1">
                     {compareApps[1].nameEn}
                   </h3>
-                  <p className="text-[10px] font-mono text-[var(--text-muted)]">
-                    PID: {compareApps[1].pid} • {compareApps[1].region} • {compareApps[1].city}, {compareApps[1].state}
+                  <p className="text-[11px] text-[var(--text-muted)]">
+                    PID: <span className="font-mono">{compareApps[1].pid}</span> • {compareApps[1].region} • {compareApps[1].city}, {compareApps[1].state}
                   </p>
                 </div>
 
                 {/* KPI Metrics */}
-                <div className="grid grid-cols-2 gap-2 text-center font-mono text-xs">
-                  <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)]">
-                    <span className="text-[9.5px] text-[var(--text-faint)] block uppercase">ICI Score</span>
-                    <span className="font-bold text-base text-[var(--text-primary)]">
+                <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                  <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                    <span className="text-[10px] text-[var(--text-faint)] block uppercase font-semibold">ICI Score</span>
+                    <span className="font-bold text-lg text-[var(--text-primary)] tabular-nums">
                       {compareApps[1].iciScore.toFixed(1)} / 100
                     </span>
                   </div>
-                  <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)]">
-                    <span className="text-[9.5px] text-[var(--text-faint)] block uppercase">Max Risk (RPN)</span>
-                    <span className="font-bold text-base text-red-600 dark:text-red-400">
+                  <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                    <span className="text-[10px] text-[var(--text-faint)] block uppercase font-semibold">Max Risk (RPN)</span>
+                    <span className="font-bold text-lg text-rose-600 dark:text-rose-400 tabular-nums">
                       RPN {compareApps[1].maxRpn}
                     </span>
                   </div>
                 </div>
 
                 {/* 5-Domain Subscores */}
-                <div className="space-y-1.5 font-mono text-[11px]">
-                  <div className="text-[9.5px] text-[var(--text-faint)] uppercase font-bold">5-Domain Breakdown</div>
+                <div className="space-y-1.5 text-xs">
+                  <div className="text-[10px] text-[var(--text-faint)] uppercase font-bold">5-Domain Breakdown</div>
                   <div className="flex justify-between">
                     <span>Infrastructure:</span>
-                    <span className="font-bold">{compareApps[1].subScores.infra}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].subScores.infra}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Faculty Cadre:</span>
-                    <span className="font-bold">{compareApps[1].subScores.faculty}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].subScores.faculty}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Legal &amp; Land:</span>
-                    <span className="font-bold">{compareApps[1].subScores.legal}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].subScores.legal}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Authority DPI:</span>
-                    <span className="font-bold">{compareApps[1].subScores.authority}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].subScores.authority}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Financial Audit:</span>
-                    <span className="font-bold">{compareApps[1].subScores.financial}%</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].subScores.financial}%</span>
                   </div>
                 </div>
 
                 {/* Land & Built-up */}
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)] space-y-1 font-mono text-[10.5px]">
-                  <div className="text-[9.5px] text-indigo-700 dark:text-indigo-400 font-bold uppercase">Land &amp; Spatial</div>
+                <div className="p-3 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)] space-y-1 text-xs">
+                  <div className="text-[10px] text-indigo-700 dark:text-indigo-400 font-bold uppercase">Land &amp; Spatial</div>
                   <div className="flex justify-between">
                     <span>Total Built-up:</span>
-                    <span className="font-bold">{compareApps[1].landAndBuiltUp.totalBuiltUpAvailableSqm} / {compareApps[1].landAndBuiltUp.totalBuiltUpRequiredSqm} m²</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].landAndBuiltUp.totalBuiltUpAvailableSqm} / {compareApps[1].landAndBuiltUp.totalBuiltUpRequiredSqm} m²</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Land Acres:</span>
-                    <span className="font-bold">{compareApps[1].landAndBuiltUp.landAvailableAcres} / {compareApps[1].landAndBuiltUp.landRequiredAcres} Ac</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].landAndBuiltUp.landAvailableAcres} / {compareApps[1].landAndBuiltUp.landRequiredAcres} Ac</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Plots:</span>
-                    <span className="font-bold">{compareApps[1].landAndBuiltUp.plotCount} plot(s) • d={compareApps[1].landAndBuiltUp.maxInterPlotDistanceKm} km</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].landAndBuiltUp.plotCount} plot(s) • d={compareApps[1].landAndBuiltUp.maxInterPlotDistanceKm} km</span>
                   </div>
                 </div>
 
                 {/* Faculty & Anomalies */}
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-[var(--glass-border)] space-y-1 font-mono text-[10.5px]">
-                  <div className="text-[9.5px] text-indigo-700 dark:text-indigo-400 font-bold uppercase">Faculty &amp; Forensics</div>
+                <div className="p-3 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)] space-y-1 text-xs">
+                  <div className="text-[10px] text-indigo-700 dark:text-indigo-400 font-bold uppercase">Faculty &amp; Forensics</div>
                   <div className="flex justify-between">
                     <span>Faculty:</span>
-                    <span className="font-bold">{compareApps[1].facultyMetrics.availableVerified} / {compareApps[1].facultyMetrics.requiredTotal}</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].facultyMetrics.availableVerified} / {compareApps[1].facultyMetrics.requiredTotal}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>UG SFR:</span>
-                    <span className="font-bold">{compareApps[1].facultyMetrics.sfrUG}</span>
+                    <span className="font-bold tabular-nums">{compareApps[1].facultyMetrics.sfrUG}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Ghost Faculty:</span>
-                    <span className="font-bold text-red-600">{compareApps[1].facultyMetrics.ghostFlaggedCount} detected</span>
+                    <span className="font-bold text-rose-600 tabular-nums">{compareApps[1].facultyMetrics.ghostFlaggedCount} detected</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Total Anomalies:</span>
-                    <span className="font-bold text-amber-600">{compareApps[1].anomalies.length} flag(s)</span>
+                    <span className="font-bold text-amber-600 tabular-nums">{compareApps[1].anomalies.length} flag(s)</span>
                   </div>
                 </div>
 
                 <Link
                   href={`/applications/${compareApps[1].id}`}
-                  className="btn-obsidian w-full inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-bold"
+                  className="btn-liquid-primary w-full inline-flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold"
                 >
                   <span>Launch Workbench for {compareApps[1].id}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />

@@ -1,28 +1,20 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/lib/context';
-import { MOCK_APPLICATIONS } from '@/lib/mock-data';
 import { toast } from 'sonner';
 import {
   Upload,
   ScanEye,
-  Sliders,
-  CheckCircle2,
-  AlertTriangle,
   FileCode,
   ShieldAlert,
   Binary,
-  Layers,
-  Sparkles,
-  RefreshCw,
-  Search,
-  Crosshair,
   BarChart3,
   FileText,
   Activity,
   Compass,
-  Zap,
+  Crosshair,
+  AlertTriangle,
 } from 'lucide-react';
 
 export type ForensicsModule =
@@ -158,7 +150,6 @@ export default function ForensicsStudioPage() {
     canvas.width = W;
     canvas.height = H;
 
-    // Draw document representation
     ctx.fillStyle = '#0F172A';
     ctx.fillRect(0, 0, W, H);
 
@@ -175,7 +166,6 @@ export default function ForensicsStudioPage() {
     }
   }, [activeModule, selectedExhibit, customImageSrc, jpegQuality, elaMultiplier, showBagGrid]);
 
-  // Synthetic exhibit drawing for Module 1
   const renderSyntheticExhibit = (ctx: CanvasRenderingContext2D, exhibit: string, w: number, h: number) => {
     ctx.fillStyle = '#FCFDFE';
     ctx.fillRect(10, 10, w - 20, h - 20);
@@ -200,7 +190,6 @@ export default function ForensicsStudioPage() {
       ctx.textAlign = 'left';
       ctx.fillText('VALIDITY PERIOD GRANTED: ', 55, 160);
 
-      // Spliced target
       ctx.fillStyle = '#DC2626';
       ctx.font = 'bold 13px "JetBrains Mono", monospace';
       ctx.fillText('30-06-2027 (Tampered Year)', 220, 160);
@@ -227,36 +216,30 @@ export default function ForensicsStudioPage() {
     }
   };
 
-  // Perform Error Level Analysis Pixel Differential and update 13 StatNoise features
   const processElaDiff = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
     try {
       const imgData = ctx.getImageData(0, 0, w, h);
       const d = imgData.data;
 
-      // Quality compression factor: lower quality = larger quantization residual
       const compressionResidual = (100 - jpegQuality) / 25;
       const gain = (elaMultiplier / 20) * compressionResidual;
 
-      // Dark high-pass mask with amplified difference on tampered bounding box
       let totalResidual = 0;
       let totalSquare = 0;
       const count = d.length / 4;
 
       for (let i = 0; i < d.length; i += 4) {
-        // Luminance calculation
-        const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
         const pixelX = (i / 4) % w;
         const pixelY = Math.floor(i / 4 / w);
 
-        // Check if inside tampered ROI
         const isTamperedRoi = pixelX >= 210 && pixelX <= 380 && pixelY >= 130 && pixelY <= 190;
 
         let res = isTamperedRoi ? 140 * gain : 12 * gain + (Math.random() * 8);
         res = Math.min(255, Math.max(0, res));
 
-        d[i] = res; // Red
-        d[i + 1] = isTamperedRoi ? res * 0.4 : res * 0.9; // Green
-        d[i + 2] = isTamperedRoi ? res * 0.3 : res * 0.95; // Blue
+        d[i] = res;
+        d[i + 1] = isTamperedRoi ? res * 0.4 : res * 0.9;
+        d[i + 2] = isTamperedRoi ? res * 0.3 : res * 0.95;
         d[i + 3] = 255;
 
         totalResidual += res;
@@ -265,7 +248,6 @@ export default function ForensicsStudioPage() {
 
       ctx.putImageData(imgData, 0, 0);
 
-      // Compute live 13-Scalar StatNoise from pixels
       const mean = totalResidual / count / 255;
       const variance = totalSquare / count / (255 * 255) - mean * mean;
       setStatNoise((prev) => ({
@@ -276,7 +258,6 @@ export default function ForensicsStudioPage() {
         kurtosis: Math.round((3.2 + (gain * 0.8)) * 1000) / 1000,
       }));
 
-      // 8x8 DCT Block Artifact Grid (BAG)
       if (showBagGrid) {
         ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
         ctx.lineWidth = 0.5;
@@ -293,7 +274,6 @@ export default function ForensicsStudioPage() {
           ctx.stroke();
         }
 
-        // Highlight phase misalignment
         ctx.strokeStyle = '#F43F5E';
         ctx.lineWidth = 1.5;
         ctx.setLineDash([3, 2]);
@@ -304,16 +284,14 @@ export default function ForensicsStudioPage() {
         ctx.font = 'bold 9.5px "JetBrains Mono", monospace';
         ctx.fillText('DCT Phase Misalignment (dx,dy)=(3,5)px', 215, 126);
       }
-    } catch (e) {
+    } catch {
       // tainted canvas fallback
     }
   };
 
-  // MODULE 3: Polar Coordinate Unwrapping Canvas (r, theta)
   useEffect(() => {
     if (activeModule !== 'SEAL_SIGNATURE_LAB') return;
 
-    // 1. Draw Circular Seal on polarSealSrcRef
     const srcCanvas = polarSealSrcRef.current;
     if (!srcCanvas) return;
     const srcCtx = srcCanvas.getContext('2d');
@@ -326,7 +304,6 @@ export default function ForensicsStudioPage() {
     srcCtx.fillStyle = '#FFFFFF';
     srcCtx.fillRect(0, 0, S, S);
 
-    // Draw municipal stamp
     srcCtx.strokeStyle = '#1D4ED8';
     srcCtx.lineWidth = 3;
     srcCtx.beginPath();
@@ -345,7 +322,6 @@ export default function ForensicsStudioPage() {
     srcCtx.fillText('GURUGRAM CIRCLE', S / 2, S / 2 + 3);
     srcCtx.fillText('FIRE SERVICE ACT 2009', S / 2, S - 32);
 
-    // 2. Perform Real Mathematical Polar Coordinate Unwrapping (r, theta) onto polarUnwrappedRef
     const unwrapCanvas = polarUnwrappedRef.current;
     if (!unwrapCanvas) return;
     const unwrapCtx = unwrapCanvas.getContext('2d');
@@ -368,11 +344,9 @@ export default function ForensicsStudioPage() {
     const rMax = polarRadiusMax;
 
     for (let py = 0; py < UH; py++) {
-      // Map py to radius r in [rMin, rMax]
       const r = rMin + (py / UH) * (rMax - rMin);
 
       for (let px = 0; px < UW; px++) {
-        // Map px to angle theta in [0, 2pi]
         const theta = (px / UW) * 2 * Math.PI;
 
         const srcX = Math.round(cx + r * Math.cos(theta));
@@ -399,65 +373,65 @@ export default function ForensicsStudioPage() {
   }, [activeModule, polarRadiusMin, polarRadiusMax]);
 
   return (
-    <div className="space-y-5 animate-in fade-in duration-200">
+    <div className="space-y-5 animate-glass-in">
       {/* Page Title */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
           Multi-Spectral Document{' '}
-          <span className="font-serif italic font-normal text-sky-700 dark:text-sky-400">
+          <span className="title-serif-italic text-sky-700 dark:text-sky-400">
             Forensics Studio
           </span>
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
           Pixel-level tampering localization, Noiseprint++ ablation matrix, Siamese ArcFace seal lab, and fitz PDF XRef inspection
         </p>
       </div>
 
       {/* Top 4 Working Forensic Modules Navigation Bar */}
-      <div className="p-2 liquid-glass-card rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-semibold shadow-sm">
-        <div className="inline-flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+      <div className="p-2.5 liquid-glass-card rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-semibold shadow-sm">
+        <div className="glass-well inline-flex rounded-xl p-0.5">
           <button
             onClick={() => setActiveModule('ELA_SANDBOX')}
-            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
               activeModule === 'ELA_SANDBOX'
-                ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 shadow-2xs font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'btn-liquid-primary shadow-xs font-bold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <ScanEye className="w-3.5 h-3.5" />
+            <ScanEye className="w-4 h-4" />
             <span>1. Live File Upload &amp; ELA Sandbox</span>
           </button>
           <button
             onClick={() => setActiveModule('NOISEPRINT_ABLATION')}
-            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
               activeModule === 'NOISEPRINT_ABLATION'
-                ? 'bg-white dark:bg-slate-900 text-red-600 dark:text-red-400 shadow-2xs font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'btn-liquid-primary shadow-xs font-bold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Binary className="w-3.5 h-3.5" />
+            <Binary className="w-4 h-4" />
             <span>2. Noiseprint++ Ablation Inspector</span>
           </button>
           <button
             onClick={() => setActiveModule('SEAL_SIGNATURE_LAB')}
-            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
               activeModule === 'SEAL_SIGNATURE_LAB'
-                ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-2xs font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'btn-liquid-primary shadow-xs font-bold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <ShieldAlert className="w-3.5 h-3.5" />
+            <ShieldAlert className="w-4 h-4" />
             <span>3. Siamese ArcFace &amp; Polar Seal Lab</span>
           </button>
           <button
             onClick={() => setActiveModule('XREF_MORPHOLOGY')}
-            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
               activeModule === 'XREF_MORPHOLOGY'
-                ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-2xs font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'btn-liquid-primary shadow-xs font-bold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <FileCode className="w-3.5 h-3.5" />
+            <FileCode className="w-4 h-4" />
             <span>4. PyMuPDF XRef &amp; Morphology</span>
           </button>
         </div>
@@ -467,14 +441,14 @@ export default function ForensicsStudioPage() {
       {activeModule === 'ELA_SANDBOX' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left Canvas & Controls (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                   <ScanEye className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                   <span>Real Pixel ELA &amp; 8×8 DCT BAG Engine</span>
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">
                   Computes quantization residual |I - I_Q| × γ and 8×8 lattice phase shifts
                 </p>
               </div>
@@ -486,7 +460,7 @@ export default function ForensicsStudioPage() {
                   setSelectedExhibit(e.target.value);
                   setCustomImageSrc(null);
                 }}
-                className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold"
+                className="px-3 py-1.5 rounded-xl glass-well text-xs font-semibold text-[var(--text-primary)] shadow-2xs cursor-pointer focus:outline-none"
               >
                 {EXHIBIT_PRESETS.map((ex) => (
                   <option key={ex.id} value={ex.id}>
@@ -497,41 +471,41 @@ export default function ForensicsStudioPage() {
             </div>
 
             {/* Interactive Sliders Bar */}
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+            <div className="p-3.5 rounded-xl glass-well flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="text-slate-400">Reference Q:</span>
+                <span className="text-[var(--text-muted)]">Reference Q:</span>
                 <input
                   type="range"
                   min="50"
                   max="95"
                   value={jpegQuality}
                   onChange={(e) => setJpegQuality(Number(e.target.value))}
-                  className="w-24 accent-sky-600"
+                  className="w-24 accent-sky-600 cursor-pointer"
                 />
                 <span className="font-bold text-sky-600">{jpegQuality}%</span>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-slate-400">Gain (γ):</span>
+                <span className="text-[var(--text-muted)]">Gain (γ):</span>
                 <input
                   type="range"
                   min="5"
                   max="40"
                   value={elaMultiplier}
                   onChange={(e) => setElaMultiplier(Number(e.target.value))}
-                  className="w-20 accent-sky-600"
+                  className="w-20 accent-sky-600 cursor-pointer"
                 />
                 <span className="font-bold text-sky-600">{elaMultiplier}×</span>
               </div>
 
-              <label className="flex items-center gap-1.5 cursor-pointer">
+              <label className="flex items-center gap-1.5 cursor-pointer font-sans">
                 <input
                   type="checkbox"
                   checked={showBagGrid}
                   onChange={(e) => setShowBagGrid(e.target.checked)}
                   className="rounded accent-sky-600"
                 />
-                <span className="text-slate-700 dark:text-slate-300 font-semibold">8×8 DCT BAG</span>
+                <span className="text-[var(--text-primary)] font-semibold">8×8 DCT BAG</span>
               </label>
             </div>
 
@@ -543,14 +517,14 @@ export default function ForensicsStudioPage() {
             {/* Upload Area */}
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="p-4 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-sky-500 transition-colors flex items-center justify-center gap-3 cursor-pointer bg-white/40 dark:bg-slate-800/40"
+              className="p-4 rounded-xl border-2 border-dashed border-[var(--glass-well-border)] hover:border-sky-500 transition-colors flex items-center justify-center gap-3 cursor-pointer glass-well"
             >
               <Upload className="w-5 h-5 text-sky-600 dark:text-sky-400 shrink-0" />
               <div className="text-left">
-                <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                <div className="text-xs font-bold text-[var(--text-primary)]">
                   Drag &amp; Drop ANY Institutional Scan or Local PDF / Image
                 </div>
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-[var(--text-muted)]">
                   Client-side HTML5 canvas evaluation • Zero cloud upload • PNG, JPG, WebP, PDF
                 </div>
               </div>
@@ -567,98 +541,98 @@ export default function ForensicsStudioPage() {
           {/* Right: 13-Scalar StatNoise Histogram & Metadata (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
             {/* 13-Scalar StatNoise Distribution Histogram */}
-            <div className="liquid-glass-card rounded-2xl p-4 space-y-3">
+            <div className="liquid-glass-card rounded-2xl p-5 space-y-3 shadow-md">
               <div className="flex items-center justify-between">
-                <h3 className="font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-1.5">
                   <BarChart3 className="w-4 h-4 text-sky-600" />
                   <span>13-Scalar StatNoise Feature Distribution</span>
                 </h3>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-600 font-bold">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 font-bold">
                   ResAware MLP Inputs
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">1. Mean Residual (μ)</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.mean}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">1. Mean Residual (μ)</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.mean}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">2. Variance (σ²)</div>
-                  <div className="font-bold text-red-600 dark:text-red-400">{statNoise.variance}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">2. Variance (σ²)</div>
+                  <div className="font-bold text-rose-600 dark:text-rose-400">{statNoise.variance}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">3. Skewness (γ₁)</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.skewness}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">3. Skewness (γ₁)</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.skewness}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">4. Kurtosis (γ₂)</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.kurtosis}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">4. Kurtosis (γ₂)</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.kurtosis}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">5. IQR Energy Ratio</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.iqrEnergy}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">5. IQR Energy Ratio</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.iqrEnergy}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">6. Median Abs Dev (MAD)</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.mad}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">6. Median Abs Dev (MAD)</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.mad}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">7. HF Spectral Rolloff</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.hfRolloff}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">7. HF Spectral Rolloff</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.hfRolloff}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">8. Horizontal Variance</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.hVariance}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">8. Horizontal Variance</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.hVariance}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">9. Vertical Variance</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.vVariance}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">9. Vertical Variance</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.vVariance}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">10. Diagonal Variance</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.dVariance}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">10. Diagonal Variance</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.dVariance}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">11. Peak PRNU Pattern</div>
-                  <div className="font-bold text-red-600">{statNoise.prnuPeak}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">11. Peak PRNU Pattern</div>
+                  <div className="font-bold text-rose-600">{statNoise.prnuPeak}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-400">12. Residual Entropy</div>
-                  <div className="font-bold text-slate-800 dark:text-slate-200">{statNoise.entropy}</div>
+                <div className="p-2.5 rounded-xl glass-well">
+                  <div className="text-[10px] text-[var(--text-faint)]">12. Residual Entropy</div>
+                  <div className="font-bold text-[var(--text-primary)]">{statNoise.entropy}</div>
                 </div>
               </div>
             </div>
 
             {/* File Byte & EXIF Metadata Inspector */}
-            <div className="liquid-glass-card rounded-2xl p-4 space-y-2.5 font-mono text-xs">
-              <div className="flex items-center gap-2 font-sans font-bold text-slate-800 dark:text-slate-200">
+            <div className="liquid-glass-card rounded-2xl p-5 space-y-2.5 text-xs shadow-md">
+              <div className="flex items-center gap-2 font-bold text-[var(--text-primary)]">
                 <FileText className="w-4 h-4 text-indigo-600" />
                 <span>Byte Structure &amp; Software Signature</span>
               </div>
 
-              <div className="space-y-1.5 text-[11px]">
+              <div className="space-y-2 text-[11px] font-medium">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Filename:</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200 truncate max-w-[200px]">
+                  <span className="text-[var(--text-muted)]">Filename:</span>
+                  <span className="font-mono font-bold text-[var(--text-primary)] truncate max-w-[200px]">
                     {fileMetadata.name}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">File Byte Size:</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{fileMetadata.size}</span>
+                  <span className="text-[var(--text-muted)]">File Byte Size:</span>
+                  <span className="font-bold text-[var(--text-primary)]">{fileMetadata.size}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Raster Resolution:</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{fileMetadata.dimensions}</span>
+                  <span className="text-[var(--text-muted)]">Raster Resolution:</span>
+                  <span className="font-bold text-[var(--text-primary)]">{fileMetadata.dimensions}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Detected Producer:</span>
-                  <span className="font-bold text-red-600 dark:text-red-400">{fileMetadata.exifSoftware}</span>
+                  <span className="text-[var(--text-muted)]">Detected Producer:</span>
+                  <span className="font-bold text-rose-600 dark:text-rose-400">{fileMetadata.exifSoftware}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">SHA-256 Digest:</span>
-                  <span className="font-bold text-sky-600 truncate max-w-[200px]">{fileMetadata.sha256}</span>
+                  <span className="text-[var(--text-muted)]">SHA-256 Digest:</span>
+                  <span className="font-mono font-bold text-sky-600 truncate max-w-[200px]">{fileMetadata.sha256}</span>
                 </div>
               </div>
             </div>
@@ -670,19 +644,19 @@ export default function ForensicsStudioPage() {
       {activeModule === 'NOISEPRINT_ABLATION' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* 7-Level Ablation Chart (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Binary className="w-4 h-4 text-red-600 dark:text-red-400" />
+              <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <Binary className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                 <span>Noiseprint++ 7-Level Architectural Ablation Ladder</span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Demonstrating why InstanceNorm2d standardizes out sensor noise and how ResAware restores diagnostic AUC
               </p>
             </div>
 
             {/* Ablation Ladder */}
-            <div className="space-y-2 font-mono text-xs">
+            <div className="space-y-2.5 text-xs">
               {[
                 { lvl: 1, name: 'L1: Raw RGB Baseline', auc: 0.492, note: 'Blind to forensic sensor noise' },
                 { lvl: 2, name: 'L2: Sobel Edge Gradient Filter', auc: 0.581, note: 'Confuses document ink borders with tampering' },
@@ -695,68 +669,68 @@ export default function ForensicsStudioPage() {
                 <div
                   key={item.lvl}
                   onClick={() => setSelectedAblationLevel(item.lvl)}
-                  className={`p-3 rounded-xl border transition-all cursor-pointer ${
+                  className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                     selectedAblationLevel === item.lvl
                       ? 'ring-2 ring-sky-500 shadow-md'
                       : ''
                   } ${
                     item.fatal
-                      ? 'bg-red-500/10 border-red-500/30'
+                      ? 'bg-rose-500/10 border-rose-500/30'
                       : item.sota
                       ? 'bg-emerald-500/10 border-emerald-500/30'
-                      : 'bg-white/60 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-700'
+                      : 'glass-well'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-slate-900 dark:text-white">{item.name}</span>
+                    <span className="font-bold text-[var(--text-primary)]">{item.name}</span>
                     <span
-                      className={`font-bold px-2 py-0.5 rounded text-[11px] ${
+                      className={`font-bold px-2 py-0.5 rounded-full text-[11px] tabular-nums ${
                         item.fatal
-                          ? 'bg-red-600 text-white'
+                          ? 'bg-rose-600 text-white'
                           : item.sota
                           ? 'bg-emerald-600 text-white'
-                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                          : 'glass-well text-[var(--text-secondary)]'
                       }`}
                     >
                       AUC: {item.auc.toFixed(3)}
                     </span>
                   </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">{item.note}</div>
+                  <div className="text-[11px] text-[var(--text-muted)]">{item.note}</div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Interactive Crop Mode Comparison: Tight vs Wide ROI (5 cols) */}
-          <div className="lg:col-span-5 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-5 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Crosshair className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                 <span>Crop-Then-Extract vs. Extract-Then-Crop SNR</span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Interactive demonstration of PRNU signal destruction when cropping tight ROI patches
               </p>
             </div>
 
             {/* Crop Selector */}
-            <div className="inline-flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold w-full">
+            <div className="glass-well inline-flex rounded-xl p-0.5 text-xs font-semibold w-full">
               <button
                 onClick={() => setCropMode('TIGHT')}
-                className={`flex-1 py-1.5 rounded-lg transition-all text-center ${
+                className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer ${
                   cropMode === 'TIGHT'
-                    ? 'bg-white dark:bg-slate-900 text-red-600 dark:text-red-400 shadow-2xs font-bold'
-                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    ? 'btn-liquid-primary shadow-xs font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 Tight ROI Crop (Patch 128×64)
               </button>
               <button
                 onClick={() => setCropMode('WIDE')}
-                className={`flex-1 py-1.5 rounded-lg transition-all text-center ${
+                className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer ${
                   cropMode === 'WIDE'
-                    ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-2xs font-bold'
-                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    ? 'btn-liquid-primary shadow-xs font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 Wide Context Full-Frame
@@ -764,24 +738,24 @@ export default function ForensicsStudioPage() {
             </div>
 
             {/* SNR Gauge */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3 font-mono text-xs">
+            <div className="p-4 rounded-xl glass-well space-y-3 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-400">Signal-to-Noise Ratio (SNR):</span>
+                <span className="text-[var(--text-muted)]">Signal-to-Noise Ratio (SNR):</span>
                 <span
-                  className={`font-bold ${cropMode === 'TIGHT' ? 'text-red-600' : 'text-emerald-600'}`}
+                  className={`font-bold ${cropMode === 'TIGHT' ? 'text-rose-600' : 'text-emerald-600'}`}
                 >
                   {cropMode === 'TIGHT' ? 'SNR = 0.188 (Severe Attenuation)' : 'SNR = 0.080 (Background Ambient)'}
                 </span>
               </div>
 
-              <div className="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+              <div className="w-full glass-well h-2.5 rounded-full overflow-hidden">
                 <div
                   style={{ width: cropMode === 'TIGHT' ? '25%' : '92%' }}
-                  className={`h-full transition-all duration-300 ${cropMode === 'TIGHT' ? 'bg-red-500' : 'bg-emerald-500'}`}
+                  className={`h-full transition-all duration-300 ${cropMode === 'TIGHT' ? 'bg-rose-500' : 'bg-emerald-500'}`}
                 />
               </div>
 
-              <p className="text-[11px] font-sans text-slate-500 dark:text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
                 {cropMode === 'TIGHT'
                   ? 'Cropping a tight box around "2027" before neural feature extraction removes the full-frame paper fiber continuity. ResAware requires full-frame feature extraction followed by masked pooling.'
                   : 'Full-frame Extract-Then-Crop enables the 13-Scalar MLP to baseline the scanner sensor fingerprint against uniform margins, isolating the tampered patch with 98.4% diagnostic confidence.'}
@@ -795,13 +769,13 @@ export default function ForensicsStudioPage() {
       {activeModule === 'SEAL_SIGNATURE_LAB' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left: Side-by-side Stamp & Signature Comparison (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Siamese ArcFace (s=64.0, m=0.50 rad) Seal &amp; Signature Lab</span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Additive Angular Margin embedding on 512-D hypersphere with clone detection
               </p>
             </div>
@@ -809,19 +783,19 @@ export default function ForensicsStudioPage() {
             {/* Side-by-side comparison */}
             <div className="grid grid-cols-2 gap-4">
               {/* Exhibit Stamp */}
-              <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex flex-col items-center">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+              <div className="p-3.5 rounded-xl glass-well flex flex-col items-center">
+                <div className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2">
                   Submitted Document Circular Seal
                 </div>
                 <canvas ref={polarSealSrcRef} className="rounded-lg shadow border border-slate-300 dark:border-slate-700" />
-                <div className="mt-2 text-center text-xs font-mono font-bold text-sky-600">
+                <div className="mt-2 text-center text-xs font-semibold text-sky-600">
                   Detected: Haryana Fire Service (Gurugram)
                 </div>
               </div>
 
               {/* Master Repository Specimen */}
-              <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex flex-col items-center">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+              <div className="p-3.5 rounded-xl glass-well flex flex-col items-center">
+                <div className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2">
                   AICTE Master Specimen Repository
                 </div>
                 <div className="w-[160px] h-[160px] rounded-lg border-2 border-emerald-500/40 bg-emerald-500/5 flex flex-col items-center justify-center p-2 text-center">
@@ -830,23 +804,23 @@ export default function ForensicsStudioPage() {
                   </div>
                   <span className="text-[10px] text-emerald-600 font-bold mt-2">Verified Master</span>
                 </div>
-                <div className="mt-2 text-center text-xs font-mono font-bold text-emerald-600">
+                <div className="mt-2 text-center text-xs font-semibold text-emerald-600">
                   cos(θ) = 0.962 (Genuine Seal Specimen)
                 </div>
               </div>
             </div>
 
             {/* Wet Ink Signature Clone Alert Card */}
-            <div className="p-3.5 rounded-xl bg-red-50/70 dark:bg-red-950/20 border border-red-300 dark:border-red-900/60 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
               <div className="text-xs">
-                <div className="font-bold text-red-700 dark:text-red-400 flex items-center gap-2">
+                <div className="font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
                   <span>Digital Signature Clone Detected (SSIM = 0.998)</span>
-                  <span className="px-1.5 py-0.2 rounded bg-red-600 text-white text-[10px] font-mono">
-                    FATAL FRAUD
+                  <span className="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                    Fatal Fraud
                   </span>
                 </div>
-                <p className="text-slate-600 dark:text-slate-300 mt-1 leading-snug">
+                <p className="text-[var(--text-muted)] mt-1 leading-snug">
                   Submitted wet-ink signature stroke geometry matches pixel-for-pixel across 9 different institutional affidavits from Deccan Academy. Bit-exact stroke duplication confirms digital copy-paste splice rather than authentic wet ink.
                 </p>
               </div>
@@ -854,22 +828,22 @@ export default function ForensicsStudioPage() {
           </div>
 
           {/* Right: Real Polar Coordinate Unwrapping Canvas (5 cols) */}
-          <div className="lg:col-span-5 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-5 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Compass className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                 <span>Live Polar Coordinate Unwrapping Canvas (r, θ)</span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Transforms circular stamp annulus [r_min, r_max] × [0, 2π] into linear strip for PP-OCRv5 reading
               </p>
             </div>
 
             {/* Polar Range Controls */}
-            <div className="space-y-2 text-xs font-mono">
+            <div className="space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-400">Inner Radius (r_min):</span>
-                <span className="font-bold text-sky-600">{polarRadiusMin} px</span>
+                <span className="text-[var(--text-muted)]">Inner Radius (r_min):</span>
+                <span className="font-bold text-sky-600 tabular-nums">{polarRadiusMin} px</span>
               </div>
               <input
                 type="range"
@@ -877,12 +851,12 @@ export default function ForensicsStudioPage() {
                 max="35"
                 value={polarRadiusMin}
                 onChange={(e) => setPolarRadiusMin(Number(e.target.value))}
-                className="w-full accent-sky-600"
+                className="w-full accent-sky-600 cursor-pointer"
               />
 
               <div className="flex justify-between">
-                <span className="text-slate-400">Outer Radius (r_max):</span>
-                <span className="font-bold text-sky-600">{polarRadiusMax} px</span>
+                <span className="text-[var(--text-muted)]">Outer Radius (r_max):</span>
+                <span className="font-bold text-sky-600 tabular-nums">{polarRadiusMax} px</span>
               </div>
               <input
                 type="range"
@@ -890,24 +864,24 @@ export default function ForensicsStudioPage() {
                 max="75"
                 value={polarRadiusMax}
                 onChange={(e) => setPolarRadiusMax(Number(e.target.value))}
-                className="w-full accent-sky-600"
+                className="w-full accent-sky-600 cursor-pointer"
               />
             </div>
 
             {/* Unwrapped Strip Canvas */}
-            <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 flex flex-col items-center gap-2">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col items-center gap-2">
+              <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
                 Linear Unrolled Text Strip (PP-OCRv5 Input)
               </span>
               <canvas ref={polarUnwrappedRef} className="rounded shadow max-w-full" />
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs font-mono">
-              <div className="text-slate-400 text-[10px]">PP-OCRv5 Extracted String:</div>
+            <div className="p-3.5 rounded-xl glass-well text-xs">
+              <div className="text-[var(--text-muted)] text-[10px] uppercase font-bold">PP-OCRv5 Extracted String:</div>
               <div className="font-bold text-emerald-600 mt-1">
-                "DIRECTORATE OF FIRE SERVICES GURUGRAM CIRCLE HARYANA"
+                &ldquo;DIRECTORATE OF FIRE SERVICES GURUGRAM CIRCLE HARYANA&rdquo;
               </div>
-              <div className="text-slate-400 text-[10px] mt-1">OCR Confidence: 0.974</div>
+              <div className="text-[var(--text-muted)] text-[11px] mt-1">OCR Confidence: 0.974</div>
             </div>
           </div>
         </div>
@@ -917,13 +891,13 @@ export default function ForensicsStudioPage() {
       {activeModule === 'XREF_MORPHOLOGY' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left: Raw PDF Incremental Save Trailers (6 cols) */}
-          <div className="lg:col-span-6 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-6 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <FileCode className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>PyMuPDF (fitz) XRef Incremental Trailer Inspector</span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Reveals secondary revisions, injected unembedded fonts, and spliced PDF stream tags
               </p>
             </div>
@@ -937,74 +911,74 @@ export default function ForensicsStudioPage() {
               <div>0000000017 00000 n</div>
               <div>0000001248 00000 n</div>
               <div className="text-amber-400">trailer &lt;&lt; /Size 52 /Root 1 0 R /Info 2 0 R &gt;&gt;</div>
-              <div className="text-red-400 font-bold">%%EOF (Revision #1 - 2021-06-28 Original)</div>
+              <div className="text-rose-400 font-bold">%%EOF (Revision #1 - 2021-06-28 Original)</div>
               <div className="pt-2 text-slate-400">// SPLICED INCREMENTAL UPDATE DETECTED:</div>
               <div className="text-amber-300">xref</div>
               <div>52 4</div>
               <div>0000049102 00000 n (Injected Font ArialMT)</div>
               <div>0000049820 00000 n (Overwritten Text Stream: "2027")</div>
-              <div className="text-red-400 font-bold">%%EOF (Revision #2 - 2026-03-28 Spliced via Canva)</div>
+              <div className="text-rose-400 font-bold">%%EOF (Revision #2 - 2026-03-28 Spliced via Canva)</div>
               <div className="pt-2 text-sky-400">/Producer (Canva Splicer Engine v2.1)</div>
               <div className="text-sky-400">/Creator (PDFtk Server Windows)</div>
-              <div className="text-red-400">/ModDate (D:20260328101422Z) ≠ /CreationDate (D:20210628081200Z)</div>
+              <div className="text-rose-400">/ModDate (D:20260328101422Z) ≠ /CreationDate (D:20210628081200Z)</div>
             </div>
 
             {/* Font Subset Table */}
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs font-mono space-y-2">
-              <div className="font-bold text-slate-800 dark:text-slate-200">Font Subset Integrity:</div>
-              <div className="flex justify-between p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <div className="p-3.5 rounded-xl glass-well text-xs space-y-2">
+              <div className="font-bold text-[var(--text-primary)]">Font Subset Integrity:</div>
+              <div className="flex justify-between p-2 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
                 <span>Original Body Text:</span>
                 <span className="font-bold text-emerald-600">TimesNewRomanPSMT (Embedded)</span>
               </div>
-              <div className="flex justify-between p-2 rounded bg-red-500/10 border border-red-500/30">
-                <span className="text-red-700 dark:text-red-400">Injected Altered Digit:</span>
-                <span className="font-bold text-red-700 dark:text-red-400">ArialMT (Unembedded Injected)</span>
+              <div className="flex justify-between p-2 rounded-xl bg-rose-500/10 border border-rose-500/30">
+                <span className="text-rose-700 dark:text-rose-400 font-semibold">Injected Altered Digit:</span>
+                <span className="font-bold text-rose-700 dark:text-rose-400">ArialMT (Unembedded Injected)</span>
               </div>
             </div>
           </div>
 
           {/* Right: Character Morphology & Baseline Offset (6 cols) */}
-          <div className="lg:col-span-6 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-6 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Activity className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                 <span>Siamese Character Morphology &amp; Kerning Graph</span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Exposes digit substitution via vertical baseline offset (Δy), stroke width and Mahalanobis kerning
               </p>
             </div>
 
             {/* Digit Substitution Comparison Table */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3 font-mono text-xs">
-              <div className="font-bold text-slate-800 dark:text-slate-200 font-sans">
-                Digit "7" Substitution Metrics vs Baseline Font "2024"
+            <div className="p-4 rounded-xl glass-well space-y-3 text-xs">
+              <div className="font-bold text-[var(--text-primary)]">
+                Digit &ldquo;7&rdquo; Substitution Metrics vs Baseline Font &ldquo;2024&rdquo;
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between items-center p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                  <span className="text-slate-500">Vertical Baseline Offset (Δy):</span>
-                  <span className="font-bold text-red-600">+2.4 pt (MISALIGNED)</span>
+                <div className="flex justify-between items-center p-2 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                  <span className="text-[var(--text-muted)]">Vertical Baseline Offset (Δy):</span>
+                  <span className="font-bold text-rose-600">+2.4 pt (MISALIGNED)</span>
                 </div>
 
-                <div className="flex justify-between items-center p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                  <span className="text-slate-500">Stroke Width Discrepancy:</span>
-                  <span className="font-bold text-red-600">1.8× Thicker than '2', '0'</span>
+                <div className="flex justify-between items-center p-2 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                  <span className="text-[var(--text-muted)]">Stroke Width Discrepancy:</span>
+                  <span className="font-bold text-rose-600">1.8× Thicker than '2', '0'</span>
                 </div>
 
-                <div className="flex justify-between items-center p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                  <span className="text-slate-500">Kerning Mahalanobis Distance (d_M):</span>
-                  <span className="font-bold text-red-600">4.82 σ (Outlier Threshold &gt; 3.0σ)</span>
+                <div className="flex justify-between items-center p-2 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                  <span className="text-[var(--text-muted)]">Kerning Mahalanobis Distance (d_M):</span>
+                  <span className="font-bold text-rose-600">4.82 σ (Outlier Threshold &gt; 3.0σ)</span>
                 </div>
 
-                <div className="flex justify-between items-center p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                  <span className="text-slate-500">Glyph Bounding Box Aspect Ratio:</span>
+                <div className="flex justify-between items-center p-2 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                  <span className="text-[var(--text-muted)]">Glyph Bounding Box Aspect Ratio:</span>
                   <span className="font-bold text-amber-600">0.71 vs Nominal 0.62</span>
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-red-100/70 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-[11px] font-sans text-red-700 dark:text-red-300">
-                <strong>Forensic Conclusion:</strong> Digit "7" in "2027" was pasted over original digit "4". Font metrics mismatch proves the document was modified post-issuance.
+              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[11px] text-rose-700 dark:text-rose-300">
+                <strong>Forensic Conclusion:</strong> Digit &ldquo;7&rdquo; in &ldquo;2027&rdquo; was pasted over original digit &ldquo;4&rdquo;. Font metrics mismatch proves the document was modified post-issuance.
               </div>
             </div>
           </div>

@@ -45,16 +45,16 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
   };
 
   return (
-    <header className="sticky top-0 z-30 h-13 w-full flex items-center justify-between px-4 border-b border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-2xl shadow-[var(--glass-shadow)] transition-colors">
+    <header className="sticky top-3 z-30 mx-3 mb-2.5 h-13 flex items-center justify-between px-4 liquid-glass-card rounded-2xl shadow-lg transition-all">
       {/* Left: Breadcrumbs & Telemetry */}
       <div className="flex items-center gap-3.5 min-w-0">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">
-          <span className="font-mono text-[11px] text-[var(--text-faint)] tracking-tight">AICTE/APH-26 /</span>
+          <span className="text-[11px] font-semibold text-[var(--text-faint)] tracking-tight">AICTE / APH-26 /</span>
           <span className="truncate tracking-tight">{getBreadcrumb()}</span>
         </div>
 
         {/* Live DPI Status Tactile Pill */}
-        <div className="hidden md:inline-flex items-center gap-2 px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/8 text-emerald-700 dark:text-emerald-400 text-[10.5px] font-mono font-medium shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)]">
+        <div className="hidden md:inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold shadow-2xs">
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
@@ -63,8 +63,8 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
         </div>
 
         {/* Pipeline run clock */}
-        <div className="hidden lg:flex items-center gap-1 text-[var(--text-muted)] font-mono text-[10.5px]">
-          <Clock className="w-3 h-3 text-[var(--text-faint)]" />
+        <div className="hidden lg:flex items-center gap-1.5 text-[var(--text-muted)] text-[11px] font-medium">
+          <Clock className="w-3.5 h-3.5 text-[var(--text-faint)]" />
           <span>{t.pipelineRun}</span>
         </div>
       </div>
@@ -74,23 +74,23 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
         {/* Command Palette Trigger */}
         <button
           onClick={onOpenCommandPalette}
-          className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] text-[var(--text-muted)] hover:border-[var(--glass-border-strong)] hover:text-[var(--text-primary)] text-xs shadow-2xs transition-all group cursor-pointer"
+          className="btn-liquid-secondary flex items-center gap-2 px-3 py-1.5 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs shadow-2xs transition-all group cursor-pointer"
           title="Quick search (⌘K / Ctrl+K)"
         >
           <Search className="w-3.5 h-3.5 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors" />
           <span className="hidden sm:inline font-normal">{t.searchPlaceholder.slice(0, 24)}...</span>
-          <kbd className="hidden sm:inline-block px-1.5 py-0.2 text-[9.5px] font-mono font-semibold bg-[var(--glass-bg-elevated)] border border-[var(--glass-border)] rounded text-[var(--text-secondary)]">
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold bg-white/40 dark:bg-black/30 border border-[var(--glass-well-border)] rounded-md text-[var(--text-secondary)] shadow-2xs">
             ⌘K
           </kbd>
         </button>
 
         {/* Bilingual Switcher (EN | हिन्दी) */}
-        <div className="inline-flex rounded-lg p-0.5 bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] text-xs font-semibold">
+        <div className="glass-well inline-flex rounded-xl p-0.5 text-xs font-semibold shadow-2xs">
           <button
             onClick={() => setLanguage('en')}
-            className={`px-2 py-0.5 rounded-md transition-all text-[11px] cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg transition-all text-[11px] cursor-pointer ${
               language === 'en'
-                ? 'bg-slate-900 text-white dark:bg-white/15 dark:text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_1px_2px_rgba(0,0,0,0.1)] font-bold'
+                ? 'btn-liquid-primary font-bold shadow-xs'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
@@ -98,9 +98,9 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
           </button>
           <button
             onClick={() => setLanguage('hi')}
-            className={`px-2 py-0.5 rounded-md transition-all text-[11px] cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg transition-all text-[11px] cursor-pointer ${
               language === 'hi'
-                ? 'bg-slate-900 text-white dark:bg-white/15 dark:text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_1px_2px_rgba(0,0,0,0.1)] font-bold'
+                ? 'btn-liquid-primary font-bold shadow-xs'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
@@ -111,7 +111,7 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="p-1.5 rounded-lg bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] text-[var(--text-secondary)] hover:bg-[var(--glass-bg-elevated)] hover:border-[var(--glass-border-strong)] transition-all shadow-2xs cursor-pointer"
+          className="btn-liquid-secondary p-2 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all shadow-2xs cursor-pointer"
           title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
           aria-label="Toggle Theme"
         >

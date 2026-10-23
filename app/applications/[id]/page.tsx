@@ -1,34 +1,20 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useLanguage, useFilters } from '@/lib/context';
-import { MOCK_APPLICATIONS, InstitutionalApplication, DocumentArtifact, ForensicAnomaly } from '@/lib/mock-data';
+import { MOCK_APPLICATIONS, DocumentArtifact } from '@/lib/mock-data';
 import { ForensicDocumentCanvas } from '@/components/workbench/ForensicDocumentCanvas';
 import { BlueprintVectorViewer } from '@/components/workbench/BlueprintVectorViewer';
 import { toast } from 'sonner';
 import {
-  ShieldAlert,
-  ShieldCheck,
-  FileCheck,
-  AlertOctagon,
-  FileText,
-  UserX,
-  Building,
   CheckCircle2,
   AlertTriangle,
-  ExternalLink,
+  AlertOctagon,
+  UserX,
   ChevronDown,
-  Sparkles,
-  Layers,
-  ArrowRight,
-  Send,
-  Lock,
   BookOpen,
   Table as TableIcon,
-  Code2,
-  FileCode,
   Copy,
   Check,
 } from 'lucide-react';
@@ -265,15 +251,12 @@ export default function ScrutinyWorkbenchPage() {
 
     if (!identifier) return;
 
-    // Switch right inspector to ENTITIES tab
     setActiveInspectorTab('ENTITIES');
 
-    // Look for matching anomaly to retrieve exact APH citation
     const matchingAnomaly = application.anomalies.find(
       (a) => a.id === identifier || a.extractedValue.includes(identifier) || a.titleEn.includes(identifier)
     );
 
-    // Look for matching field in active document
     const matchingField = activeDocument.extractedFields.find((f) => f.nameEn === identifier);
 
     if (matchingAnomaly) {
@@ -283,7 +266,6 @@ export default function ScrutinyWorkbenchPage() {
         rule: matchingAnomaly.descriptionEn,
       });
     } else if (matchingField) {
-      // Default citations mapped to field names
       if (matchingField.nameEn.includes('Valid') || matchingField.nameEn.includes('Date')) {
         setActiveAphCitation({
           clause: 'APH 2024–27 Chapter VII & Annexure 16, Clause 2.1',
@@ -305,7 +287,6 @@ export default function ScrutinyWorkbenchPage() {
       }
     }
 
-    // Auto-scroll to corresponding row in right pane table
     setTimeout(() => {
       const sanitizedId = identifier.replace(/[^a-zA-Z0-9_-]/g, '_');
       const el = document.getElementById(`entity-row-${sanitizedId}`);
@@ -315,15 +296,12 @@ export default function ScrutinyWorkbenchPage() {
     }, 100);
   };
 
-  // Handle clicking on an entity row or anomaly row in right pane
   const handleSelectFieldFromInspector = (fieldName: string, docType?: string) => {
     setSelectedAnomalyId(fieldName);
 
-    // Switch document canvas to the document containing this field
     if (docType && docTypeToTab[docType]) {
       setActiveDocumentTab(docTypeToTab[docType]);
     } else {
-      // Find document containing this field
       const foundDoc = application.documents.find((d) =>
         d.extractedFields.some((f) => f.nameEn === fieldName)
       );
@@ -332,7 +310,6 @@ export default function ScrutinyWorkbenchPage() {
       }
     }
 
-    // Update citation
     const matchingAnomaly = application.anomalies.find((a) => a.titleEn.includes(fieldName) || a.extractedValue.includes(fieldName));
     if (matchingAnomaly) {
       setActiveAphCitation({
@@ -343,7 +320,6 @@ export default function ScrutinyWorkbenchPage() {
     }
   };
 
-  // Officer Decision Handler with Closed-Loop Store Mutation
   const handleOfficerDecision = async (decision: 'APPROVE' | 'DEFICIENCY' | 'SHC') => {
     if (decision === 'APPROVE') {
       await approveApplicationEoA(
@@ -365,16 +341,16 @@ export default function ScrutinyWorkbenchPage() {
   };
 
   return (
-    <div className="space-y-4 animate-in fade-in duration-200">
+    <div className="space-y-4 animate-glass-in">
       {/* Top Workbench Control Bar */}
-      <div className="p-4 liquid-glass-card rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-sm">
+      <div className="p-4 sm:p-5 liquid-glass-card rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
         {/* Left: Institution Selector & Badges */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative">
             <select
               value={application.id}
               onChange={(e) => router.push(`/applications/${e.target.value}`)}
-              className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-bold text-sm text-slate-900 dark:text-white shadow-2xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="appearance-none pl-3.5 pr-9 py-2 rounded-xl glass-well font-bold text-xs sm:text-sm text-[var(--text-primary)] shadow-2xs cursor-pointer focus:outline-none"
             >
               {applications.map((app) => (
                 <option key={app.id} value={app.id}>
@@ -382,86 +358,78 @@ export default function ScrutinyWorkbenchPage() {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-faint)]" />
           </div>
 
           {/* ICI Score Pill */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-2xs font-mono text-xs">
-            <span className="text-slate-400 font-medium">ICI Score:</span>
-            <span
-              className={`font-bold text-sm ${
-                application.fatalGateTriggered
-                  ? 'text-red-600 dark:text-red-400'
-                  : application.iciScore >= 90
-                  ? 'text-emerald-600 dark:text-emerald-400'
-                  : 'text-amber-600 dark:text-amber-400'
-              }`}
-            >
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-well shadow-2xs text-xs font-semibold">
+            <span className="text-[var(--text-muted)] font-medium">ICI Score:</span>
+            <span className="font-bold text-sm tabular-nums text-[var(--text-primary)]">
               {application.iciScore.toFixed(1)} / 100
             </span>
             {application.fatalGateTriggered && (
-              <span className="px-1.5 py-0.2 rounded bg-red-600 text-white font-bold text-[10px]">
+              <span className="px-2 py-0.5 rounded-full bg-rose-600 text-white font-bold text-[10px]">
                 FATAL VETO
               </span>
             )}
           </div>
 
           {/* Max RPN Pill */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-2xs font-mono text-xs">
-            <span className="text-slate-400 font-medium">Max RPN:</span>
-            <span className="font-bold text-sm text-slate-900 dark:text-white">{application.maxRpn}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-well shadow-2xs text-xs font-semibold">
+            <span className="text-[var(--text-muted)] font-medium">Max RPN:</span>
+            <span className="font-bold text-sm tabular-nums text-[var(--text-primary)]">{application.maxRpn}</span>
           </div>
         </div>
 
         {/* Right: Officer Statutory Decision Buttons */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => handleOfficerDecision('APPROVE')}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all hover:-translate-y-0.5 inline-flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all hover:-translate-y-0.5 inline-flex items-center gap-1.5 cursor-pointer"
           >
-            <CheckCircle2 className="w-3.5 h-3.5" />
+            <CheckCircle2 className="w-4 h-4" />
             <span>{t.btnApproveEoA}</span>
           </button>
           <button
             onClick={() => handleOfficerDecision('DEFICIENCY')}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-xs transition-all hover:-translate-y-0.5 inline-flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition-all hover:-translate-y-0.5 inline-flex items-center gap-1.5 cursor-pointer"
           >
-            <AlertTriangle className="w-3.5 h-3.5" />
+            <AlertTriangle className="w-4 h-4" />
             <span>{t.btnIssueDeficiency}</span>
           </button>
           <button
             onClick={() => handleOfficerDecision('SHC')}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-700 text-white shadow-xs transition-all hover:-translate-y-0.5 inline-flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition-all hover:-translate-y-0.5 inline-flex items-center gap-1.5 cursor-pointer"
           >
-            <AlertOctagon className="w-3.5 h-3.5" />
+            <AlertOctagon className="w-4 h-4" />
             <span>{t.btnEscalateShc}</span>
           </button>
         </div>
       </div>
 
-      {/* AICTE APH 2024–27 Citation Banner (Updated dynamically on BBox selection) */}
+      {/* AICTE APH 2024–27 Citation Banner */}
       {activeAphCitation && (
-        <div className="p-3 rounded-xl bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-sky-200 dark:border-slate-800 flex items-start gap-3 shadow-xs">
+        <div className="p-3.5 rounded-2xl glass-well flex items-start gap-3 shadow-xs">
           <BookOpen className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
           <div className="text-xs">
             <div className="flex items-center gap-2">
               <span className="font-bold text-sky-900 dark:text-sky-200">{activeAphCitation.clause}</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-sky-200/80 dark:bg-sky-900/60 text-sky-800 dark:text-sky-300 font-bold">
-                STATUTORY CITATION
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-200/80 dark:bg-sky-900/60 text-sky-800 dark:text-sky-300 font-bold uppercase tracking-wider">
+                Statutory Citation
               </span>
             </div>
-            <p className="text-slate-700 dark:text-slate-300 font-semibold mt-0.5">
+            <p className="text-[var(--text-primary)] font-semibold mt-0.5">
               {activeAphCitation.description}
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
               {activeAphCitation.rule}
             </p>
           </div>
         </div>
       )}
 
-      {/* Document Tab Switcher (Mapped with DocumentTabKey) */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-semibold">
+      {/* Document Tab Switcher */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold">
         {application.documents.map((doc) => {
           const tabKey = docTypeToTab[doc.docType] || 'fire_noc';
           const isSelected = activeDocumentTab === tabKey;
@@ -471,22 +439,21 @@ export default function ScrutinyWorkbenchPage() {
               key={doc.id}
               onClick={() => {
                 setActiveDocumentTab(tabKey);
-                // Auto-select first extracted field of this document
                 if (doc.extractedFields.length > 0) {
                   setSelectedAnomalyId(doc.extractedFields[0].nameEn);
                 }
               }}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all shrink-0 ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all shrink-0 cursor-pointer ${
                 isSelected
-                  ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20 font-bold'
-                  : 'bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800'
+                  ? 'btn-liquid-primary shadow-sm font-bold'
+                  : 'btn-liquid-secondary'
               }`}
             >
               <span>{language === 'hi' ? doc.titleHi : doc.titleEn}</span>
               {doc.tamperAlert && (
                 <span
-                  className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded ${
-                    isSelected ? 'bg-white text-red-600' : 'bg-red-500/10 text-red-600'
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    isSelected ? 'bg-white text-rose-600' : 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
                   }`}
                 >
                   FLAG
@@ -518,16 +485,16 @@ export default function ScrutinyWorkbenchPage() {
         </div>
 
         {/* Right Pane (5 cols / 45%): Evidence-Linked Inspector */}
-        <div className="lg:col-span-5 flex flex-col h-[750px] liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
+        <div className="lg:col-span-5 flex flex-col h-[750px] liquid-glass-card rounded-2xl overflow-hidden shadow-md">
           {/* Right Pane Tabs */}
-          <div className="p-2 border-b border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md flex items-center justify-between text-xs font-semibold">
-            <div className="inline-flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full text-[11px]">
+          <div className="p-2 border-b border-[var(--glass-well-border)] flex items-center justify-between text-xs font-semibold">
+            <div className="glass-well inline-flex rounded-xl p-0.5 w-full text-[11px]">
               <button
                 onClick={() => setActiveInspectorTab('ENTITIES')}
-                className={`flex-1 py-1.5 rounded-lg transition-all text-center ${
+                className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer ${
                   activeInspectorTab === 'ENTITIES'
-                    ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 shadow-2xs font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'btn-liquid-primary shadow-xs font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
                 title="Extracted Document Attributes & Authority Reconciliation"
               >
@@ -535,10 +502,10 @@ export default function ScrutinyWorkbenchPage() {
               </button>
               <button
                 onClick={() => setActiveInspectorTab('APH_NORM')}
-                className={`flex-1 py-1.5 rounded-lg transition-all text-center ${
+                className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer ${
                   activeInspectorTab === 'APH_NORM'
-                    ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 shadow-2xs font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'btn-liquid-primary shadow-xs font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
                 title="Approval Process Handbook Chapter VII Deterministic Math"
               >
@@ -546,10 +513,10 @@ export default function ScrutinyWorkbenchPage() {
               </button>
               <button
                 onClick={() => setActiveInspectorTab('GHOST_FACULTY')}
-                className={`flex-1 py-1.5 rounded-lg transition-all text-center ${
+                className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer ${
                   activeInspectorTab === 'GHOST_FACULTY'
-                    ? 'bg-white dark:bg-slate-900 text-red-600 dark:text-red-400 shadow-2xs font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'btn-liquid-primary shadow-xs font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
                 title="Cross-Institutional RetinaFace / ArcFace Ghost Faculty Search"
               >
@@ -557,10 +524,10 @@ export default function ScrutinyWorkbenchPage() {
               </button>
               <button
                 onClick={() => setActiveInspectorTab('SLANET_TABLE')}
-                className={`flex-1 py-1.5 rounded-lg transition-all text-center ${
+                className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer ${
                   activeInspectorTab === 'SLANET_TABLE'
-                    ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-2xs font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'btn-liquid-primary shadow-xs font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
                 title="PP-StructureV3 + Improved SLANet Table DOM & LayoutLMv3 KIE"
               >
@@ -573,35 +540,35 @@ export default function ScrutinyWorkbenchPage() {
           {activeInspectorTab === 'ENTITIES' && (
             <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
               <div>
-                <h3 className="font-bold text-slate-900 dark:text-white text-sm">
+                <h3 className="font-bold text-[var(--text-primary)] text-sm">
                   Document Attributes &amp; Authority Reconciliation
                 </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
                   Click any row to switch document and highlight corresponding bounding box on canvas
                 </p>
               </div>
 
               {/* Document Metadata Pill */}
-              <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/90 dark:border-slate-700 space-y-1.5 font-mono text-[11px]">
+              <div className="p-3.5 rounded-xl glass-well space-y-1.5 text-[11px]">
                 <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400 font-semibold">Issuing Repository:</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{activeDocument.issuingAuthority}</span>
+                  <span className="text-[var(--text-muted)] font-semibold">Issuing Repository:</span>
+                  <span className="font-bold text-[var(--text-primary)]">{activeDocument.issuingAuthority}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400 font-semibold">Canonical URI:</span>
-                  <span className="font-bold text-sky-600 dark:text-sky-400 truncate max-w-[220px]">
+                  <span className="text-[var(--text-muted)] font-semibold">Canonical URI:</span>
+                  <span className="font-mono font-bold text-sky-600 dark:text-sky-400 truncate max-w-[220px]">
                     {activeDocument.authorityUri}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400 font-semibold">Verification Status:</span>
+                  <span className="text-[var(--text-muted)] font-semibold">Verification Status:</span>
                   <span
-                    className={`font-bold px-1.5 py-0.2 rounded text-[10px] ${
+                    className={`font-bold px-2 py-0.5 rounded-full text-[10px] ${
                       activeDocument.verificationState === 'MISMATCH_DETECTED'
-                        ? 'bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/20'
+                        ? 'pill-fatal'
                         : activeDocument.verificationState === 'VERIFIED'
-                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
-                        : 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20'
+                        ? 'pill-verified'
+                        : 'pill-deficiency'
                     }`}
                   >
                     {activeDocument.verificationState}
@@ -620,47 +587,47 @@ export default function ScrutinyWorkbenchPage() {
                       key={idx}
                       id={`entity-row-${sanitizedId}`}
                       onClick={() => handleSelectFieldFromInspector(field.nameEn, activeDocument.docType)}
-                      className={`p-3 rounded-xl border transition-all cursor-pointer ${
-                        isHighlighted ? 'ring-2 ring-sky-500 shadow-md bg-sky-50/40 dark:bg-sky-950/20' : ''
+                      className={`p-3.5 rounded-xl transition-all cursor-pointer ${
+                        isHighlighted ? 'ring-2 ring-sky-500 shadow-md bg-sky-500/10' : ''
                       } ${
                         field.isMismatch
-                          ? 'bg-red-50/60 dark:bg-red-950/20 border-red-200 dark:border-red-900/60 shadow-2xs'
-                          : 'bg-white/70 dark:bg-slate-800/50 border-slate-200/90 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
+                          ? 'bg-rose-500/10 border border-rose-500/30'
+                          : 'glass-well'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <span className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                           {isHighlighted && <span className="w-2 h-2 rounded-full bg-sky-500 animate-ping" />}
                           <span>{language === 'hi' ? field.nameHi : field.nameEn}</span>
                         </span>
-                        <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full glass-well text-[var(--text-muted)]">
                           OCR Conf: {Math.round(field.confidence * 100)}%
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
-                        <div className="p-2 rounded-lg bg-slate-100/90 dark:bg-slate-900/90">
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">
+                      <div className="grid grid-cols-2 gap-2 text-[11px]">
+                        <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                          <div className="text-[10px] text-[var(--text-muted)] uppercase font-semibold">
                             Uploaded PDF (OCR)
                           </div>
                           <div
                             className={`font-bold mt-0.5 ${
-                              field.isMismatch ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-slate-200'
+                              field.isMismatch ? 'text-rose-600 dark:text-rose-400' : 'text-[var(--text-primary)]'
                             }`}
                           >
                             {field.ocrValue}
                           </div>
                         </div>
 
-                        <div className="p-2 rounded-lg bg-slate-100/90 dark:bg-slate-900/90">
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">
+                        <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                          <div className="text-[10px] text-[var(--text-muted)] uppercase font-semibold">
                             Issuing Authority Record
                           </div>
                           <div
                             className={`font-bold mt-0.5 ${
                               field.isMismatch
                                 ? 'text-emerald-700 dark:text-emerald-400'
-                                : 'text-slate-800 dark:text-slate-200'
+                                : 'text-[var(--text-primary)]'
                             }`}
                           >
                             {field.authorityValue}
@@ -669,7 +636,7 @@ export default function ScrutinyWorkbenchPage() {
                       </div>
 
                       {field.isMismatch && (
-                        <div className="mt-2 text-[11px] font-medium text-red-700 dark:text-red-400 flex items-center gap-1.5">
+                        <div className="mt-2 text-[11px] font-medium text-rose-700 dark:text-rose-400 flex items-center gap-1.5">
                           <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                           <span>Critical Discrepancy: Extracted value contradicts issuing registry record.</span>
                         </div>
@@ -685,48 +652,48 @@ export default function ScrutinyWorkbenchPage() {
           {activeInspectorTab === 'APH_NORM' && (
             <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
               <div>
-                <h3 className="font-bold text-slate-900 dark:text-white text-sm">
+                <h3 className="font-bold text-[var(--text-primary)] text-sm">
                   Approval Process Handbook Compliance Math
                 </h3>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
                   Automated verification of FSI/FAR, Instructional Area, and 1:2:6 Cadre distribution
                 </p>
               </div>
 
               {/* Built-up Area Component Grid */}
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 space-y-2">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="p-3.5 rounded-xl glass-well space-y-2">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-faint)]">
                   Total Built-up Area ($TB_&#123;req&#125;$) Breakdown
                 </div>
 
-                <div className="space-y-1.5 font-mono text-[11px]">
+                <div className="space-y-1.5 text-[11px]">
                   <div className="flex justify-between">
-                    <span className="text-slate-600 dark:text-slate-400">Instructional Area (INA):</span>
-                    <span className="font-bold text-slate-900 dark:text-slate-100">
+                    <span className="text-[var(--text-muted)]">Instructional Area (INA):</span>
+                    <span className="font-bold tabular-nums text-[var(--text-primary)]">
                       {application.landAndBuiltUp.inaAvailableSqm} / {application.landAndBuiltUp.inaRequiredSqm} m²
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600 dark:text-slate-400">Administrative Area (ADA):</span>
-                    <span className="font-bold text-slate-900 dark:text-slate-100">
+                    <span className="text-[var(--text-muted)]">Administrative Area (ADA):</span>
+                    <span className="font-bold tabular-nums text-[var(--text-primary)]">
                       {application.landAndBuiltUp.adaAvailableSqm} / {application.landAndBuiltUp.adaRequiredSqm} m²
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600 dark:text-slate-400">Amenities Area (AMA):</span>
-                    <span className="font-bold text-slate-900 dark:text-slate-100">
+                    <span className="text-[var(--text-muted)]">Amenities Area (AMA):</span>
+                    <span className="font-bold tabular-nums text-[var(--text-primary)]">
                       {application.landAndBuiltUp.amaAvailableSqm} / {application.landAndBuiltUp.amaRequiredSqm} m²
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600 dark:text-slate-400">Circulation Area (ACA = 0.25 × Carpet):</span>
-                    <span className="font-bold text-slate-900 dark:text-slate-100">
+                    <span className="text-[var(--text-muted)]">Circulation Area (ACA = 0.25 × Carpet):</span>
+                    <span className="font-bold tabular-nums text-[var(--text-primary)]">
                       {application.landAndBuiltUp.acaAvailableSqm} / {application.landAndBuiltUp.acaRequiredSqm} m²
                     </span>
                   </div>
-                  <div className="pt-1.5 border-t border-slate-200 dark:border-slate-700 flex justify-between font-bold text-slate-900 dark:text-white">
+                  <div className="pt-2 border-t border-[var(--glass-well-border)] flex justify-between font-bold text-[var(--text-primary)]">
                     <span>Total Built-up Area:</span>
-                    <span>
+                    <span className="tabular-nums">
                       {application.landAndBuiltUp.totalBuiltUpAvailableSqm} / {application.landAndBuiltUp.totalBuiltUpRequiredSqm} m²
                     </span>
                   </div>
@@ -734,26 +701,26 @@ export default function ScrutinyWorkbenchPage() {
               </div>
 
               {/* Faculty Cadre Compliance */}
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 space-y-2">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="p-3.5 rounded-xl glass-well space-y-2">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-faint)]">
                   Cadre Ratio 1:2:6 Compliance
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-center font-mono">
-                  <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                    <div className="text-[10px] text-slate-400">Professors</div>
-                    <div className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                    <div className="text-[10px] text-[var(--text-faint)] font-semibold">Professors</div>
+                    <div className="font-bold text-[var(--text-primary)] mt-1 tabular-nums">
                       {application.facultyMetrics.cadreAvailable.prof} / {application.facultyMetrics.cadreRequired.prof}
                     </div>
                   </div>
-                  <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                    <div className="text-[10px] text-slate-400">Assoc. Profs</div>
-                    <div className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                  <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                    <div className="text-[10px] text-[var(--text-faint)] font-semibold">Assoc. Profs</div>
+                    <div className="font-bold text-[var(--text-primary)] mt-1 tabular-nums">
                       {application.facultyMetrics.cadreAvailable.assoc} / {application.facultyMetrics.cadreRequired.assoc}
                     </div>
                   </div>
-                  <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                    <div className="text-[10px] text-slate-400">Asst. Profs</div>
-                    <div className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                  <div className="p-2.5 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                    <div className="text-[10px] text-[var(--text-faint)] font-semibold">Asst. Profs</div>
+                    <div className="font-bold text-[var(--text-primary)] mt-1 tabular-nums">
                       {application.facultyMetrics.cadreAvailable.asst} / {application.facultyMetrics.cadreRequired.asst}
                     </div>
                   </div>
@@ -766,11 +733,11 @@ export default function ScrutinyWorkbenchPage() {
           {activeInspectorTab === 'GHOST_FACULTY' && (
             <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
               <div>
-                <h3 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-1.5">
-                  <UserX className="w-4 h-4 text-red-600 dark:text-red-400" />
+                <h3 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1.5">
+                  <UserX className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                   <span>Cross-Institutional Ghost Faculty Detections</span>
                 </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
                   RetinaFace 5-point alignment + ArcFace 512-D vector search across 1.2M national faculty index
                 </p>
               </div>
@@ -783,55 +750,55 @@ export default function ScrutinyWorkbenchPage() {
                     <div
                       key={fac.id}
                       onClick={() => handleSelectFieldFromInspector(fac.name, 'FACULTY_ROSTER')}
-                      className={`p-3 rounded-xl border transition-all cursor-pointer ${
+                      className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                         isDual
-                          ? 'bg-red-50/70 dark:bg-red-950/20 border-red-300 dark:border-red-900/60 shadow-2xs'
-                          : 'bg-white/60 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
+                          ? 'bg-rose-500/10 border-rose-500/30'
+                          : 'glass-well'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                          <div className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                             <span>{fac.name}</span>
                             {isDual && (
-                              <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-red-600 text-white">
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-600 text-white">
                                 GHOST DETECTED
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          <div className="text-[11px] text-[var(--text-muted)] mt-0.5">
                             {fac.designation} • {fac.department}
                           </div>
                         </div>
 
-                        <div className="text-right font-mono text-[10px]">
-                          <span className="text-slate-400">ArcFace Cosine: </span>
-                          <span className={`font-bold ${isDual ? 'text-red-600 dark:text-red-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                        <div className="text-right text-[10px]">
+                          <span className="text-[var(--text-faint)]">ArcFace Cosine: </span>
+                          <span className={`font-bold tabular-nums ${isDual ? 'text-rose-600 dark:text-rose-400' : 'text-[var(--text-secondary)]'}`}>
                             {fac.arcFaceSimilarityMax.toFixed(3)}
                           </span>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 mt-2 text-[11px] font-mono">
-                        <div className="p-2 rounded bg-slate-100/80 dark:bg-slate-900/80">
-                          <span className="text-[10px] text-slate-400 block">PAN &amp; UAN:</span>
-                          <span className="font-bold text-slate-800 dark:text-slate-200">{fac.pan}</span>
-                          <span className="block text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{fac.uan}</span>
+                      <div className="grid grid-cols-2 gap-2 mt-2 text-[11px]">
+                        <div className="p-2 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                          <span className="text-[10px] text-[var(--text-faint)] block uppercase font-semibold">PAN &amp; UAN:</span>
+                          <span className="font-mono font-bold text-[var(--text-primary)]">{fac.pan}</span>
+                          <span className="block font-mono text-[10px] text-[var(--text-muted)] mt-0.5">{fac.uan}</span>
                         </div>
-                        <div className="p-2 rounded bg-slate-100/80 dark:bg-slate-900/80">
-                          <span className="text-[10px] text-slate-400 block">EPFO Status:</span>
-                          <span className={`font-bold ${isDual ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                        <div className="p-2 rounded-xl bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
+                          <span className="text-[10px] text-[var(--text-faint)] block uppercase font-semibold">EPFO Status:</span>
+                          <span className={`font-bold ${isDual ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400'}`}>
                             {fac.epfoEcrStatus}
                           </span>
-                          <span className="block text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          <span className="block text-[10px] text-[var(--text-muted)] mt-0.5">
                             50% Wage Rule: {fac.wageRule50Compliant ? 'Compliant' : 'VIOLATION'}
                           </span>
                         </div>
                       </div>
 
                       {isDual && fac.matchedInstitutionName && (
-                        <div className="mt-2 p-2 rounded-lg bg-red-100/60 dark:bg-red-900/30 text-[11px] text-red-700 dark:text-red-300">
-                          <strong>Active Concurrent Employer:</strong> {fac.matchedInstitutionName} (PID: {fac.matchedInstitutionPid})
+                        <div className="mt-2 p-2 rounded-xl bg-rose-500/15 text-[11px] text-rose-700 dark:text-rose-300">
+                          <strong>Active Concurrent Employer:</strong> {fac.matchedInstitutionName} (PID: <span className="font-mono">{fac.matchedInstitutionPid}</span>)
                         </div>
                       )}
                     </div>
@@ -841,65 +808,65 @@ export default function ScrutinyWorkbenchPage() {
             </div>
           )}
 
-          {/* Tab 4: PP-StructureV3 + Improved SLANet (Mish + EOS, 96.67% TEDS) Table Topology & KIE Inspector */}
+          {/* Tab 4: PP-StructureV3 + Improved SLANet Table Topology & KIE Inspector */}
           {activeInspectorTab === 'SLANET_TABLE' && (
             <div className="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs">
               {/* Telemetry Header Badge */}
-              <div className="p-3 rounded-xl bg-slate-50/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 space-y-1.5 font-mono">
+              <div className="p-3.5 rounded-xl glass-well space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-1.5 text-xs">
                     <TableIcon className="w-4 h-4 text-indigo-600" />
                     <span>PP-StructureV3 + Improved SLANet-LCNetV2</span>
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold border border-indigo-500/20">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold border border-indigo-500/20">
                     TEDS: 96.67%
                   </span>
                 </div>
-                <p className="text-[10.5px] text-slate-500 dark:text-slate-400">
+                <p className="text-[11px] text-[var(--text-muted)]">
                   Mish activation + EOS dynamic termination &amp; LayoutLMv3 Token BIO sequence labeling
                 </p>
-                <div className="flex flex-wrap gap-1.5 pt-1 text-[10px] text-slate-600 dark:text-slate-300">
-                  <span className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="flex flex-wrap gap-1.5 pt-1 text-[10px]">
+                  <span className="px-2 py-0.5 rounded-lg bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
                     Doc: <strong>{activeDocument.titleEn.substring(0, 24)}...</strong>
                   </span>
-                  <span className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <span className="px-2 py-0.5 rounded-lg bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
                     LayoutLMv3 F1: <strong>94.2%</strong>
                   </span>
-                  <span className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <span className="px-2 py-0.5 rounded-lg bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
                     Topology: <strong>Closed Manifold 5×5</strong>
                   </span>
                 </div>
               </div>
 
-              {/* View Mode Switcher: Visual DOM vs. Raw HTML DOM vs. Token Graph */}
+              {/* View Mode Switcher */}
               <div className="flex items-center justify-between gap-2">
-                <div className="inline-flex rounded-lg p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-mono">
+                <div className="glass-well inline-flex rounded-xl p-0.5 text-xs font-semibold">
                   <button
                     onClick={() => setSlanetViewMode('VISUAL')}
-                    className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                       slanetViewMode === 'VISUAL'
-                        ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 font-bold shadow-2xs'
-                        : 'text-slate-600 dark:text-slate-400'
+                        ? 'btn-liquid-primary shadow-xs font-bold'
+                        : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     Visual Table DOM
                   </button>
                   <button
                     onClick={() => setSlanetViewMode('HTML_DOM')}
-                    className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                       slanetViewMode === 'HTML_DOM'
-                        ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 font-bold shadow-2xs'
-                        : 'text-slate-600 dark:text-slate-400'
+                        ? 'btn-liquid-primary shadow-xs font-bold'
+                        : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     HTML DOM Tree
                   </button>
                   <button
                     onClick={() => setSlanetViewMode('TOKEN_GRAPH')}
-                    className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                       slanetViewMode === 'TOKEN_GRAPH'
-                        ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 font-bold shadow-2xs'
-                        : 'text-slate-600 dark:text-slate-400'
+                        ? 'btn-liquid-primary shadow-xs font-bold'
+                        : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     LayoutLMv3 JSON
@@ -915,9 +882,9 @@ export default function ScrutinyWorkbenchPage() {
                       toast.success(`Copied ${slanetViewMode === 'HTML_DOM' ? 'HTML DOM Tree' : 'LayoutLMv3 JSON Graph'} to clipboard`);
                       setTimeout(() => setCopiedType(null), 2000);
                     }}
-                    className="btn-glass-subtle px-2 py-1 rounded text-[10px] font-mono inline-flex items-center gap-1 cursor-pointer shrink-0"
+                    className="btn-liquid-secondary px-2.5 py-1 rounded-xl text-xs font-semibold inline-flex items-center gap-1 cursor-pointer shrink-0 shadow-2xs"
                   >
-                    {copiedType ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-slate-400" />}
+                    {copiedType ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" />}
                     <span>{copiedType ? 'Copied!' : 'Copy'}</span>
                   </button>
                 )}
@@ -926,23 +893,22 @@ export default function ScrutinyWorkbenchPage() {
               {/* View Mode 1: Visual Table DOM */}
               {slanetViewMode === 'VISUAL' && (
                 <div className="space-y-3">
-                  {/* Selected Cell Inspector Banner */}
                   {selectedCellId && (
-                    <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 font-mono text-[11px] space-y-1">
+                    <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-xs space-y-1">
                       <div className="flex items-center justify-between text-indigo-700 dark:text-indigo-300 font-bold">
                         <span>Selected Cell: {selectedCellId}</span>
                         <button
                           onClick={() => setSelectedCellId(null)}
-                          className="text-[10px] text-slate-400 hover:text-slate-600 cursor-pointer"
+                          className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
                         >
                           Clear
                         </button>
                       </div>
-                      <div className="text-[10px] text-slate-600 dark:text-slate-300">
+                      <div className="text-[11px] text-[var(--text-secondary)]">
                         {SLANET_CELLS_MAP[selectedCellId] ? (
                           <div>
-                            <div>Token Text: <strong>"{SLANET_CELLS_MAP[selectedCellId].text}"</strong></div>
-                            <div className="flex gap-3 mt-0.5">
+                            <div>Token Text: <strong>&ldquo;{SLANET_CELLS_MAP[selectedCellId].text}&rdquo;</strong></div>
+                            <div className="flex gap-3 mt-1 font-mono text-[10px]">
                               <span>BIO Tag: <strong className="text-indigo-600">{SLANET_CELLS_MAP[selectedCellId].bioTag}</strong></span>
                               <span>BBox: <strong>[{SLANET_CELLS_MAP[selectedCellId].bbox.join(', ')}]</strong></span>
                               <span>Conf: <strong>{(SLANET_CELLS_MAP[selectedCellId].confidence * 100).toFixed(1)}%</strong></span>
@@ -954,60 +920,60 @@ export default function ScrutinyWorkbenchPage() {
                   )}
 
                   {/* Reconstructed HTML Table */}
-                  <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto bg-white/70 dark:bg-slate-900/60 shadow-xs">
-                    <table className="w-full text-left text-[11px] font-mono">
+                  <div className="rounded-xl glass-well overflow-x-auto shadow-xs">
+                    <table className="w-full text-left text-xs">
                       <thead>
-                        <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">
-                          <th className="py-2 px-2.5 w-8">#</th>
-                          <th className="py-2 px-2.5">Name / Description</th>
-                          <th className="py-2 px-2.5">PAN / Invoice Serial</th>
-                          <th className="py-2 px-2.5">EPFO UAN / Cost</th>
-                          <th className="py-2 px-2.5">Confidence</th>
+                        <tr className="border-b border-[var(--glass-well-border)] text-[10px] uppercase text-[var(--text-muted)] font-bold">
+                          <th className="py-2.5 px-3 w-8">#</th>
+                          <th className="py-2.5 px-3">Name / Description</th>
+                          <th className="py-2.5 px-3">PAN / Invoice Serial</th>
+                          <th className="py-2.5 px-3">EPFO UAN / Cost</th>
+                          <th className="py-2.5 px-3">Confidence</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      <tbody className="divide-y divide-[var(--glass-well-border)]">
                         {SLANET_TABLE_DATA.map((row) => (
                           <tr
                             key={row.id}
-                            className={`hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors ${
-                              selectedCellId?.startsWith(row.id) ? 'bg-indigo-50/50 dark:bg-indigo-950/20' : ''
+                            className={`hover:bg-white/40 dark:hover:bg-white/5 transition-colors ${
+                              selectedCellId?.startsWith(row.id) ? 'bg-indigo-500/10' : ''
                             }`}
                           >
-                            <td className="py-2.5 px-2.5 text-slate-400">{row.sr}</td>
+                            <td className="py-2.5 px-3 text-[var(--text-muted)]">{row.sr}</td>
 
                             <td
                               onClick={() => setSelectedCellId(`${row.id}-name`)}
-                              className="py-2.5 px-2.5 font-bold text-slate-800 dark:text-slate-200 cursor-pointer hover:text-indigo-600"
+                              className="py-2.5 px-3 font-bold text-[var(--text-primary)] cursor-pointer hover:text-indigo-600"
                             >
                               <div>{row.name}</div>
-                              <div className="text-[9px] text-slate-400 font-normal">
+                              <div className="text-[10px] text-[var(--text-muted)] font-mono font-normal">
                                 BBox: [{row.nameBBox.join(', ')}]
                               </div>
                             </td>
 
                             <td
                               onClick={() => setSelectedCellId(`${row.id}-identifier`)}
-                              className="py-2.5 px-2.5 cursor-pointer hover:text-indigo-600"
+                              className="py-2.5 px-3 cursor-pointer hover:text-indigo-600"
                             >
-                              <div className="font-bold text-slate-700 dark:text-slate-300">{row.identifier}</div>
-                              <span className="text-[9px] px-1 py-0.2 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 font-bold">
+                              <div className="font-mono font-bold text-[var(--text-primary)]">{row.identifier}</div>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 font-bold">
                                 {row.identifierBio}
                               </span>
                             </td>
 
                             <td
                               onClick={() => setSelectedCellId(`${row.id}-value`)}
-                              className="py-2.5 px-2.5 cursor-pointer hover:text-indigo-600"
+                              className="py-2.5 px-3 cursor-pointer hover:text-indigo-600"
                             >
-                              <div className="font-bold text-slate-700 dark:text-slate-300">{row.value}</div>
-                              <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-bold">
+                              <div className="font-mono font-bold text-[var(--text-primary)]">{row.value}</div>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-bold">
                                 {row.valueBio}
                               </span>
                             </td>
 
-                            <td className="py-2.5 px-2.5">
-                              <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                                Conf: {(row.confidence * 100).toFixed(1)}%
+                            <td className="py-2.5 px-3">
+                              <span className="text-[10px] px-2 py-0.5 rounded-full glass-well text-[var(--text-secondary)] font-semibold">
+                                {(row.confidence * 100).toFixed(1)}%
                               </span>
                             </td>
                           </tr>
@@ -1016,7 +982,7 @@ export default function ScrutinyWorkbenchPage() {
                     </table>
                   </div>
 
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                  <div className="text-[11px] text-[var(--text-muted)] font-medium">
                     * Click any cell to inspect LayoutLMv3 BIO sequence tokens, normalized coordinates [x0, y0, x1, y1], and sub-word OCR confidence.
                   </div>
                 </div>
@@ -1024,8 +990,8 @@ export default function ScrutinyWorkbenchPage() {
 
               {/* View Mode 2: Raw Reconstructed HTML DOM Tree */}
               {slanetViewMode === 'HTML_DOM' && (
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 font-mono text-[10.5px] overflow-x-auto space-y-2">
-                  <div className="text-[10px] text-indigo-400 uppercase font-bold border-b border-slate-800 pb-1 flex justify-between">
+                <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-slate-200 font-mono text-[11px] overflow-x-auto space-y-2">
+                  <div className="text-[10px] text-indigo-400 uppercase font-bold border-b border-slate-800 pb-1.5 flex justify-between">
                     <span>Reconstructed HTML DOM Structure (PP-StructureV3 SLANet)</span>
                     <span>TEDS: 96.67%</span>
                   </div>
@@ -1037,8 +1003,8 @@ export default function ScrutinyWorkbenchPage() {
 
               {/* View Mode 3: LayoutLMv3 JSON Token Graph */}
               {slanetViewMode === 'TOKEN_GRAPH' && (
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 font-mono text-[10.5px] overflow-x-auto space-y-2">
-                  <div className="text-[10px] text-indigo-400 uppercase font-bold border-b border-slate-800 pb-1 flex justify-between">
+                <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-slate-200 font-mono text-[11px] overflow-x-auto space-y-2">
+                  <div className="text-[10px] text-indigo-400 uppercase font-bold border-b border-slate-800 pb-1.5 flex justify-between">
                     <span>LayoutLMv3 Multimodal Token Graph (BIO Sequence Tagging)</span>
                     <span>Tokens: 10 • F1: 94.2%</span>
                   </div>
