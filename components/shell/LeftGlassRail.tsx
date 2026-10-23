@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/context';
+import { AICTELogo } from '@/components/brand/AICTELogo';
 import {
   LayoutDashboard,
   Building2,
@@ -96,28 +97,14 @@ export function LeftGlassRail() {
   return (
     <aside className="w-64 !fixed fixed top-3 bottom-3 left-3 z-40 flex flex-col liquid-glass-card rounded-2xl overflow-hidden shadow-2xl transition-all">
       {/* Brand Header */}
-      <div className="h-14 px-3.5 border-b border-[var(--glass-well-border)] flex items-center gap-2.5">
-        {/* Emblem: Tactile Obsidian Seal with Specular Rim and Gold AICTE Glyph */}
-        <div className="w-8 h-8 rounded-xl bg-slate-950 dark:bg-slate-900 border border-slate-800 dark:border-slate-700/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_1px_3px_rgba(0,0,0,0.3)] flex items-center justify-center shrink-0 text-amber-400">
-          <svg viewBox="0 0 48 48" width={18} height={18} className="fill-none stroke-current" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            {/* Emblem stylized Ashok wheel + open book + lamp */}
-            <circle cx="24" cy="24" r="18" className="opacity-40" strokeDasharray="3 3" />
-            <path d="M12 34C18 31 24 33 24 33C24 33 30 31 36 34" />
-            <path d="M12 28C18 25 24 27 24 27C24 27 30 25 36 28" />
-            <path d="M24 13V33" />
-            <circle cx="24" cy="12" r="3" className="fill-amber-300 stroke-none" />
-          </svg>
-        </div>
-        <div className="flex flex-col min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span className="font-bold text-xs tracking-tight text-[var(--text-primary)] truncate">
-              {t.portalTitle}
-            </span>
-          </div>
-          <span className="text-[10px] tracking-wider font-semibold text-[var(--text-muted)] uppercase truncate">
-            {t.portalSubtitle}
-          </span>
-        </div>
+      <div className="h-14 px-3.5 border-b border-[var(--glass-well-border)] flex items-center justify-between">
+        <AICTELogo
+          variant="full"
+          size="sm"
+          interactive={true}
+          title={t.portalTitle}
+          subtitle={t.portalSubtitle}
+        />
       </div>
 
       {/* Navigation Groups */}

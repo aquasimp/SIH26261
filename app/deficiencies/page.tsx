@@ -6,6 +6,7 @@ import { useLanguage, useFilters } from '@/lib/context';
 import { InstitutionalApplication } from '@/lib/mock-data';
 import { computeSha256 } from '@/lib/crypto-utils';
 import { toast } from 'sonner';
+import { AICTELogo } from '@/components/brand/AICTELogo';
 import {
   FileWarning,
   Printer,
@@ -334,9 +335,9 @@ function DeficienciesContent() {
       <div className="rounded-3xl p-8 sm:p-12 space-y-6 liquid-glass-card shadow-2xl print:border-none print:shadow-none">
         {/* National Emblem & AICTE Official Header */}
         <div className="text-center pb-6 border-b border-[var(--glass-border)] space-y-1.5">
-          {/* Ashoka Lion Emblem Representation */}
-          <div className="w-14 h-14 mx-auto rounded-full glass-well flex items-center justify-center text-[var(--text-primary)] mb-2 shadow-xs">
-            <Building className="w-7 h-7 text-amber-600 dark:text-amber-400" />
+          {/* Official AICTE Emblem Insignia */}
+          <div className="flex justify-center mb-3">
+            <AICTELogo variant="badge" size="xl" showStatusDot={false} interactive={false} />
           </div>
 
           <div className="font-serif font-extrabold text-sm sm:text-base text-[var(--text-primary)] tracking-wide uppercase">

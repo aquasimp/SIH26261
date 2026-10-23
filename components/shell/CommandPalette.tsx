@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage, useFilters } from '@/lib/context';
+import { AICTELogo } from '@/components/brand/AICTELogo';
 import {
   Search,
   Building,
@@ -279,7 +280,10 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
         {/* Footer */}
         <div className="px-4 py-2.5 border-t border-[var(--glass-well-border)] bg-[var(--glass-well-bg)] flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-          <span>AICTE PS 26261 • Evidence-Linked Scrutiny Engine</span>
+          <div className="flex items-center gap-2">
+            <AICTELogo variant="badge" size="xs" showStatusDot={false} />
+            <span>AICTE PS 26261 • Evidence-Linked Scrutiny Engine</span>
+          </div>
           <span>Press Enter to navigate • ESC to dismiss</span>
         </div>
       </div>
