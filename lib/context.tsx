@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { TRANSLATIONS, Language } from './i18n';
 import {
@@ -55,6 +55,7 @@ export interface AppStoreContextType {
   filters: GlobalFilters;
   setFilters: React.Dispatch<React.SetStateAction<GlobalFilters>>;
   resetFilters: () => void;
+  resetDemoState: () => void;
   applications: InstitutionalApplication[];
   setApplications: React.Dispatch<React.SetStateAction<InstitutionalApplication[]>>;
   filteredApplications: InstitutionalApplication[];
@@ -90,12 +91,80 @@ const AppStoreContext = createContext<AppStoreContextType | undefined>(undefined
 
 export function FilterProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
   const [filters, setFilters] = useState<GlobalFilters>(defaultFilters);
   const [applications, setApplications] = useState<InstitutionalApplication[]>(MOCK_APPLICATIONS);
   const [selectedAppId, setSelectedAppId] = useState<string>('AICTE-2026-NW-0842');
   const [auditLogs, setAuditLogs] = useState<AuditBlock[]>(INITIAL_AUDIT_BLOCKS);
 
+  // Client-side hydration from localStorage (aicte_sih26261_apps_v2 & aicte_sih26261_audit_v2)
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const storedApps = localStorage.getItem('aicte_sih26261_apps_v2');
+        if (storedApps) {
+          const parsed = JSON.parse(storedApps);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setApplications(parsed);
+          }
+        }
+        const storedLogs = localStorage.getItem('aicte_sih26261_audit_v2');
+        if (storedLogs) {
+          const parsed = JSON.parse(storedLogs);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setAuditLogs(parsed);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to hydrate state from localStorage:', err);
+    } finally {
+      setHasMounted(true);
+    }
+  }, []);
+
+  // Persist mutated applications to localStorage
+  useEffect(() => {
+    if (!hasMounted) return;
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('aicte_sih26261_apps_v2', JSON.stringify(applications));
+      }
+    } catch (err) {
+      console.warn('Failed to persist applications to localStorage:', err);
+    }
+  }, [applications, hasMounted]);
+
+  // Persist mutated auditLogs to localStorage
+  useEffect(() => {
+    if (!hasMounted) return;
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('aicte_sih26261_audit_v2', JSON.stringify(auditLogs));
+      }
+    } catch (err) {
+      console.warn('Failed to persist auditLogs to localStorage:', err);
+    }
+  }, [auditLogs, hasMounted]);
+
   const resetFilters = useCallback(() => setFilters(defaultFilters), []);
+
+  const resetDemoState = useCallback(() => {
+    setApplications(MOCK_APPLICATIONS);
+    setAuditLogs(INITIAL_AUDIT_BLOCKS);
+    setFilters(defaultFilters);
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('aicte_sih26261_apps_v2');
+        localStorage.removeItem('aicte_sih26261_audit_v2');
+      }
+    } catch (err) {
+      console.warn('Failed to clear demo state from localStorage:', err);
+    }
+    toast.info('Demo state reset: Initial 6 flagship institutions & default audit ledger restored.', {
+      duration: 4000,
+    });
+  }, []);
 
   const updateApplicationStatus = useCallback(
     (id: string, status: InstitutionalApplication['scrutinyStatus'], officerNote?: string) => {
@@ -395,6 +464,7 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
     filters,
     setFilters,
     resetFilters,
+    resetDemoState,
     applications,
     setApplications,
     filteredApplications,

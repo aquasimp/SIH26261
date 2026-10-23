@@ -5,7 +5,7 @@ import { useFilters, useLanguage } from '@/lib/context';
 import { Filter, RotateCcw, ChevronDown } from 'lucide-react';
 
 export function GlobalFilterBar() {
-  const { filters, setFilters, resetFilters, filteredApplications } = useFilters();
+  const { filters, setFilters, resetFilters, resetDemoState, filteredApplications } = useFilters();
   const { t } = useLanguage();
 
   const isFiltered =
@@ -110,7 +110,7 @@ export function GlobalFilterBar() {
         </div>
 
         {/* Right: Matches Count & Reset */}
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="text-[11px] font-mono text-[var(--text-muted)]">
             Showing <strong className="text-[var(--text-primary)] font-bold">{filteredApplications.length}</strong> Dossiers
           </span>
@@ -124,6 +124,15 @@ export function GlobalFilterBar() {
               <span>Reset</span>
             </button>
           )}
+
+          <button
+            onClick={resetDemoState}
+            title="Restore initial 6 flagship institutions and default audit ledger"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[var(--text-muted)] hover:text-amber-600 dark:hover:text-amber-400 bg-[var(--glass-bg)] border border-[var(--glass-border)] hover:border-amber-500/40 text-[10px] font-mono font-medium transition-all shadow-2xs cursor-pointer"
+          >
+            <RotateCcw className="w-2.5 h-2.5 text-amber-500" />
+            <span>Reset Demo</span>
+          </button>
         </div>
       </div>
     </div>

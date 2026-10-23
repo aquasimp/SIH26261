@@ -26,7 +26,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 
-function DeficiencyGeneratorContent() {
+function DeficienciesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { t, language } = useLanguage();
@@ -653,14 +653,8 @@ function DeficiencyGeneratorContent() {
 
 export default function DeficienciesPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="p-8 text-center font-mono text-xs text-slate-400">
-          Loading Statutory Notice Generator...
-        </div>
-      }
-    >
-      <DeficiencyGeneratorContent />
+    <Suspense fallback={<div className="p-8 font-mono text-xs text-slate-500">Loading Statutory Notice Engine...</div>}>
+      <DeficienciesContent />
     </Suspense>
   );
 }

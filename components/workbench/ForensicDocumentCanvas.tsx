@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useLanguage } from '@/lib/context';
 import { DocumentArtifact, ForensicAnomaly } from '@/lib/mock-data';
 import {
   Layers,
@@ -38,6 +39,7 @@ export function ForensicDocumentCanvas({
   activeAnomalyId,
   onSelectAnomaly,
 }: ForensicDocumentCanvasProps) {
+  const { t, language } = useLanguage();
   // 4 Selectable Inspection Modes
   const [inspectionMode, setInspectionMode] = useState<InspectionMode>('RGB_ORIGINAL');
 
@@ -840,7 +842,7 @@ export function ForensicDocumentCanvas({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            3. TruFor Noiseprint++
+            {t.forensicLayerTruFor}
           </button>
           <button
             onClick={() => setInspectionMode('ELA_DCT_BAG')}
@@ -850,7 +852,7 @@ export function ForensicDocumentCanvas({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            4. ELA &amp; 8×8 BAG
+            {t.forensicLayerDctGrid}
           </button>
         </div>
 
@@ -921,7 +923,7 @@ export function ForensicDocumentCanvas({
 
           {/* ResAware vs InstanceNorm2d Collapse Toggle */}
           <div className="flex items-center gap-2">
-            <span className="text-slate-500 font-semibold">Normalization:</span>
+            <span className="text-slate-500 font-semibold">{t.forensicLayerResAware}:</span>
             <button
               onClick={() => setNormAblation(normAblation === 'RESAWARE' ? 'INSTANCE_NORM' : 'RESAWARE')}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
@@ -931,8 +933,8 @@ export function ForensicDocumentCanvas({
               }`}
             >
               {normAblation === 'RESAWARE'
-                ? 'ResAware BatchNorm (AUC 0.747)'
-                : 'InstanceNorm2d Collapse (AUC 0.554)'}
+                ? (language === 'hi' ? 'ResAware बैचनॉर्म (AUC 0.747)' : 'ResAware BatchNorm (AUC 0.747)')
+                : (language === 'hi' ? 'InstanceNorm2d पतन (AUC 0.554)' : 'InstanceNorm2d Collapse (AUC 0.554)')}
             </button>
           </div>
         </div>
@@ -975,7 +977,7 @@ export function ForensicDocumentCanvas({
               onChange={(e) => setShowDctBagGrid(e.target.checked)}
               className="rounded accent-indigo-600"
             />
-            <span className="font-bold text-indigo-600">Show 8×8 DCT Block Artifact Grid (BAG)</span>
+            <span className="font-bold text-indigo-600">{language === 'hi' ? '8×8 डीसीटी ब्लॉक ग्रिड (BAG) दिखाएं' : 'Show 8×8 DCT Block Artifact Grid (BAG)'}</span>
           </label>
         </div>
       )}

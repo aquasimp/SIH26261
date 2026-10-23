@@ -17,12 +17,12 @@ export const TRANSLATIONS = {
 
     // Navigation Items
     navOverview: 'Executive Overview',
-    navApplications: 'Institutional Registry',
+    navApplications: 'Institutional Dossier Registry',
     navWorkbench: 'Scrutiny Workbench',
-    navForensicsStudio: 'Document Forensics',
+    navForensicsStudio: 'Digital Forensics Studio',
     navInfrastructure: 'Blueprint & Campus CV',
-    navAuthorityBridge: 'Authority Bridge (DPI)',
-    navDeficiencies: 'Deficiency & EVC Notices',
+    navAuthorityBridge: 'DPI Authority Bridge',
+    navDeficiencies: 'Deficiency & Show-Cause Notices',
     navAuditTrail: 'SHA-256 Audit Ledger',
 
     // Global Filter Bar
@@ -72,11 +72,12 @@ export const TRANSLATIONS = {
     btnLaunchWorkbench: 'Launch Workbench →',
 
     // Workbench Tabs & Controls
-    tabEntities: 'Extracted Entities & DPI Handshake',
-    tabApmMatrix: 'APH 2024–27 Compliance Matrix',
-    tabGhostFaculty: 'Ghost Faculty Biometric Inspector',
+    tabEntities: '1. Extracted Entities & DPI Handshake',
+    tabApmMatrix: '2. APH 2024–27 Compliance Matrix',
+    tabGhostFaculty: '3. Ghost Faculty Biometric Inspector',
+    tabTableExtractor: '4. SLANet Table & LayoutLMv3 KIE',
     btnApproveEoA: 'Approve Extension of Approval',
-    btnIssueDeficiency: 'Issue 15-Day Rectification',
+    btnIssueDeficiency: 'Issue 15-Day Deficiency Notice',
     btnEscalateShc: 'Escalate to Standing Hearing Comm.',
     canvasLayerRGB: 'Original RGB',
     canvasLayerBBox: 'LayoutLMv3 Bounding Boxes',
@@ -85,6 +86,19 @@ export const TRANSLATIONS = {
     sliderJpegQuality: 'JPEG Quality (Q)',
     sliderElaGamma: 'Gain Multiplier (γ)',
     showConfidenceMask: 'Show Anomaly Confidence Suppression',
+
+    // Forensic Layers & Ablation
+    forensicLayerTruFor: 'TruFor Noiseprint++ Heatmap',
+    forensicLayerDctGrid: '8×8 DCT Block Grid',
+    forensicLayerResAware: 'ResAware BatchNorm vs InstanceNorm2d',
+
+    // Authority Bridge Statuses
+    statusVerified: 'VERIFIED',
+    statusMismatchDetected: 'MISMATCH_DETECTED',
+    statusExpired: 'EXPIRED',
+    statusVerificationPending: 'VERIFY_PENDING',
+    statusSourceUnavailable: 'SOURCE_UNAVAIL',
+    statusManualReviewRequired: 'MANUAL_REVIEW',
 
     // Forensics Studio
     forensicsStudioTitle: 'Multi-Spectral Document Forensics Studio',
@@ -150,18 +164,18 @@ export const TRANSLATIONS = {
 
     // Navigation Groups
     navCore: 'मुख्य विश्लेषण प्रणाली',
-    navForensics: 'फोरेंसिक एवं दृष्टि प्रभाग',
+    navForensics: 'फॉरेंसिक एवं दृष्टि प्रभाग',
     navGovernance: 'प्रशासन एवं डीपीआई सेतु',
 
     // Navigation Items
-    navOverview: 'कार्यकारी अवलोकन',
-    navApplications: 'संस्थान पंजीकरण पंजी',
-    navWorkbench: 'दस्तावेज़ संवीक्षा कार्यशाला',
-    navForensicsStudio: 'डिजिटल दस्तावेज़ फोरेंसिक',
-    navInfrastructure: 'ब्लूप्रिंट एवं परिसर सीवी',
-    navAuthorityBridge: 'प्राधिकरण सेतु (डीपीआई)',
-    navDeficiencies: 'कमी एवं ईवीसी नोटिस',
-    navAuditTrail: 'एसएचए-256 ऑडिट बहीखाता',
+    navOverview: 'कार्यकारी सारांश',
+    navApplications: 'संस्थागत डोजियर रजिस्ट्री',
+    navWorkbench: 'स्क्रूटनी वर्कबेंच',
+    navForensicsStudio: 'डिजिटल फॉरेंसिक स्टूडियो',
+    navInfrastructure: 'ब्लूप्रिंट और कैंपस सीवी',
+    navAuthorityBridge: 'डीपीआई अथॉरिटी ब्रिज',
+    navDeficiencies: 'कमी और कारण बताओ नोटिस',
+    navAuditTrail: 'SHA-256 ऑडिट लेजर',
 
     // Global Filter Bar
     filterAcademicYear: 'शैक्षणिक सत्र',
@@ -210,19 +224,33 @@ export const TRANSLATIONS = {
     btnLaunchWorkbench: 'कार्यशाला खोलें →',
 
     // Workbench Tabs & Controls
-    tabEntities: 'निकाली गई जानकारी एवं डीपीआई मिलान',
-    tabApmMatrix: 'एपीएच 2024-27 अनुपालन मैट्रिक्स',
-    tabGhostFaculty: 'छद्म फैकल्टी बायोमेट्रिक निरीक्षक',
-    btnApproveEoA: 'अनुमोदन विस्तार (ईओए) स्वीकृत करें',
-    btnIssueDeficiency: '15-दिवसीय सुधार नोटिस जारी करें',
-    btnEscalateShc: 'स्थायी सुनवाई समिति (एसएचसी) को भेजें',
+    tabEntities: '1. निकाली गई जानकारी एवं डीपीआई मिलान',
+    tabApmMatrix: '2. एपीएच 2024-27 अनुपालन मैट्रिक्स',
+    tabGhostFaculty: '3. छद्म फैकल्टी बायोमेट्रिक निरीक्षक',
+    tabTableExtractor: '4. एसएलए-नेट सारणी एवं केआईई',
+    btnApproveEoA: 'ईओए स्वीकृत करें',
+    btnIssueDeficiency: '15-दिवसीय कमी नोटिस जारी करें',
+    btnEscalateShc: 'स्थायी सुनवाई समिति को भेजें',
     canvasLayerRGB: 'मूल आरजीबी छवि',
     canvasLayerBBox: 'लेआउट-एलएमवी3 सीमा बॉक्स',
-    canvasLayerTruFor: 'ट्रू-फॉर नॉयसप्रिंट++ हीटमैप',
+    canvasLayerTruFor: 'TruFor नॉइज़प्रिंट++ हीटमैप',
     canvasLayerELA: 'एरर लेवल एनालिसिस (ईएलए)',
     sliderJpegQuality: 'जेपीईजी गुणवत्ता (Q)',
     sliderElaGamma: 'वृद्धि गुणक (γ)',
     showConfidenceMask: 'विसंगति विश्वास आवरण दिखाएं',
+
+    // Forensic Layers & Ablation
+    forensicLayerTruFor: 'TruFor नॉइज़प्रिंट++ हीटमैप',
+    forensicLayerDctGrid: '8×8 डीसीटी ब्लॉक ग्रिड',
+    forensicLayerResAware: 'ResAware बैचनॉर्म बनाम InstanceNorm2d',
+
+    // Authority Bridge Statuses
+    statusVerified: 'सत्यापित',
+    statusMismatchDetected: 'विसंगति पाई गई',
+    statusExpired: 'अवधि समाप्त',
+    statusVerificationPending: 'सत्यापन लंबित',
+    statusSourceUnavailable: 'स्रोत अनुपलब्ध',
+    statusManualReviewRequired: 'मैनुअल समीक्षा आवश्यक',
 
     // Forensics Studio
     forensicsStudioTitle: 'मल्टी-स्पेक्ट्रल डिजिटल दस्तावेज़ फोरेंसिक लैब',
@@ -276,5 +304,5 @@ export const TRANSLATIONS = {
     auditSub: 'प्रत्येक एआई निर्णय, डीपीआई हैंडशेक एवं अधिकारी अनुमोदन को दर्ज करने वाली सुरक्षित एसएचए-256 श्रृंखला',
     btnVerifyIntegrity: 'क्रिप्टोग्राफिक श्रृंखला अखंडता सत्यापित करें',
     chainStatusValid: 'एसएचए-256 हैश श्रृंखला: 100% वैध एवं छेड़छाड़-रहित',
-  }
+  },
 };

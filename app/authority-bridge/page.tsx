@@ -646,7 +646,7 @@ export default function AuthorityBridgePage() {
                 : 'bg-emerald-500/5 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
             }`}
           >
-            VERIFIED
+            {t.statusVerified}
           </div>
           <div
             className={`p-2 rounded-xl border transition-all ${
@@ -655,7 +655,7 @@ export default function AuthorityBridgePage() {
                 : 'bg-red-500/5 border-red-500/20 text-red-700 dark:text-red-400'
             }`}
           >
-            MISMATCH_DETECTED
+            {t.statusMismatchDetected}
           </div>
           <div
             className={`p-2 rounded-xl border transition-all ${
@@ -664,7 +664,7 @@ export default function AuthorityBridgePage() {
                 : 'bg-amber-500/5 border-amber-500/20 text-amber-700 dark:text-amber-400'
             }`}
           >
-            EXPIRED
+            {t.statusExpired}
           </div>
           <div
             className={`p-2 rounded-xl border transition-all ${
@@ -673,7 +673,7 @@ export default function AuthorityBridgePage() {
                 : 'bg-sky-500/5 border-sky-500/20 text-sky-700 dark:text-sky-400'
             }`}
           >
-            VERIFY_PENDING
+            {t.statusVerificationPending}
           </div>
           <div
             className={`p-2 rounded-xl border transition-all ${
@@ -682,7 +682,7 @@ export default function AuthorityBridgePage() {
                 : 'bg-slate-500/5 border-slate-500/20 text-slate-700 dark:text-slate-400'
             }`}
           >
-            SOURCE_UNAVAIL
+            {t.statusSourceUnavailable}
           </div>
           <div
             className={`p-2 rounded-xl border transition-all ${
@@ -691,7 +691,7 @@ export default function AuthorityBridgePage() {
                 : 'bg-violet-500/5 border-violet-500/20 text-violet-700 dark:text-violet-400'
             }`}
           >
-            MANUAL_REVIEW
+            {t.statusManualReviewRequired}
           </div>
         </div>
       </div>
