@@ -94,7 +94,7 @@ export function LeftGlassRail() {
   ];
 
   return (
-    <aside className="w-64 fixed top-3 bottom-3 left-3 z-40 flex flex-col liquid-glass-card rounded-2xl overflow-hidden shadow-2xl transition-all">
+    <aside className="w-64 !fixed fixed top-3 bottom-3 left-3 z-40 flex flex-col liquid-glass-card rounded-2xl overflow-hidden shadow-2xl transition-all">
       {/* Brand Header */}
       <div className="h-14 px-3.5 border-b border-[var(--glass-well-border)] flex items-center gap-2.5">
         {/* Emblem: Tactile Obsidian Seal with Specular Rim and Gold AICTE Glyph */}

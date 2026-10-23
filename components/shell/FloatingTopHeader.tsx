@@ -45,7 +45,7 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
   };
 
   return (
-    <header className="sticky top-3 z-30 mx-3 mb-2.5 h-13 flex items-center justify-between px-4 liquid-glass-card rounded-2xl shadow-lg transition-all">
+    <header className="!sticky sticky top-3 z-30 mx-3 mb-2.5 h-13 flex items-center justify-between px-4 liquid-glass-card rounded-2xl shadow-lg transition-all">
       {/* Left: Breadcrumbs & Telemetry */}
       <div className="flex items-center gap-3.5 min-w-0">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">

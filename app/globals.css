@@ -126,6 +126,23 @@ body {
   isolation: isolate;
 }
 
+.liquid-glass-card.fixed,
+.fixed.liquid-glass-card,
+aside.liquid-glass-card {
+  position: fixed !important;
+}
+
+.liquid-glass-card.sticky,
+.sticky.liquid-glass-card,
+header.liquid-glass-card {
+  position: sticky !important;
+}
+
+.liquid-glass-card.absolute,
+.absolute.liquid-glass-card {
+  position: absolute !important;
+}
+
 /* Diagonal Specular Glass Rim (Top-Left & Bottom-Right Light Catch) */
 .liquid-glass-card::before,
 .glass-interactive::before {
