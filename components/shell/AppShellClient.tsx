@@ -21,8 +21,8 @@ export function AppShellClient({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#F4F7FB] dark:bg-[#0B132B]">
-      {/* 240px Fixed Left Rail */}
+    <div className="flex min-h-screen">
+      {/* 256px (w-64) Fixed Left Rail */}
       <LeftGlassRail />
 
       {/* Main Workspace Area (Offset by 256px / 64 for left rail) */}
@@ -33,8 +33,8 @@ export function AppShellClient({ children }: { children: React.ReactNode }) {
         {/* Global Contextual Filter Bar */}
         <GlobalFilterBar />
 
-        {/* Page Canvas Container */}
-        <main className="flex-1 p-6 max-w-7xl w-full mx-auto">
+        {/* High-Density Workstation Page Canvas Container */}
+        <main className="flex-1 p-3.5 sm:p-4 max-w-[1600px] w-full mx-auto">
           {children}
         </main>
       </div>

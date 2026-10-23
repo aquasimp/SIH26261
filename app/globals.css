@@ -1,190 +1,299 @@
 @import "tailwindcss";
-
 @custom-variant dark (&:where(.dark, .dark *));
 
-@layer base {
-  :root {
-    --bg-canvas: #F4F7FB;
-    --text-primary: #0F172A;
-    --text-secondary: #334155;
-    --text-muted: #64748B;
-    --border-subtle: #E2E8F0;
-    --glass-bg: rgba(255, 255, 255, 0.90);
-    --glass-border: rgba(226, 232, 240, 0.95);
-    --glass-highlight: rgba(255, 255, 255, 0.9);
-    --glass-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-  }
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  .dark {
-    --bg-canvas: #0B132B;
-    --text-primary: #F8FAFC;
-    --text-secondary: #CBD5E1;
-    --text-muted: #94A3B8;
-    --border-subtle: #1E293B;
-    --glass-bg: rgba(15, 23, 42, 0.85);
-    --glass-border: rgba(51, 65, 85, 0.75);
-    --glass-highlight: rgba(255, 255, 255, 0.06);
-    --glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  }
+  --bg-canvas: #F2F5F9;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-faint: #94A3B8;
 
-  html {
-    color-scheme: light;
-  }
+  /* Apple visionOS / Sequoia Liquid Glass Tokens - Light */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.86);
+  --glass-bg-subtle: rgba(248, 250, 252, 0.58);
+  --glass-border: rgba(203, 213, 225, 0.65);
+  --glass-border-strong: rgba(148, 163, 184, 0.5);
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.98), inset 1px 0 0 0 rgba(255, 255, 255, 0.6);
+  --glass-rim-bottom: inset 0 -1px 0 0 rgba(15, 23, 42, 0.05);
+  --glass-shadow: 0 1px 2px rgba(15, 23, 42, 0.03), 0 12px 28px -8px rgba(15, 23, 42, 0.06);
+  --glass-shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.06), 0 20px 36px -10px rgba(15, 23, 42, 0.1);
 
-  html.dark {
-    color-scheme: dark;
-  }
-
-  body {
-    background-color: #F4F7FB;
-    background-image: 
-      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14, 165, 233, 0.08), transparent 70%),
-      radial-gradient(ellipse 60% 40% at 85% 20%, rgba(67, 56, 202, 0.05), transparent 60%),
-      radial-gradient(ellipse 50% 30% at 10% 70%, rgba(14, 165, 233, 0.04), transparent 50%);
-    background-attachment: fixed;
-    color: var(--text-primary);
-    font-family: var(--font-sans, "Plus Jakarta Sans", system-ui, -apple-system, sans-serif);
-    min-height: 100vh;
-    overflow-x: hidden;
-    transition: background-color 0.25s ease, color 0.25s ease;
-  }
-
-  html.dark body {
-    background-color: #0B132B;
-    background-image: 
-      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14, 165, 233, 0.12), transparent 70%),
-      radial-gradient(ellipse 60% 40% at 85% 20%, rgba(67, 56, 202, 0.10), transparent 60%),
-      radial-gradient(ellipse 50% 30% at 10% 70%, rgba(14, 165, 233, 0.06), transparent 50%);
-    background-attachment: fixed;
-  }
-
-  /* Global Select Option Dropdown Fix */
-  select option {
-    background-color: #ffffff;
-    color: #0f172a;
-  }
-
-  .dark select option,
-  html.dark select option {
-    background-color: #1e293b;
-    color: #f8fafc;
-  }
+  /* Semantic Regulatory Severity Tokens */
+  --rule-fatal: #DC2626;
+  --rule-deficiency: #D97706;
+  --rule-verified: #059669;
+  --rule-registry: #4338CA;
 }
 
-/* Liquid Glass Card Primitive */
+.dark {
+  --bg-canvas: #090D16;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-faint: #64748B;
+
+  /* Apple visionOS / Sequoia Liquid Glass Tokens - Dark */
+  --glass-bg: rgba(15, 23, 42, 0.68);
+  --glass-bg-elevated: rgba(30, 41, 59, 0.78);
+  --glass-bg-subtle: rgba(15, 23, 42, 0.45);
+  --glass-border: rgba(51, 65, 85, 0.55);
+  --glass-border-strong: rgba(71, 85, 105, 0.65);
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), inset 1px 0 0 0 rgba(255, 255, 255, 0.05);
+  --glass-rim-bottom: inset 0 -1px 0 0 rgba(0, 0, 0, 0.45);
+  --glass-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 36px -8px rgba(0, 0, 0, 0.55);
+  --glass-shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.4), 0 24px 44px -10px rgba(0, 0, 0, 0.65);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(ellipse 75% 45% at 50% -8%, rgba(14, 165, 233, 0.055), transparent 70%),
+    radial-gradient(ellipse 55% 35% at 88% 15%, rgba(67, 56, 202, 0.035), transparent 65%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+.dark body {
+  background-image:
+    radial-gradient(ellipse 75% 45% at 50% -8%, rgba(14, 165, 233, 0.075), transparent 70%),
+    radial-gradient(ellipse 55% 35% at 88% 15%, rgba(67, 56, 202, 0.06), transparent 65%);
+}
+
+/* Optical Micro-Noise Grain Texture */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.dark body::before {
+  opacity: 0.038;
+}
+
+/* Primary Apple Liquid Glass Surface */
 .liquid-glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(190%) contrast(102%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%) contrast(102%);
   border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 0 var(--glass-highlight), var(--glass-shadow);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--glass-specular-top), var(--glass-rim-bottom), var(--glass-shadow);
 }
 
-.liquid-glass-card:hover {
-  border-color: rgba(14, 165, 233, 0.4);
-}
-
-/* Interactive Glass Token */
+/* Interactive Liquid Glass Surface */
 .glass-interactive {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
   border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 0 var(--glass-highlight), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
-  transition: all 0.2s ease;
+  box-shadow: var(--glass-specular-top), var(--glass-rim-bottom), var(--glass-shadow);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 180ms ease,
+              background-color 180ms ease;
 }
 
 .glass-interactive:hover {
-  background: rgba(255, 255, 255, 0.95);
-  transform: translateY(-1px);
+  background: var(--glass-bg-elevated);
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--glass-specular-top), var(--glass-rim-bottom), var(--glass-shadow-hover);
 }
 
-.dark .glass-interactive:hover {
-  background: rgba(30, 41, 59, 0.95);
+/* Editorial Serif Italic Accent (SIH26246 Signature) */
+.title-serif-italic {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
-/* 2px Severity Top Rules */
-.top-rule-fraud {
-  border-top: 2.5px solid #DC2626 !important;
-}
-
-.top-rule-deficiency {
-  border-top: 2.5px solid #D97706 !important;
-}
-
-.top-rule-compliant {
-  border-top: 2.5px solid #059669 !important;
-}
-
-.top-rule-archive {
-  border-top: 2.5px solid #4338CA !important;
-}
-
-/* High-Contrast Semantic Severity Badges */
-.badge-fraud {
-  background-color: rgba(239, 68, 68, 0.12);
-  color: #B91C1C;
-  border: 1px solid rgba(239, 68, 68, 0.25);
-}
-
-.dark .badge-fraud {
-  background-color: rgba(239, 68, 68, 0.18);
-  color: #FCA5A5;
-  border-color: rgba(239, 68, 68, 0.35);
-}
-
-.badge-deficiency {
-  background-color: rgba(245, 158, 11, 0.12);
-  color: #B45309;
-  border: 1px solid rgba(245, 158, 11, 0.25);
-}
-
-.dark .badge-deficiency {
-  background-color: rgba(245, 158, 11, 0.18);
-  color: #FCD34D;
-  border-color: rgba(245, 158, 11, 0.35);
-}
-
-.badge-compliant {
-  background-color: rgba(16, 185, 129, 0.12);
-  color: #047857;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
-
-.dark .badge-compliant {
-  background-color: rgba(16, 185, 129, 0.18);
-  color: #6EE7B7;
-  border-color: rgba(16, 185, 129, 0.35);
-}
-
-.badge-info {
-  background-color: rgba(14, 165, 233, 0.12);
-  color: #0369A1;
-  border: 1px solid rgba(14, 165, 233, 0.25);
-}
-
-.dark .badge-info {
-  background-color: rgba(14, 165, 233, 0.18);
-  color: #7DD3FC;
-  border-color: rgba(14, 165, 233, 0.35);
-}
-
-/* Typography styles */
-.font-mono-numbers {
-  font-family: var(--font-mono, "JetBrains Mono", monospace);
+/* Tabular Numerals Enforcement */
+.metric-value {
   font-variant-numeric: tabular-nums;
+  font-size: clamp(1.65rem, 2.2vw, 2.05rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 700;
 }
 
 .fluid-kpi-numeral {
-  font-size: clamp(1.75rem, 2.4vw, 2.125rem);
-  line-height: 1.1;
-  font-weight: 700;
+  font-size: clamp(1.65rem, 2.2vw, 2.05rem);
+  line-height: 1.05;
   letter-spacing: -0.03em;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom scrollbars */
+.font-mono-numbers {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tactile Obsidian Glass Action Button (Bans Cyberpunk Gradients) */
+.btn-obsidian {
+  background: #0F172A;
+  color: #F8FAFC;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.22), 0 2px 4px rgba(15, 23, 42, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.18);
+  transition: all 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-obsidian:hover {
+  background: #1E293B;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.32), 0 4px 8px rgba(15, 23, 42, 0.18), 0 12px 24px -4px rgba(15, 23, 42, 0.24);
+  transform: translateY(-0.5px);
+}
+
+.btn-obsidian:active {
+  transform: translateY(0.5px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.dark .btn-obsidian {
+  background: #F8FAFC;
+  color: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 2px 6px rgba(0, 0, 0, 0.4), 0 10px 20px -4px rgba(0, 0, 0, 0.5);
+}
+
+.dark .btn-obsidian:hover {
+  background: #FFFFFF;
+  box-shadow: inset 0 1px 0 0 #FFFFFF, 0 4px 10px rgba(0, 0, 0, 0.5), 0 16px 28px -4px rgba(0, 0, 0, 0.6);
+  transform: translateY(-0.5px);
+}
+
+/* Tactile Calibrated Glass Pill Button */
+.btn-glass-subtle {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-specular-top), var(--glass-rim-bottom), 0 1px 2px rgba(15, 23, 42, 0.04);
+  color: var(--text-primary);
+  transition: all 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-glass-subtle:hover {
+  background: var(--glass-bg-elevated);
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--glass-specular-top), var(--glass-rim-bottom), 0 4px 10px rgba(15, 23, 42, 0.08);
+  transform: translateY(-0.5px);
+}
+
+/* 2px Severity Top Rules */
+.top-rule-fatal,
+.top-rule-fraud {
+  border-top: 2px solid var(--rule-fatal) !important;
+}
+
+.top-rule-deficiency {
+  border-top: 2px solid var(--rule-deficiency) !important;
+}
+
+.top-rule-verified,
+.top-rule-compliant {
+  border-top: 2px solid var(--rule-verified) !important;
+}
+
+.top-rule-registry,
+.top-rule-archive {
+  border-top: 2px solid var(--rule-registry) !important;
+}
+
+/* Semantic Regulatory Badges & Status Pills */
+.badge-fraud,
+.pill-fatal {
+  background-color: rgba(220, 38, 38, 0.08);
+  color: #B91C1C;
+  border: 1px solid rgba(220, 38, 38, 0.22);
+}
+
+.dark .badge-fraud,
+.dark .pill-fatal {
+  background-color: rgba(220, 38, 38, 0.16);
+  color: #FCA5A5;
+  border-color: rgba(220, 38, 38, 0.35);
+}
+
+.badge-deficiency,
+.pill-deficiency {
+  background-color: rgba(217, 119, 6, 0.08);
+  color: #B45309;
+  border: 1px solid rgba(217, 119, 6, 0.22);
+}
+
+.dark .badge-deficiency,
+.dark .pill-deficiency {
+  background-color: rgba(217, 119, 6, 0.16);
+  color: #FCD34D;
+  border-color: rgba(217, 119, 6, 0.35);
+}
+
+.badge-compliant,
+.pill-verified {
+  background-color: rgba(5, 150, 105, 0.08);
+  color: #047857;
+  border: 1px solid rgba(5, 150, 105, 0.22);
+}
+
+.dark .badge-compliant,
+.dark .pill-verified {
+  background-color: rgba(5, 150, 105, 0.16);
+  color: #6EE7B7;
+  border-color: rgba(5, 150, 105, 0.35);
+}
+
+.badge-info,
+.pill-registry {
+  background-color: rgba(67, 56, 202, 0.08);
+  color: #4338CA;
+  border: 1px solid rgba(67, 56, 202, 0.22);
+}
+
+.dark .badge-info,
+.dark .pill-registry {
+  background-color: rgba(67, 56, 202, 0.16);
+  color: #A5B4FC;
+  border-color: rgba(67, 56, 202, 0.35);
+}
+
+/* Global Select Option Dropdown Fix */
+select option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+.dark select option,
+html.dark select option {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -210,4 +319,3 @@
 .dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.8);
 }
-

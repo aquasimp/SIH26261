@@ -1026,3 +1026,85 @@ export const REGIONAL_STATS: RegionalStats[] = [
   { region: "Northern", applications: 280, avgIci: 69.4, fatalFraudCount: 12, rectifiableCount: 92, ghostFacultyCount: 22, compliantCount: 154 },
   { region: "South-Central", applications: 160, avgIci: 81.0, fatalFraudCount: 6, rectifiableCount: 70, ghostFacultyCount: 12, compliantCount: 72 },
 ];
+
+export interface AuditBlock {
+  blockIndex: number;
+  timestamp: string;
+  eventType: 'AI_INFERENCE' | 'DPI_HANDSHAKE' | 'OFFICER_SIGN_OFF' | 'DEFICIENCY_DISPATCH';
+  applicationId: string;
+  targetArtifact: string;
+  actorOrModel: string;
+  previousHash: string;
+  currentHash: string;
+  status: 'VALID' | 'VERIFIED';
+}
+
+export const INITIAL_AUDIT_BLOCKS: AuditBlock[] = [
+  {
+    blockIndex: 1,
+    timestamp: '2026-10-19T14:10:02Z',
+    eventType: 'AI_INFERENCE',
+    applicationId: 'AICTE-2026-NW-0842',
+    targetArtifact: 'DOC-FIRE-01 (Fire NOC)',
+    actorOrModel: 'TruFor (CVPR 2023) + NFA-ViT',
+    previousHash: '0000000000000000000000000000000000000000000000000000000000000000',
+    currentHash: 'b88518640fb090d14a6bba97e8cc84cdcd1ee444ef41325b028944b5ed29925f',
+    status: 'VALID',
+  },
+  {
+    blockIndex: 2,
+    timestamp: '2026-10-19T14:12:15Z',
+    eventType: 'DPI_HANDSHAKE',
+    applicationId: 'AICTE-2026-NW-0842',
+    targetArtifact: 'in.gov.har.fire-NOC-2021-8841',
+    actorOrModel: 'API Setu DigiLocker Bridge',
+    previousHash: 'b88518640fb090d14a6bba97e8cc84cdcd1ee444ef41325b028944b5ed29925f',
+    currentHash: '3c74d2912dd950ac7cf4b0b658521ea82f51b4c87b80c2858fbaa80949866de7',
+    status: 'VALID',
+  },
+  {
+    blockIndex: 3,
+    timestamp: '2026-10-19T14:15:30Z',
+    eventType: 'AI_INFERENCE',
+    applicationId: 'AICTE-2026-NW-0842',
+    targetArtifact: 'DOC-FAC-01 (Faculty Roster)',
+    actorOrModel: 'ArcFace (IResNet-100) + Qdrant HNSW',
+    previousHash: '3c74d2912dd950ac7cf4b0b658521ea82f51b4c87b80c2858fbaa80949866de7',
+    currentHash: '3768e75a1983398367d78111a39465d5eacd374d29c7f264b355f48cb375289b',
+    status: 'VALID',
+  },
+  {
+    blockIndex: 4,
+    timestamp: '2026-10-19T14:18:45Z',
+    eventType: 'AI_INFERENCE',
+    applicationId: 'AICTE-2026-NW-0842',
+    targetArtifact: 'DOC-PLAN-01 (CAD Blueprint)',
+    actorOrModel: 'Mask2Former Swin-Base + Shoelace CV',
+    previousHash: '3768e75a1983398367d78111a39465d5eacd374d29c7f264b355f48cb375289b',
+    currentHash: 'ad70ae23afc4768c9516ed12575ab962eb3118f90f60d7246016153c27259870',
+    status: 'VALID',
+  },
+  {
+    blockIndex: 5,
+    timestamp: '2026-10-19T14:22:10Z',
+    eventType: 'OFFICER_SIGN_OFF',
+    applicationId: 'AICTE-2026-NW-0842',
+    targetArtifact: 'Standing Hearing Committee Referral Order',
+    actorOrModel: 'Regional Scrutiny Officer (RO-04 Shri R.K. Verma)',
+    previousHash: 'ad70ae23afc4768c9516ed12575ab962eb3118f90f60d7246016153c27259870',
+    currentHash: '0ff1d872b91b194ee27921cec2ad069de26f79f524ff6a5c8481648950206144',
+    status: 'VALID',
+  },
+  {
+    blockIndex: 6,
+    timestamp: '2026-10-19T14:25:00Z',
+    eventType: 'DEFICIENCY_DISPATCH',
+    applicationId: 'AICTE-2026-NW-0842',
+    targetArtifact: 'Statutory Show-Cause Dispatch #AICTE/UB/2026-0842',
+    actorOrModel: 'AICTE Dispatch Gateway (DPI v4.2)',
+    previousHash: '0ff1d872b91b194ee27921cec2ad069de26f79f524ff6a5c8481648950206144',
+    currentHash: '7832895952fc7eb51b61ea95cc48274ec4b0d6f998993a6911298facd0b08fa4',
+    status: 'VALID',
+  },
+];
+

@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, use } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useLanguage, useFilters } from '@/lib/context';
-import { MOCK_APPLICATIONS, InstitutionalApplication, DocumentArtifact } from '@/lib/mock-data';
+import { MOCK_APPLICATIONS, InstitutionalApplication, DocumentArtifact, ForensicAnomaly } from '@/lib/mock-data';
 import { ForensicDocumentCanvas } from '@/components/workbench/ForensicDocumentCanvas';
 import { BlueprintVectorViewer } from '@/components/workbench/BlueprintVectorViewer';
 import { toast } from 'sonner';
@@ -25,49 +25,170 @@ import {
   ArrowRight,
   Send,
   Lock,
+  BookOpen,
 } from 'lucide-react';
 
-export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id: string }> }) {
+export type DocumentTabKey = 'fire_noc' | 'land_deed' | 'blueprint' | 'faculty_roster' | 'balance_sheet';
+
+const docTypeToTab: Record<string, DocumentTabKey> = {
+  FIRE_NOC: 'fire_noc',
+  LAND_DEED: 'land_deed',
+  BLUEPRINT: 'blueprint',
+  FACULTY_ROSTER: 'faculty_roster',
+  BALANCE_SHEET: 'balance_sheet',
+};
+
+const tabToDocType: Record<DocumentTabKey, string> = {
+  fire_noc: 'FIRE_NOC',
+  land_deed: 'LAND_DEED',
+  blueprint: 'BLUEPRINT',
+  faculty_roster: 'FACULTY_ROSTER',
+  balance_sheet: 'BALANCE_SHEET',
+};
+
+export default function ScrutinyWorkbenchPage() {
   const router = useRouter();
-  const { id } = use(params);
+  const routeParams = useParams<{ id: string }>();
+  const id = routeParams?.id || 'AICTE-2026-NW-0842';
+
   const { t, language } = useLanguage();
-  const { applications, updateApplicationStatus } = useFilters();
+  const {
+    applications,
+    approveApplicationEoA,
+    issueDeficiencyNotice,
+    escalateToStandingHearingCommittee,
+  } = useFilters();
 
   // Find target application or fallback to first
-  const application = applications.find((a) => a.id === id) || applications[0];
+  const application = applications.find((a) => a.id === id) || applications[0] || MOCK_APPLICATIONS[0];
 
-  // Active Document tab index
-  const [selectedDocIndex, setSelectedDocIndex] = useState<number>(0);
-  const activeDocument: DocumentArtifact = application.documents[selectedDocIndex] || application.documents[0];
+  // Active Document Tab state
+  const [activeDocumentTab, setActiveDocumentTab] = useState<DocumentTabKey>('fire_noc');
+
+  // Find corresponding document from active tab
+  const activeDocType = tabToDocType[activeDocumentTab];
+  const activeDocument: DocumentArtifact =
+    application.documents.find((d) => d.docType === activeDocType) || application.documents[0];
 
   // Active right pane tab
   const [activeInspectorTab, setActiveInspectorTab] = useState<'ENTITIES' | 'APH_NORM' | 'GHOST_FACULTY'>('ENTITIES');
 
-  // Highlighted anomaly from BBox click
-  const [activeAnomalyId, setActiveAnomalyId] = useState<string | null>(null);
+  // Selected anomaly or entity ID for bidirectional synchronization
+  const [selectedAnomalyId, setSelectedAnomalyId] = useState<string | null>('Valid Upto Date');
 
-  // Officer Decision Handler
-  const handleOfficerDecision = (decision: 'APPROVE' | 'DEFICIENCY' | 'SHC') => {
-    if (decision === 'APPROVE') {
-      const note = 'Statutory approval logged in SHA-256 Scrutiny Ledger with Officer DSC sign-off.';
-      updateApplicationStatus(application.id, 'Auto-Pre-Cleared', note);
-      toast.success(`Extension of Approval (EoA) Approved for ${application.nameEn}`, {
-        description: note,
+  // Active APH Citation banner
+  const [activeAphCitation, setActiveAphCitation] = useState<{
+    clause: string;
+    description: string;
+    rule: string;
+  } | null>({
+    clause: 'APH 2024–27 Chapter VII & Annexure 16, Clause 2.1',
+    description: 'Mandatory Fire Safety Certification Validity Window',
+    rule: 'Educational buildings must possess a non-expired Fire NOC with verifiable e-District registration.',
+  });
+
+  // Handle BBox click on ForensicDocumentCanvas
+  const handleSelectAnomalyFromCanvas = (identifier: string | null) => {
+    setSelectedAnomalyId(identifier);
+
+    if (!identifier) return;
+
+    // Switch right inspector to ENTITIES tab
+    setActiveInspectorTab('ENTITIES');
+
+    // Look for matching anomaly to retrieve exact APH citation
+    const matchingAnomaly = application.anomalies.find(
+      (a) => a.id === identifier || a.extractedValue.includes(identifier) || a.titleEn.includes(identifier)
+    );
+
+    // Look for matching field in active document
+    const matchingField = activeDocument.extractedFields.find((f) => f.nameEn === identifier);
+
+    if (matchingAnomaly) {
+      setActiveAphCitation({
+        clause: matchingAnomaly.aphClause,
+        description: matchingAnomaly.titleEn,
+        rule: matchingAnomaly.descriptionEn,
       });
-    } else if (decision === 'DEFICIENCY') {
-      const note = 'Auto-compiled APH Chapter VII shortfall notice dispatched to institutional portal.';
-      updateApplicationStatus(application.id, 'Deficiency Issued', note);
-      toast.warning(`15-Day EVC Rectification Notice Generated for ${application.nameEn}`, {
-        description: note,
-      });
-      setTimeout(() => router.push('/deficiencies'), 1000);
+    } else if (matchingField) {
+      // Default citations mapped to field names
+      if (matchingField.nameEn.includes('Valid') || matchingField.nameEn.includes('Date')) {
+        setActiveAphCitation({
+          clause: 'APH 2024–27 Chapter VII & Annexure 16, Clause 2.1',
+          description: 'Mandatory Fire Safety Certification Validity Window',
+          rule: 'Validity must extend through entire current academic scrutiny cycle.',
+        });
+      } else if (matchingField.nameEn.includes('Area') || matchingField.nameEn.includes('Acres')) {
+        setActiveAphCitation({
+          clause: 'APH 2024–27 Chapter I Clause 1.4 & Appendix 4',
+          description: 'Minimum Land Acreage & Contiguity Mandate',
+          rule: 'Urban engineering technical institutions require min 2.50 contiguous acres verified against revenue records.',
+        });
+      } else if (matchingField.nameEn.includes('Lab') || matchingField.nameEn.includes('Built-up')) {
+        setActiveAphCitation({
+          clause: 'APH 2024–27 Chapter VII Clause 7.1',
+          description: 'Instructional Area Standards for Engineering Laboratories',
+          rule: 'Specialized laboratories mandate 66.0 m² carpet area minimum computed via architectural boundaries.',
+        });
+      }
+    }
+
+    // Auto-scroll to corresponding row in right pane table
+    setTimeout(() => {
+      const sanitizedId = identifier.replace(/[^a-zA-Z0-9_-]/g, '_');
+      const el = document.getElementById(`entity-row-${sanitizedId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  };
+
+  // Handle clicking on an entity row or anomaly row in right pane
+  const handleSelectFieldFromInspector = (fieldName: string, docType?: string) => {
+    setSelectedAnomalyId(fieldName);
+
+    // Switch document canvas to the document containing this field
+    if (docType && docTypeToTab[docType]) {
+      setActiveDocumentTab(docTypeToTab[docType]);
     } else {
-      const note = 'Fatal fraud flag confirmed via TruFor & API Setu. Hearing summons drafted.';
-      updateApplicationStatus(application.id, 'Fatal Fraud Alert', note);
-      toast.error(`Escalated to Standing Hearing Committee (SHC) for ${application.nameEn}`, {
-        description: note,
+      // Find document containing this field
+      const foundDoc = application.documents.find((d) =>
+        d.extractedFields.some((f) => f.nameEn === fieldName)
+      );
+      if (foundDoc && docTypeToTab[foundDoc.docType]) {
+        setActiveDocumentTab(docTypeToTab[foundDoc.docType]);
+      }
+    }
+
+    // Update citation
+    const matchingAnomaly = application.anomalies.find((a) => a.titleEn.includes(fieldName) || a.extractedValue.includes(fieldName));
+    if (matchingAnomaly) {
+      setActiveAphCitation({
+        clause: matchingAnomaly.aphClause,
+        description: matchingAnomaly.titleEn,
+        rule: matchingAnomaly.descriptionEn,
       });
-      setTimeout(() => router.push('/deficiencies'), 1000);
+    }
+  };
+
+  // Officer Decision Handler with Closed-Loop Store Mutation
+  const handleOfficerDecision = async (decision: 'APPROVE' | 'DEFICIENCY' | 'SHC') => {
+    if (decision === 'APPROVE') {
+      await approveApplicationEoA(
+        application.id,
+        'Statutory approval for EoA 2026–27 granted with Class-3 Officer DSC sign-off.'
+      );
+    } else if (decision === 'DEFICIENCY') {
+      await issueDeficiencyNotice(
+        application.id,
+        15,
+        'Auto-compiled APH Chapter VII shortfall notice dispatched to institutional portal.'
+      );
+    } else {
+      await escalateToStandingHearingCommittee(
+        application.id,
+        'Fatal fraud flag confirmed via TruFor & API Setu. Hearing summons drafted under APH Chapter VIII.'
+      );
     }
   };
 
@@ -146,16 +267,43 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
         </div>
       </div>
 
-      {/* Document Tab Switcher */}
+      {/* AICTE APH 2024–27 Citation Banner (Updated dynamically on BBox selection) */}
+      {activeAphCitation && (
+        <div className="p-3 rounded-xl bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-sky-200 dark:border-slate-800 flex items-start gap-3 shadow-xs">
+          <BookOpen className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
+          <div className="text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sky-900 dark:text-sky-200">{activeAphCitation.clause}</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-sky-200/80 dark:bg-sky-900/60 text-sky-800 dark:text-sky-300 font-bold">
+                STATUTORY CITATION
+              </span>
+            </div>
+            <p className="text-slate-700 dark:text-slate-300 font-semibold mt-0.5">
+              {activeAphCitation.description}
+            </p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              {activeAphCitation.rule}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Document Tab Switcher (Mapped with DocumentTabKey) */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-semibold">
-        {application.documents.map((doc, idx) => {
-          const isSelected = selectedDocIndex === idx;
-          const isMismatch = doc.verificationState === 'MISMATCH_DETECTED';
+        {application.documents.map((doc) => {
+          const tabKey = docTypeToTab[doc.docType] || 'fire_noc';
+          const isSelected = activeDocumentTab === tabKey;
 
           return (
             <button
               key={doc.id}
-              onClick={() => setSelectedDocIndex(idx)}
+              onClick={() => {
+                setActiveDocumentTab(tabKey);
+                // Auto-select first extracted field of this document
+                if (doc.extractedFields.length > 0) {
+                  setSelectedAnomalyId(doc.extractedFields[0].nameEn);
+                }
+              }}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all shrink-0 ${
                 isSelected
                   ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20 font-bold'
@@ -164,7 +312,11 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
             >
               <span>{language === 'hi' ? doc.titleHi : doc.titleEn}</span>
               {doc.tamperAlert && (
-                <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded ${isSelected ? 'bg-white text-red-600' : 'bg-red-500/10 text-red-600'}`}>
+                <span
+                  className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded ${
+                    isSelected ? 'bg-white text-red-600' : 'bg-red-500/10 text-red-600'
+                  }`}
+                >
                   FLAG
                 </span>
               )}
@@ -180,15 +332,15 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
           {activeDocument.docType === 'BLUEPRINT' ? (
             <BlueprintVectorViewer
               rooms={application.blueprintRooms}
-              selectedRoomId={activeAnomalyId}
-              onSelectRoom={(id) => setActiveAnomalyId(id)}
+              selectedRoomId={selectedAnomalyId}
+              onSelectRoom={(id) => handleSelectAnomalyFromCanvas(id)}
             />
           ) : (
             <ForensicDocumentCanvas
               document={activeDocument}
               anomalies={application.anomalies}
-              activeAnomalyId={activeAnomalyId}
-              onSelectAnomaly={(id) => setActiveAnomalyId(id)}
+              activeAnomalyId={selectedAnomalyId}
+              onSelectAnomaly={handleSelectAnomalyFromCanvas}
             />
           )}
         </div>
@@ -239,7 +391,7 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
                   Document Attributes &amp; Authority Reconciliation
                 </h3>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  Side-by-side LayoutLMv3 extracted tokens vs. authoritative DigiLocker / State registry response
+                  Click any row to switch document and highlight corresponding bounding box on canvas
                 </p>
               </div>
 
@@ -251,7 +403,9 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 dark:text-slate-400 font-semibold">Canonical URI:</span>
-                  <span className="font-bold text-sky-600 dark:text-sky-400 truncate max-w-[220px]">{activeDocument.authorityUri}</span>
+                  <span className="font-bold text-sky-600 dark:text-sky-400 truncate max-w-[220px]">
+                    {activeDocument.authorityUri}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 dark:text-slate-400 font-semibold">Verification Status:</span>
@@ -272,22 +426,26 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
               {/* Side-by-Side Diff Table */}
               <div className="space-y-2.5">
                 {activeDocument.extractedFields.map((field, idx) => {
-                  const isHighlighted = activeAnomalyId === field.nameEn;
+                  const sanitizedId = field.nameEn.replace(/[^a-zA-Z0-9_-]/g, '_');
+                  const isHighlighted = selectedAnomalyId === field.nameEn;
 
                   return (
                     <div
                       key={idx}
-                      className={`p-3 rounded-xl border transition-all ${
-                        isHighlighted ? 'ring-2 ring-sky-500 shadow-md' : ''
+                      id={`entity-row-${sanitizedId}`}
+                      onClick={() => handleSelectFieldFromInspector(field.nameEn, activeDocument.docType)}
+                      className={`p-3 rounded-xl border transition-all cursor-pointer ${
+                        isHighlighted ? 'ring-2 ring-sky-500 shadow-md bg-sky-50/40 dark:bg-sky-950/20' : ''
                       } ${
                         field.isMismatch
                           ? 'bg-red-50/60 dark:bg-red-950/20 border-red-200 dark:border-red-900/60 shadow-2xs'
-                          : 'bg-white/70 dark:bg-slate-800/50 border-slate-200/90 dark:border-slate-700'
+                          : 'bg-white/70 dark:bg-slate-800/50 border-slate-200/90 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-bold text-slate-900 dark:text-white">
-                          {language === 'hi' ? field.nameHi : field.nameEn}
+                        <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                          {isHighlighted && <span className="w-2 h-2 rounded-full bg-sky-500 animate-ping" />}
+                          <span>{language === 'hi' ? field.nameHi : field.nameEn}</span>
                         </span>
                         <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                           OCR Conf: {Math.round(field.confidence * 100)}%
@@ -296,15 +454,29 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
 
                       <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
                         <div className="p-2 rounded-lg bg-slate-100/90 dark:bg-slate-900/90">
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Uploaded PDF (OCR)</div>
-                          <div className={`font-bold mt-0.5 ${field.isMismatch ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-slate-200'}`}>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">
+                            Uploaded PDF (OCR)
+                          </div>
+                          <div
+                            className={`font-bold mt-0.5 ${
+                              field.isMismatch ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-slate-200'
+                            }`}
+                          >
                             {field.ocrValue}
                           </div>
                         </div>
 
                         <div className="p-2 rounded-lg bg-slate-100/90 dark:bg-slate-900/90">
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Issuing Authority Record</div>
-                          <div className={`font-bold mt-0.5 ${field.isMismatch ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-800 dark:text-slate-200'}`}>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">
+                            Issuing Authority Record
+                          </div>
+                          <div
+                            className={`font-bold mt-0.5 ${
+                              field.isMismatch
+                                ? 'text-emerald-700 dark:text-emerald-400'
+                                : 'text-slate-800 dark:text-slate-200'
+                            }`}
+                          >
                             {field.authorityValue}
                           </div>
                         </div>
@@ -322,7 +494,6 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
               </div>
             </div>
           )}
-
 
           {/* Tab 2: APH 2024–27 Compliance Matrix */}
           {activeInspectorTab === 'APH_NORM' && (
@@ -425,10 +596,11 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
                   return (
                     <div
                       key={fac.id}
-                      className={`p-3 rounded-xl border transition-all ${
+                      onClick={() => handleSelectFieldFromInspector(fac.name, 'FACULTY_ROSTER')}
+                      className={`p-3 rounded-xl border transition-all cursor-pointer ${
                         isDual
                           ? 'bg-red-50/70 dark:bg-red-950/20 border-red-300 dark:border-red-900/60 shadow-2xs'
-                          : 'bg-white/60 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-700'
+                          : 'bg-white/60 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -456,7 +628,7 @@ export default function ScrutinyWorkbenchPage({ params }: { params: Promise<{ id
 
                       <div className="grid grid-cols-2 gap-2 mt-2 text-[11px] font-mono">
                         <div className="p-2 rounded bg-slate-100/80 dark:bg-slate-900/80">
-                          <span className="text-[10px] text-slate-400 block">PAN & UAN:</span>
+                          <span className="text-[10px] text-slate-400 block">PAN &amp; UAN:</span>
                           <span className="font-bold text-slate-800 dark:text-slate-200">{fac.pan}</span>
                           <span className="block text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{fac.uan}</span>
                         </div>

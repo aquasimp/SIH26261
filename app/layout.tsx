@@ -27,7 +27,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen text-slate-900 dark:text-slate-100 bg-[#F4F7FB] dark:bg-[#0B132B] antialiased">
+      <body className="min-h-screen text-[var(--text-primary)] antialiased selection:bg-sky-500/20 selection:text-sky-900 dark:selection:text-sky-100">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <LanguageProvider>
             <FilterProvider>

@@ -8,10 +8,7 @@ import {
   Search,
   Sun,
   Moon,
-  Globe,
-  Radio,
   Clock,
-  Sparkles,
 } from 'lucide-react';
 
 interface FloatingTopHeaderProps {
@@ -48,63 +45,63 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 w-full flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl shadow-xs">
+    <header className="sticky top-0 z-30 h-13 w-full flex items-center justify-between px-4 border-b border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-2xl shadow-[var(--glass-shadow)] transition-colors">
       {/* Left: Breadcrumbs & Telemetry */}
-      <div className="flex items-center gap-4 min-w-0">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-100">
-          <span className="text-slate-400 dark:text-slate-500 font-normal">AICTE PS 26261 /</span>
-          <span className="truncate">{getBreadcrumb()}</span>
+      <div className="flex items-center gap-3.5 min-w-0">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">
+          <span className="font-mono text-[11px] text-[var(--text-faint)] tracking-tight">AICTE/APH-26 /</span>
+          <span className="truncate tracking-tight">{getBreadcrumb()}</span>
         </div>
 
-        {/* Live DPI Status Pulse */}
-        <div className="hidden md:inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[11px] font-medium">
-          <span className="relative flex h-2 w-2">
+        {/* Live DPI Status Tactile Pill */}
+        <div className="hidden md:inline-flex items-center gap-2 px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/8 text-emerald-700 dark:text-emerald-400 text-[10.5px] font-mono font-medium shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)]">
+          <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
           </span>
           <span>{t.dpiStatus}</span>
         </div>
 
         {/* Pipeline run clock */}
-        <div className="hidden lg:flex items-center gap-1.5 text-slate-400 dark:text-slate-500 text-[11px]">
-          <Clock className="w-3.5 h-3.5" />
+        <div className="hidden lg:flex items-center gap-1 text-[var(--text-muted)] font-mono text-[10.5px]">
+          <Clock className="w-3 h-3 text-[var(--text-faint)]" />
           <span>{t.pipelineRun}</span>
         </div>
       </div>
 
       {/* Right: Quick Search, Language Switcher, Theme Toggle */}
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center gap-2.5 shrink-0">
         {/* Command Palette Trigger */}
         <button
           onClick={onOpenCommandPalette}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs hover:border-sky-500/40 hover:text-slate-900 dark:hover:text-white transition-all shadow-2xs group"
+          className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] text-[var(--text-muted)] hover:border-[var(--glass-border-strong)] hover:text-[var(--text-primary)] text-xs shadow-2xs transition-all group cursor-pointer"
           title="Quick search (⌘K / Ctrl+K)"
         >
-          <Search className="w-3.5 h-3.5 group-hover:text-sky-500 transition-colors" />
-          <span className="hidden sm:inline">{t.searchPlaceholder.slice(0, 24)}...</span>
-          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded text-slate-500 dark:text-slate-400">
+          <Search className="w-3.5 h-3.5 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors" />
+          <span className="hidden sm:inline font-normal">{t.searchPlaceholder.slice(0, 24)}...</span>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.2 text-[9.5px] font-mono font-semibold bg-[var(--glass-bg-elevated)] border border-[var(--glass-border)] rounded text-[var(--text-secondary)]">
             ⌘K
           </kbd>
         </button>
 
         {/* Bilingual Switcher (EN | हिन्दी) */}
-        <div className="inline-flex rounded-xl p-0.5 bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+        <div className="inline-flex rounded-lg p-0.5 bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] text-xs font-semibold">
           <button
             onClick={() => setLanguage('en')}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
+            className={`px-2 py-0.5 rounded-md transition-all text-[11px] cursor-pointer ${
               language === 'en'
-                ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 shadow-2xs font-bold'
-                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-slate-900 text-white dark:bg-white/15 dark:text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_1px_2px_rgba(0,0,0,0.1)] font-bold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             EN
           </button>
           <button
             onClick={() => setLanguage('hi')}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
+            className={`px-2 py-0.5 rounded-md transition-all text-[11px] cursor-pointer ${
               language === 'hi'
-                ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-400 shadow-2xs font-bold'
-                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-slate-900 text-white dark:bg-white/15 dark:text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_1px_2px_rgba(0,0,0,0.1)] font-bold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             हिन्दी
@@ -114,14 +111,14 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 transition-all shadow-2xs cursor-pointer"
+          className="p-1.5 rounded-lg bg-[var(--glass-bg-subtle)] border border-[var(--glass-border)] text-[var(--text-secondary)] hover:bg-[var(--glass-bg-elevated)] hover:border-[var(--glass-border-strong)] transition-all shadow-2xs cursor-pointer"
           title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
           aria-label="Toggle Theme"
         >
           {isDark ? (
-            <Sun className="w-4 h-4 text-amber-400" />
+            <Sun className="w-3.5 h-3.5 text-amber-400" />
           ) : (
-            <Moon className="w-4 h-4 text-sky-700" />
+            <Moon className="w-3.5 h-3.5 text-slate-700 dark:text-slate-200" />
           )}
         </button>
       </div>

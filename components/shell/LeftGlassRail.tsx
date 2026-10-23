@@ -13,13 +13,11 @@ import {
   Network,
   AlertTriangle,
   History,
-  ShieldCheck,
-  ChevronRight,
 } from 'lucide-react';
 
 export function LeftGlassRail() {
   const pathname = usePathname();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   const navGroups = [
     {
@@ -37,14 +35,14 @@ export function LeftGlassRail() {
           label: t.navApplications,
           icon: Building2,
           badge: '4,820',
-          badgeColor: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20',
+          badgeColor: 'border border-slate-300 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300',
         },
         {
           href: '/applications/AICTE-2026-NW-0842',
           label: t.navWorkbench,
           icon: FileSearch,
           badge: 'LIVE',
-          badgeColor: 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/25 animate-pulse',
+          badgeColor: 'border border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400 font-bold',
         },
       ],
     },
@@ -56,14 +54,14 @@ export function LeftGlassRail() {
           label: t.navForensicsStudio,
           icon: ScanEye,
           badge: '148',
-          badgeColor: 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20',
+          badgeColor: 'border border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-400',
         },
         {
           href: '/infrastructure',
           label: t.navInfrastructure,
           icon: Layers,
           badge: '64',
-          badgeColor: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20',
+          badgeColor: 'border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400',
         },
       ],
     },
@@ -75,7 +73,7 @@ export function LeftGlassRail() {
           label: t.navAuthorityBridge,
           icon: Network,
           badge: '98.4%',
-          badgeColor: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20',
+          badgeColor: 'border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
         },
         {
           href: '/deficiencies',
@@ -96,12 +94,12 @@ export function LeftGlassRail() {
   ];
 
   return (
-    <aside className="w-64 fixed inset-y-0 left-0 z-40 flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl shadow-sm">
+    <aside className="w-64 fixed inset-y-0 left-0 z-40 flex flex-col border-r border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-2xl shadow-[var(--glass-shadow)] transition-colors">
       {/* Brand Header */}
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
-        {/* Emblem SVG */}
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-600 to-indigo-800 flex items-center justify-center shadow-md shadow-sky-600/20 shrink-0 text-white">
-          <svg viewBox="0 0 48 48" width={24} height={24} style={{ width: '24px', height: '24px' }} className="w-6 h-6 fill-none stroke-current" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <div className="h-14 px-3.5 border-b border-[var(--glass-border)] flex items-center gap-2.5">
+        {/* Emblem: Tactile Obsidian Seal with Specular Rim and Gold AICTE Glyph */}
+        <div className="w-8 h-8 rounded-lg bg-slate-950 dark:bg-slate-900 border border-slate-800 dark:border-slate-700/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_1px_3px_rgba(0,0,0,0.3)] flex items-center justify-center shrink-0 text-amber-400">
+          <svg viewBox="0 0 48 48" width={18} height={18} className="fill-none stroke-current" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             {/* Emblem stylized Ashok wheel + open book + lamp */}
             <circle cx="24" cy="24" r="18" className="opacity-40" strokeDasharray="3 3" />
             <path d="M12 34C18 31 24 33 24 33C24 33 30 31 36 34" />
@@ -112,21 +110,21 @@ export function LeftGlassRail() {
         </div>
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-white truncate">
+            <span className="font-bold text-xs tracking-tight text-[var(--text-primary)] truncate">
               {t.portalTitle}
             </span>
           </div>
-          <span className="text-[10px] font-mono tracking-wider font-semibold text-sky-700 dark:text-sky-400 uppercase truncate">
+          <span className="text-[9.5px] font-mono tracking-widest font-semibold text-[var(--text-muted)] uppercase truncate">
             {t.portalSubtitle}
           </span>
         </div>
       </div>
 
-      {/* Navigation Groups */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+      {/* Navigation Groups - Dense Workstation Spacing */}
+      <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-4">
         {navGroups.map((group, gIdx) => (
-          <div key={gIdx} className="space-y-1">
-            <div className="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500 mb-2">
+          <div key={gIdx} className="space-y-0.5">
+            <div className="px-2.5 text-[9.5px] font-mono font-semibold uppercase tracking-wider text-[var(--text-faint)] mb-1.5">
               {group.label}
             </div>
             {group.items.map((item) => {
@@ -140,23 +138,23 @@ export function LeftGlassRail() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`group relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${
+                  className={`group relative flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${
                     isActive
-                      ? 'bg-sky-500/10 text-sky-800 dark:text-sky-300 font-semibold shadow-xs border border-sky-500/25'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-slate-800/60'
+                      ? 'bg-slate-900 text-white dark:bg-white/12 dark:text-white font-semibold shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_1px_2px_rgba(0,0,0,0.12)] border border-slate-800 dark:border-white/15'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex items-center gap-2 min-w-0">
                     <Icon
-                      className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${
-                        isActive ? 'text-sky-600 dark:text-sky-400' : 'text-slate-400 dark:text-slate-500'
+                      className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                        isActive ? 'text-amber-400 dark:text-sky-300' : 'text-[var(--text-faint)] group-hover:text-[var(--text-secondary)]'
                       }`}
                     />
                     <span className="truncate">{item.label}</span>
                   </div>
 
                   {item.badge && (
-                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md ${item.badgeColor}`}>
+                    <span className={`text-[9.5px] font-mono font-semibold px-1.5 py-0.5 rounded ${item.badgeColor}`}>
                       {item.badge}
                     </span>
                   )}
@@ -167,17 +165,18 @@ export function LeftGlassRail() {
         ))}
       </div>
 
-      {/* Officer Credential Footer */}
-      <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60">
-        <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-2xs">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
-            <ShieldCheck className="w-4 h-4" />
+      {/* Officer Credential Footer - De-AI-ified, Sharp Typographic Credential */}
+      <div className="p-2.5 border-t border-[var(--glass-border)] bg-[var(--glass-bg-subtle)]">
+        <div className="flex items-center gap-2 p-1.5 rounded-lg bg-[var(--glass-bg)] border border-[var(--glass-border)] shadow-2xs">
+          <div className="relative w-7 h-7 rounded-md bg-slate-900 dark:bg-slate-800 text-slate-200 flex items-center justify-center font-mono font-bold text-[10px] shrink-0 border border-slate-700/60 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]">
+            RO
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 truncate">
+            <div className="text-[11px] font-semibold text-[var(--text-primary)] truncate">
               Shri R.K. Verma (RO-04)
             </div>
-            <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate">
+            <div className="text-[9.5px] font-mono text-[var(--text-muted)] truncate">
               Regional Scrutiny Officer
             </div>
           </div>
