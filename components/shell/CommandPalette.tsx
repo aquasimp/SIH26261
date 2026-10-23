@@ -110,7 +110,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-150 cursor-pointer"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-slate-950/70 animate-in fade-in duration-150 cursor-pointer"
       onClick={onClose}
     >
       <div

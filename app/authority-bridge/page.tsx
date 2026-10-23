@@ -824,7 +824,7 @@ export default function AuthorityBridgePage() {
             </div>
 
             {/* Real Web Crypto Security Credentials Card */}
-            <div className="p-5 rounded-2xl bg-slate-950/90 backdrop-blur-md text-slate-200 text-xs border border-white/10 space-y-3.5 shadow-xl">
+            <div className="p-5 rounded-2xl bg-slate-950 text-slate-200 text-xs border border-white/10 space-y-3.5 shadow-xl">
               <div className="flex items-center justify-between text-slate-400 border-b border-white/10 pb-2.5">
                 <span className="flex items-center gap-2 text-sky-400 font-semibold">
                   <ShieldCheck className="w-4 h-4" />
@@ -1141,7 +1141,7 @@ export default function AuthorityBridgePage() {
             </div>
 
             {/* Qdrant 512-D ArcFace HNSW ANN Search Simulator */}
-            <div className="p-5 rounded-2xl border border-indigo-500/20 bg-slate-950/85 backdrop-blur-md space-y-4 shadow-xl text-slate-200">
+            <div className="p-5 rounded-2xl border border-indigo-500/20 bg-slate-950 space-y-4 shadow-xl text-slate-200">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-500/20 pb-3">
                 <div>
                   <h3 className="font-semibold text-white text-sm flex items-center gap-2">

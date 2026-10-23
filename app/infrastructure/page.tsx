@@ -1193,7 +1193,7 @@ export default function InfrastructureStudioPage() {
 
                   {/* Top Overlay Badges */}
                   <div className="absolute top-2 left-2 flex items-center gap-1.5">
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-black/70 text-white backdrop-blur-xs border border-white/20">
+                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/85 text-white border border-white/20">
                       {photo.exif.device}
                     </span>
                   </div>
@@ -1430,7 +1430,7 @@ export default function InfrastructureStudioPage() {
               </svg>
 
               {/* In-Map Telemetry Hud */}
-              <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/10 text-xs text-slate-300 flex items-center gap-2 shadow-lg">
+              <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-xs text-slate-300 flex items-center gap-2 shadow-lg">
                 <span className="text-slate-400">Centroid:</span>
                 <span className="font-mono font-semibold text-sky-400">
                   {spatialProfile.plots[0]?.lat.toFixed(4)}°N, {spatialProfile.plots[0]?.lon.toFixed(4)}°E

@@ -22,12 +22,6 @@ export function AppShellClient({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative min-h-screen w-full selection:bg-sky-500/20 selection:text-sky-600 dark:selection:text-sky-300">
-      {/* Ambient Optical Refraction Orbs Behind All Glass Surfaces */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute -top-28 left-[18%] h-[460px] w-[680px] rounded-full bg-sky-400/15 dark:bg-sky-500/12 blur-[120px]" />
-        <div className="absolute top-[28%] -right-24 h-[420px] w-[540px] rounded-full bg-indigo-500/12 dark:bg-indigo-500/12 blur-[130px]" />
-        <div className="absolute -bottom-24 left-[35%] h-[380px] w-[580px] rounded-full bg-emerald-400/10 dark:bg-emerald-500/10 blur-[120px]" />
-      </div>
 
       {/* Detached Floating Left Glass Dock */}
       <LeftGlassRail />

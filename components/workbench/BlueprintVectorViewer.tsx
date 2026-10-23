@@ -264,7 +264,7 @@ export function BlueprintVectorViewer({
   return (
     <div className="flex flex-col h-full liquid-glass-card rounded-2xl overflow-hidden shadow-sm select-none">
       {/* Top Toolbar: 4 CAD Layer Toggles */}
-      <div className="p-3 border-b border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="p-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-wrap items-center justify-between gap-3 text-xs">
         {/* Layer Filters */}
         <div className="flex flex-wrap items-center gap-1.5 font-semibold">
           <span className="text-[10px] uppercase tracking-wider text-slate-400 mr-1 hidden sm:inline">

@@ -755,7 +755,7 @@ export default function OverviewPage() {
           (TruFor Noiseprint++ Heatmap vs. DigiLocker XML Handshake Diff)
           ========================================================================= */}
       {quickLookApp && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-glass-in">
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 animate-glass-in">
           <div className="liquid-glass-card rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl">
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-[var(--glass-well-border)] pb-3.5">

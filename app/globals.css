@@ -6,39 +6,34 @@
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --bg-canvas: #EEF2F7;
-  --text-primary: #0B1120;
+  --bg-canvas: #F8FAFC;
+  --text-primary: #0F172A;
   --text-secondary: #334155;
-  --text-muted: #64748B;
-  --text-faint: #94A3B8;
+  --text-muted: #475569;
+  --text-faint: #64748B;
 
-  /* Apple visionOS / iOS 26 Liquid Glass Optical Tokens (Light) */
-  --glass-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.56) 50%, rgba(248, 250, 252, 0.68) 100%);
-  --glass-surface-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.68) 50%, rgba(255, 255, 255, 0.80) 100%);
-  --glass-well-bg: rgba(226, 232, 240, 0.45);
-  --glass-well-border: rgba(148, 163, 184, 0.22);
-  --glass-well-shadow: inset 0 2px 5px rgba(15, 23, 42, 0.045), inset 0 1px 1px rgba(15, 23, 42, 0.04), 0 1px 0 rgba(255, 255, 255, 0.9);
+  /* Clean, Crisp Solid Surface Tokens (Light) - Zero Blur/Fog */
+  --glass-surface: #FFFFFF;
+  --glass-surface-hover: #F8FAFC;
+  --glass-well-bg: #F1F5F9;
+  --glass-well-border: #E2E8F0;
+  --glass-well-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
 
-  /* Specular Rim & Caustic Reflection (Light) */
-  --glass-rim-gradient: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.35) 35%, rgba(148, 163, 184, 0.25) 70%, rgba(255, 255, 255, 0.85) 100%);
-  --glass-caustic-top: radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 65%);
+  --glass-rim-gradient: none;
+  --glass-caustic-top: none;
   --glass-elevation: 
-    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 0 rgba(15, 23, 42, 0.04),
-    0 4px 12px -2px rgba(15, 23, 42, 0.04),
-    0 20px 40px -15px rgba(15, 23, 42, 0.07);
+    0 1px 3px 0 rgba(0, 0, 0, 0.07),
+    0 1px 2px -1px rgba(0, 0, 0, 0.04);
   --glass-elevation-hover:
-    inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 0 0 rgba(14, 165, 233, 0.12),
-    0 10px 24px -4px rgba(15, 23, 42, 0.07),
-    0 28px 56px -14px rgba(14, 165, 233, 0.10);
+    0 4px 6px -1px rgba(0, 0, 0, 0.09),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05);
 
   /* Compatibility Fallback Tokens */
   --glass-bg: var(--glass-surface);
   --glass-bg-elevated: var(--glass-surface-hover);
   --glass-bg-subtle: var(--glass-well-bg);
   --glass-border: var(--glass-well-border);
-  --glass-border-strong: rgba(148, 163, 184, 0.38);
+  --glass-border-strong: #CBD5E1;
   --glass-shadow: var(--glass-elevation);
   --glass-shadow-hover: var(--glass-elevation-hover);
 
@@ -50,39 +45,34 @@
 }
 
 .dark {
-  --bg-canvas: #060A12;
+  --bg-canvas: #090D16;
   --text-primary: #F8FAFC;
   --text-secondary: #CBD5E1;
   --text-muted: #94A3B8;
   --text-faint: #64748B;
 
-  /* Apple visionOS / iOS 26 Liquid Glass Optical Tokens (Dark) */
-  --glass-surface: linear-gradient(135deg, rgba(30, 41, 59, 0.62) 0%, rgba(15, 23, 42, 0.48) 55%, rgba(15, 23, 42, 0.66) 100%);
-  --glass-surface-hover: linear-gradient(135deg, rgba(38, 52, 74, 0.74) 0%, rgba(20, 30, 52, 0.58) 55%, rgba(25, 37, 64, 0.76) 100%);
-  --glass-well-bg: rgba(9, 13, 24, 0.62);
-  --glass-well-border: rgba(255, 255, 255, 0.06);
-  --glass-well-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* Clean, Crisp Solid Surface Tokens (Dark) - Zero Blur/Fog */
+  --glass-surface: #0F172A;
+  --glass-surface-hover: #1E293B;
+  --glass-well-bg: #060A12;
+  --glass-well-border: #1E293B;
+  --glass-well-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
 
-  /* Specular Rim & Caustic Reflection (Dark) */
-  --glass-rim-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.06) 35%, rgba(56, 189, 248, 0.08) 70%, rgba(255, 255, 255, 0.18) 100%);
-  --glass-caustic-top: radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 65%);
+  --glass-rim-gradient: none;
+  --glass-caustic-top: none;
   --glass-elevation:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5),
-    0 8px 24px -4px rgba(0, 0, 0, 0.45),
-    0 24px 48px -12px rgba(0, 0, 0, 0.6);
+    0 4px 12px -2px rgba(0, 0, 0, 0.4),
+    0 1px 3px 0 rgba(0, 0, 0, 0.3);
   --glass-elevation-hover:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.26),
-    inset 0 -1px 0 0 rgba(56, 189, 248, 0.2),
-    0 14px 32px -6px rgba(0, 0, 0, 0.6),
-    0 32px 64px -12px rgba(14, 165, 233, 0.14);
+    0 8px 24px -4px rgba(0, 0, 0, 0.5),
+    0 2px 6px -1px rgba(0, 0, 0, 0.4);
 
   /* Compatibility Fallback Tokens */
   --glass-bg: var(--glass-surface);
   --glass-bg-elevated: var(--glass-surface-hover);
   --glass-bg-subtle: var(--glass-well-bg);
   --glass-border: var(--glass-well-border);
-  --glass-border-strong: rgba(255, 255, 255, 0.14);
+  --glass-border-strong: #334155;
   --glass-shadow: var(--glass-elevation);
   --glass-shadow-hover: var(--glass-elevation-hover);
 
@@ -99,29 +89,21 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  background-image:
-    radial-gradient(circle 650px at 12% 8%, rgba(14, 165, 233, 0.11), transparent 70%),
-    radial-gradient(circle 550px at 88% 14%, rgba(99, 102, 241, 0.09), transparent 70%),
-    radial-gradient(circle 600px at 50% 85%, rgba(16, 185, 129, 0.06), transparent 70%);
-  background-attachment: fixed;
+  background-image: none;
   min-height: 100vh;
 }
 
 .dark body {
-  background-image:
-    radial-gradient(circle 700px at 15% 10%, rgba(14, 165, 233, 0.13), transparent 70%),
-    radial-gradient(circle 600px at 85% 16%, rgba(99, 102, 241, 0.12), transparent 70%),
-    radial-gradient(circle 650px at 50% 90%, rgba(16, 185, 129, 0.07), transparent 70%);
+  background-image: none;
 }
 
 /* ==========================================================================
-   TRUE APPLE LIQUID GLASS SURFACE WITH SPECULAR RIM & CAUSTIC SHEEN
+   CRISP REGULATORY SURFACES - ZERO FOG / BLUR
    ========================================================================== */
 .liquid-glass-card {
   position: relative;
   background: var(--glass-surface);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid var(--glass-well-border);
   box-shadow: var(--glass-elevation);
   isolation: isolate;
 }
@@ -143,46 +125,25 @@ header.liquid-glass-card {
   position: absolute !important;
 }
 
-/* Diagonal Specular Glass Rim (Top-Left & Bottom-Right Light Catch) */
+/* Disable blurry rim and caustic foggy pseudo-elements */
 .liquid-glass-card::before,
-.glass-interactive::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: var(--glass-rim-gradient);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Top Optical Caustic Reflection */
+.glass-interactive::before,
 .liquid-glass-card::after,
 .glass-interactive::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--glass-caustic-top);
-  pointer-events: none;
-  z-index: 1;
+  display: none !important;
 }
 
-/* Interactive Spatial Glass Card */
+/* Interactive Solid Card */
 .glass-interactive {
   position: relative;
   background: var(--glass-surface);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid var(--glass-well-border);
   box-shadow: var(--glass-elevation);
   isolation: isolate;
   transition:
-    transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 320ms cubic-bezier(0.16, 1, 0.3, 1),
-    background 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-interactive:hover {
@@ -195,35 +156,27 @@ header.liquid-glass-card {
   transform: translateY(0px) scale(0.996);
 }
 
-/* Recessed Optical Well (For Filter Bars, Tracks, Code Blocks & Inputs) */
+/* Crisp Clean Well (For Filter Bars, Tracks, Code Blocks & Inputs) */
 .glass-well {
   background: var(--glass-well-bg);
   border: 1px solid var(--glass-well-border);
   box-shadow: var(--glass-well-shadow);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
 }
 
-/* Tactile Liquid Glass Buttons */
+/* Tactile Primary Buttons */
 .btn-liquid-primary {
   position: relative;
   background: linear-gradient(180deg, #1E293B 0%, #0F172A 100%);
   color: #F8FAFC;
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
-    0 2px 6px rgba(15, 23, 42, 0.2),
-    0 8px 16px -4px rgba(15, 23, 42, 0.25);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: all 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .btn-liquid-primary {
   background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
   color: #090D16;
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 1),
-    0 2px 10px rgba(255, 255, 255, 0.12),
-    0 8px 20px -4px rgba(14, 165, 233, 0.22);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
@@ -234,15 +187,14 @@ header.liquid-glass-card {
 
 .btn-liquid-secondary {
   background: var(--glass-surface);
-  backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.8), 0 2px 6px rgba(15, 23, 42, 0.04);
-  transition: all 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--glass-well-border);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .btn-liquid-secondary {
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.35);
+  border-color: var(--glass-well-border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .btn-liquid-secondary:hover {

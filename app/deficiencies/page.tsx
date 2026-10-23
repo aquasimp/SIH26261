@@ -557,7 +557,7 @@ function DeficienciesContent() {
       {/* Class 3 Officer DSC Signing Modal */}
       {isDscModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-glass-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-glass-in"
           onClick={() => setIsDscModalOpen(false)}
         >
           <div

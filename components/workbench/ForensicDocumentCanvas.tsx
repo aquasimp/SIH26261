@@ -811,7 +811,7 @@ export function ForensicDocumentCanvas({
       className="flex flex-col h-full liquid-glass-card rounded-2xl overflow-hidden shadow-sm select-none"
     >
       {/* Top Main Mode Toolbar */}
-      <div className="p-3 border-b border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="p-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-wrap items-center justify-between gap-3 text-xs">
         {/* 4 Inspection Modes */}
         <div className="inline-flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-semibold">
           <button
