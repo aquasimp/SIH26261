@@ -166,7 +166,7 @@ export function LeftGlassRail({ mobileOpen = false, onCloseMobile }: LeftGlassRa
                       onClick={onCloseMobile}
                       className={`group relative flex items-center justify-between px-2.5 py-2 rounded-xl text-[12.5px] font-medium transition-all duration-150 ${
                         isActive
-                          ? 'glass-well font-semibold text-slate-950 dark:text-white'
+                          ? 'glass-well font-semibold text-slate-950 dark:text-white dark:bg-white/[0.07] dark:ring-1 dark:ring-white/[0.12] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_4px_12px_rgba(0,0,0,0.6)]'
                           : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-900/[0.03] dark:hover:bg-white/[0.04]'
                       }`}
                     >

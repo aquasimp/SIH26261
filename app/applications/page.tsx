@@ -1,9 +1,12 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { useLanguage, useFilters } from '@/lib/context';
 import { InstitutionalApplication } from '@/lib/mock-data';
+import GlassFolder, { ArtPreset, FolderFile } from '@/components/ui/glass-folder-cards';
 import { toast } from 'sonner';
 import {
   Search,
@@ -19,6 +22,8 @@ import {
   Scale,
   X,
   ArrowUpRight,
+  FolderArchive,
+  Layers,
 } from 'lucide-react';
 
 const SYNTHETIC_COLLEGE_NAMES = [
@@ -40,11 +45,34 @@ const REGIONS = [
   'South-Central',
 ] as const;
 
+const CAMPUS_VERIFICATION_IMAGES = [
+  'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80',
+  'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+  'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80',
+];
+
 export default function ApplicationsPage() {
+  const router = useRouter();
+  const { resolvedTheme } = useTheme();
   const { t, language } = useLanguage();
   const { applications, setApplications, filteredApplications, filters, setFilters } = useFilters();
-  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+  const [viewMode, setViewMode] = useState<'table' | 'cards' | 'folders'>('table');
   const [sortBy, setSortBy] = useState<'rpn' | 'ici' | 'date'>('rpn');
+
+  // Responsive folder width state
+  const [folderWidth, setFolderWidth] = useState<number>(330);
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setFolderWidth(window.innerWidth < 420 ? 285 : 330);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const folderTone: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
 
   // Compare 2 Institutions Selection State
   const [selectedForCompare, setSelectedForCompare] = useState<string[]>([]);
@@ -259,7 +287,7 @@ export default function ApplicationsPage() {
 
         {/* Action Controls Toolbar */}
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* Card / Table view toggle */}
+          {/* View mode toggle: Table / Cards / 3D Glass Folders */}
           <div className="glass-well inline-flex rounded-xl p-0.5 shadow-2xs">
             <button
               onClick={() => setViewMode('table')}
@@ -278,6 +306,16 @@ export default function ApplicationsPage() {
               title="Card view"
             >
               <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setViewMode('folders')}
+              className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer inline-flex items-center gap-1.5 text-xs font-semibold ${
+                viewMode === 'folders' ? 'btn-liquid-primary shadow-xs' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+              }`}
+              title="3D Glass Dossier Folders View"
+            >
+              <FolderArchive className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+              <span className="hidden sm:inline">3D Folders</span>
             </button>
           </div>
 
@@ -525,7 +563,7 @@ export default function ApplicationsPage() {
             </table>
           </div>
         </div>
-      ) : (
+      ) : viewMode === 'cards' ? (
         /* Cards View */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sortedApplications.map((app) => {
@@ -627,6 +665,169 @@ export default function ApplicationsPage() {
               </div>
             );
           })}
+        </div>
+      ) : (
+        /* 3D Glass Folders View (Interactive Regulatory Dossier Pockets) */
+        <div className="space-y-4">
+          <div className="p-3.5 rounded-2xl glass-well flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+              <span className="font-bold text-[var(--text-primary)]">
+                3D Interactive Statutory Dossier Evidence Shelves
+              </span>
+              <span className="text-[var(--text-muted)] hidden md:inline">
+                • Click any folder to expand annexure sheets; click a sheet to open Scrutiny Workbench; click &apos;+&apos; to drop supplemental affidavits with spring physics
+              </span>
+            </div>
+            <div className="text-[11px] font-mono text-[var(--text-muted)]">
+              {filteredApplications.length} Dossiers Active in Scope
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+            {sortedApplications.map((app, appIdx) => {
+              const isFatal = app.scrutinyStatus === 'Fatal Fraud Alert';
+              const isCleared = app.scrutinyStatus === 'Auto-Pre-Cleared';
+              const isChecked = selectedForCompare.includes(app.id);
+
+              const artPreset: ArtPreset = isFatal
+                ? 'ember'
+                : app.scrutinyStatus === 'Deficiency Issued'
+                ? 'dusk'
+                : isCleared
+                ? 'verdant'
+                : 'aurora';
+
+              const hashVal = Math.abs(app.id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0));
+              const campusImg = CAMPUS_VERIFICATION_IMAGES[hashVal % CAMPUS_VERIFICATION_IMAGES.length];
+
+              const institutionalAnnexures: FolderFile[] = [
+                {
+                  name: `${app.id.slice(-7)} Fire NOC.pdf`,
+                  meta: app.fatalGateTriggered ? 'RPN 912 · TruFor Tampered' : 'Verified · e-District QR',
+                  art: isFatal ? 'ember' : 'glacier',
+                  href: `/applications/${app.id}`,
+                },
+                {
+                  name: 'Land Sale Deed.pdf',
+                  meta: `${app.landAndBuiltUp.landAvailableAcres} Acres · DigiLocker URI`,
+                  image: campusImg,
+                  href: `/applications/${app.id}`,
+                },
+                {
+                  name: 'CAD Floor Plan.dwg',
+                  meta: `${app.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()} m² · Shoelace CV`,
+                  art: 'dusk',
+                  href: `/applications/${app.id}`,
+                },
+                {
+                  name: 'EPFO ECR 2.0 Roll.csv',
+                  meta: `${app.facultyMetrics.availableVerified} Faculty · ${app.facultyMetrics.ghostFlaggedCount} Ghost`,
+                  art: 'verdant',
+                  href: `/applications/${app.id}`,
+                },
+              ];
+
+              return (
+                <div
+                  key={app.id}
+                  className={`liquid-glass-card rounded-[22px] p-5 flex flex-col items-center justify-between transition-all shadow-lg overflow-hidden ${
+                    isFatal
+                      ? 'top-rule-fatal'
+                      : isCleared
+                      ? 'top-rule-verified'
+                      : 'top-rule-deficiency'
+                  } ${isChecked ? 'ring-2 ring-sky-500 shadow-xl' : ''}`}
+                >
+                  {/* Institutional Header & Comparison Selector */}
+                  <div className="w-full mb-3 space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span
+                        className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
+                          isFatal
+                            ? 'pill-fatal'
+                            : isCleared
+                            ? 'pill-verified'
+                            : 'pill-deficiency'
+                        }`}
+                      >
+                        {app.scrutinyStatus}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <label className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => handleToggleCompare(app.id)}
+                            className="rounded accent-sky-600 cursor-pointer"
+                          />
+                          <span>Compare</span>
+                        </label>
+                        <span className="text-xs font-bold tabular-nums text-[var(--text-primary)]">
+                          RPN {app.maxRpn}
+                        </span>
+                      </div>
+                    </div>
+                    <h3 className="text-sm font-bold text-[var(--text-primary)] truncate mt-1">
+                      {language === 'hi' ? app.nameHi : app.nameEn}
+                    </h3>
+                    <div className="text-[11px] text-[var(--text-muted)] flex items-center justify-between">
+                      <span className="font-mono">{app.id}</span>
+                      <span>{app.city}, {app.state}</span>
+                    </div>
+                  </div>
+
+                  {/* 3D Glass Dossier Folder */}
+                  <div className="py-2 flex justify-center w-full overflow-visible">
+                    <GlassFolder
+                      width={folderWidth}
+                      tone={folderTone}
+                      art={artPreset}
+                      seed={hashVal + appIdx}
+                      label={app.id.replace('AICTE-2026-', '')}
+                      meta={`${app.applicationCategory.slice(0, 18)} · ICI ${app.iciScore.toFixed(1)}`}
+                      files={institutionalAnnexures}
+                      action="add"
+                      onAdd={() => {
+                        const newDoc: FolderFile = {
+                          name: 'EVC Supplemental Affidavit.pdf',
+                          meta: 'Uploaded Just Now · SHA-256 Validated',
+                          art: 'glacier',
+                          href: `/applications/${app.id}`,
+                        };
+                        toast.success(`Supplemental Evidence Sheet Ingested into ${app.id}`, {
+                          description: 'EVC Supplemental Affidavit.pdf dropped into pocket with spring physics.',
+                        });
+                        return newDoc;
+                      }}
+                      onFileSelect={(file) => {
+                        toast.info(`Opening Annexure: ${file.name}`, {
+                          description: `Navigating to Scrutiny Workbench for ${app.id} (${file.meta || 'Statutory Filing'})`,
+                        });
+                        router.push(`/applications/${app.id}`);
+                      }}
+                    />
+                  </div>
+
+                  {/* Bottom Shelf Metadata & Navigation */}
+                  <div className="w-full pt-3 mt-2 border-t border-[var(--glass-well-border)] flex items-center justify-between text-xs">
+                    <div className="text-[11px] text-[var(--text-muted)]">
+                      <span>ICI: <strong className="text-[var(--text-primary)]">{app.iciScore.toFixed(1)}</strong></span>
+                      <span className="mx-1.5">•</span>
+                      <span>{app.anomalies.length} Flagged</span>
+                    </div>
+                    <Link
+                      href={`/applications/${app.id}`}
+                      className="btn-liquid-primary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-xs"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Open Workbench</span>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import 'blobatar/motion.css';
 import { ThemeProvider } from 'next-themes';
 import { LanguageProvider, FilterProvider } from '@/lib/context';
 import { AppShellClient } from '@/components/shell/AppShellClient';

@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useLanguage, useFilters } from '@/lib/context';
 import { MOCK_APPLICATIONS, DocumentArtifact } from '@/lib/mock-data';
 import { ForensicDocumentCanvas } from '@/components/workbench/ForensicDocumentCanvas';
 import { BlueprintVectorViewer } from '@/components/workbench/BlueprintVectorViewer';
+import GroupChat, { ChatMessage } from '@/components/ui/group-chat';
+import { computeSha256 } from '@/lib/crypto-utils';
 import { toast } from 'sonner';
 import {
   CheckCircle2,
@@ -17,6 +19,10 @@ import {
   Table as TableIcon,
   Copy,
   Check,
+  Send,
+  MessageSquare,
+  ShieldCheck,
+  CornerDownLeft,
 } from 'lucide-react';
 
 export type DocumentTabKey = 'fire_noc' | 'land_deed' | 'blueprint' | 'faculty_roster' | 'balance_sheet';
@@ -212,6 +218,8 @@ export default function ScrutinyWorkbenchPage() {
     approveApplicationEoA,
     issueDeficiencyNotice,
     escalateToStandingHearingCommittee,
+    auditLogs,
+    setAuditLogs,
   } = useFilters();
 
   // Find target application or fallback to first
@@ -226,10 +234,103 @@ export default function ScrutinyWorkbenchPage() {
     application.documents.find((d) => d.docType === activeDocType) || application.documents[0];
 
   // Active right pane tab
-  const [activeInspectorTab, setActiveInspectorTab] = useState<'ENTITIES' | 'APH_NORM' | 'GHOST_FACULTY' | 'SLANET_TABLE'>('ENTITIES');
+  const [activeInspectorTab, setActiveInspectorTab] = useState<'ENTITIES' | 'APH_NORM' | 'GHOST_FACULTY' | 'SLANET_TABLE' | 'COMMITTEE_DELIBERATION'>('ENTITIES');
   const [slanetViewMode, setSlanetViewMode] = useState<'VISUAL' | 'HTML_DOM' | 'TOKEN_GRAPH'>('VISUAL');
   const [selectedCellId, setSelectedCellId] = useState<string | null>(null);
   const [copiedType, setCopiedType] = useState<string | null>(null);
+
+  // Dynamic Deliberation Stream Seeding based on Institution Anomalies
+  const getInitialDeliberation = (app: typeof application): ChatMessage[] => {
+    const topAnom = app.anomalies[0];
+    const isFatal = app.fatalGateTriggered || app.scrutinyStatus === 'Fatal Fraud Alert';
+    const hasGhost = app.facultyMetrics.ghostFlaggedCount > 0;
+    const labDeficit = app.landAndBuiltUp.inaAvailableSqm < app.landAndBuiltUp.inaRequiredSqm;
+
+    return [
+      {
+        name: 'trufor-sentinel',
+        title: 'TruFor AI Sentinel',
+        text: topAnom
+          ? `[FORENSIC ALERT] Multi-spectral TruFor Noiseprint++ & DCT localized anomaly in ${topAnom.documentTitle} with ${(topAnom.tamperProbability * 100).toFixed(1)}% tamper probability. Bounding box: [${topAnom.boundingBox.join(', ')}].`
+          : `[FORENSIC OK] Multi-spectral TruFor Noiseprint++ and DCT analysis localized 0 pixel anomalies across uploaded institutional filings.`,
+        time: '10:14 AM',
+      },
+      {
+        name: 'dpi-auditor',
+        title: 'API Setu / EPFO Auditor',
+        text: hasGhost
+          ? `[DPI EXCEPTION] API Setu / EPFO ECR 2.0 handshake flagged ${app.facultyMetrics.ghostFlaggedCount} faculty members with concurrent active UAN provident fund contributions in other institutions.`
+          : `[DPI RECONCILED] National DPI Authority verification confirmed: DigiLocker land acreage ${app.landAndBuiltUp.landAvailableAcres} Acres and EPFO payroll roll verified without UAN collisions.`,
+        time: '10:19 AM',
+      },
+      {
+        name: 'evc-sharma',
+        title: 'Dr. A. Sharma (EVC)',
+        text: labDeficit
+          ? `[EVC PRE-CHECK] Physical floor vector inspection: Instructional Area shortfall detected (${app.landAndBuiltUp.inaAvailableSqm} m² actual vs ${app.landAndBuiltUp.inaRequiredSqm} m² mandated). Lab carpet area boundaries do not conform to APH Chapter VII.`
+          : `[EVC PRE-CHECK] Architectural floor boundary polygon verified via Mask2Former Shoelace integration: Total built-up ${app.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()} m² conforms to AICTE APH 2024-27 norms.`,
+        time: '10:25 AM',
+      },
+      {
+        name: 'ro-verma',
+        title: 'Shri R.K. Verma (RO-04)',
+        text: isFatal
+          ? `Acknowledged. In view of the ${topAnom?.severity || 'FATAL_FRAUD'} determination and RPN risk score of ${app.maxRpn}, I recommend an immediate Standing Hearing Committee (SHC) Show-Cause summons under APH Chapter VIII.`
+          : app.scrutinyStatus === 'Deficiency Issued'
+          ? `Statutory shortfall documented under APH Chapter VII. Recommending dispatch of Form-A 15-Day EVC Rectification Notice with digital signature sign-off.`
+          : `All 5 statutory compliance pillars validated. Recommending application for Auto-Pre-Cleared 3-Year Extension of Approval.`,
+        time: '10:32 AM',
+      },
+    ];
+  };
+
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => getInitialDeliberation(application));
+  const [newChatMessage, setNewChatMessage] = useState<string>('');
+
+  useEffect(() => {
+    setChatMessages(getInitialDeliberation(application));
+  }, [application.id]);
+
+  const handleSendChatMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!newChatMessage.trim()) return;
+
+    const noteText = newChatMessage.trim();
+    const timeStr = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+    const addedMsg: ChatMessage = {
+      name: 'ro-verma',
+      title: 'Shri R.K. Verma (RO-04)',
+      text: noteText,
+      time: timeStr,
+    };
+
+    setChatMessages((prev) => [...prev, addedMsg]);
+    setNewChatMessage('');
+
+    const timestamp = new Date().toISOString();
+    const noteDigest = await computeSha256(
+      `COMMITTEE_DELIBERATION|${application.id}|ro-verma|${noteText}|${timestamp}`
+    );
+
+    const prevBlock = auditLogs[auditLogs.length - 1];
+    const newAuditBlock = {
+      blockIndex: auditLogs.length + 1,
+      timestamp,
+      eventType: 'OFFICER_SIGN_OFF' as const,
+      applicationId: application.id,
+      targetArtifact: `#shc-${application.id.toLowerCase()}`,
+      actorOrModel: 'Shri R.K. Verma (RO-04)',
+      previousHash: prevBlock ? prevBlock.currentHash : '0000000000000000000000000000000000000000000000000000000000000000',
+      currentHash: noteDigest,
+      status: 'VALID' as const,
+    };
+
+    setAuditLogs((prev) => [...prev, newAuditBlock]);
+    toast.success('Live Committee Note Recorded & Ledger-Chained', {
+      description: `Cryptographic SHA-256 certificate (${noteDigest.slice(0, 16)}...) committed to statutory audit trail.`,
+    });
+  };
 
   // Selected anomaly or entity ID for bidirectional synchronization
   const [selectedAnomalyId, setSelectedAnomalyId] = useState<string | null>('Valid Upto Date');
@@ -559,6 +660,19 @@ export default function ScrutinyWorkbenchPage() {
                 title="PP-StructureV3 + Improved SLANet Table DOM & LayoutLMv3 KIE"
               >
                 {t.tabTableExtractor}
+              </button>
+              <button
+                onClick={() => setActiveInspectorTab('COMMITTEE_DELIBERATION')}
+                className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer inline-flex items-center justify-center gap-1 ${
+                  activeInspectorTab === 'COMMITTEE_DELIBERATION'
+                    ? 'btn-liquid-primary shadow-xs font-bold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                }`}
+                title={`Live Standing Hearing Committee Deliberation Stream (#shc-${application.id.toLowerCase()})`}
+              >
+                <MessageSquare className="w-3 h-3 text-sky-400" />
+                <span className="truncate">SHC Chat</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               </button>
             </div>
           </div>
@@ -1040,6 +1154,69 @@ export default function ScrutinyWorkbenchPage() {
                   </pre>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Tab 5: Committee Deliberation Stream (Live SHC & EVC Deliberation Stream via GroupChat) */}
+          {activeInspectorTab === 'COMMITTEE_DELIBERATION' && (
+            <div className="flex-1 flex flex-col h-full min-h-0 overflow-hidden text-xs">
+              {/* Channel and Committee Status Banner */}
+              <div className="p-3 border-b border-[var(--glass-well-border)] bg-white/40 dark:bg-black/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <div>
+                    <h4 className="font-bold text-[var(--text-primary)] text-xs flex items-center gap-1.5">
+                      <span>Standing Hearing Committee (SHC) Deliberation</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold">
+                        #shc-{application.id.toLowerCase()}
+                      </span>
+                    </h4>
+                    <p className="text-[10px] text-[var(--text-muted)]">
+                      Statutory quorum: RO-04 Verma, EVC Sharma, TruFor AI Sentinel, DPI Auditor
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-[10px] text-[var(--text-muted)]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>SHA-256 Ledger Chained</span>
+                </div>
+              </div>
+
+              {/* GroupChat Deliberation Feed */}
+              <div className="flex-1 overflow-y-auto p-3.5 min-h-0">
+                <GroupChat
+                  channel={`shc-${application.id.toLowerCase()}`}
+                  members={["ro-verma", "evc-sharma", "trufor-sentinel", "dpi-auditor"]}
+                  extra={3}
+                  messages={chatMessages}
+                  className="bg-transparent border-0 shadow-none"
+                />
+              </div>
+
+              {/* Interactive Deliberation Note Composer */}
+              <div className="p-3 border-t border-[var(--glass-well-border)] bg-white/50 dark:bg-slate-900/40 shrink-0 space-y-1.5">
+                <form onSubmit={handleSendChatMessage} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={newChatMessage}
+                    onChange={(e) => setNewChatMessage(e.target.value)}
+                    placeholder="Type official scrutiny note into committee record..."
+                    className="flex-1 px-3.5 py-2.5 rounded-xl glass-well text-xs font-medium text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!newChatMessage.trim()}
+                    className="btn-liquid-primary px-3.5 py-2.5 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-sm"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Send Note</span>
+                  </button>
+                </form>
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] px-1">
+                  <span>Signatory: <strong>Shri R.K. Verma (RO-04)</strong></span>
+                  <span className="font-mono">Auto-generates SHA-256 Block Digest</span>
+                </div>
+              </div>
             </div>
           )}
         </div>

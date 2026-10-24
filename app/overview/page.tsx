@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { useLanguage, useFilters } from '@/lib/context';
 import { REGIONAL_STATS, MOCK_APPLICATIONS, InstitutionalApplication } from '@/lib/mock-data';
+import GlassFolder, { FolderFile, FolderMenuItem } from '@/components/ui/glass-folder-cards';
 import { toast } from 'sonner';
 import {
   ArrowUpRight,
@@ -17,13 +19,37 @@ import {
   X,
   Eye,
   Sparkles,
+  FolderArchive,
+  ShieldAlert,
+  Clock,
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 export default function OverviewPage() {
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
   const { t, language } = useLanguage();
   const { filters, filteredApplications, setFilters, applications } = useFilters();
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+
+  // Responsive GlassFolder width for Statutory Evidence Vaults
+  const [vaultFolderWidth, setVaultFolderWidth] = useState<number>(330);
+  const [isVaultSectionOpen, setIsVaultSectionOpen] = useState<boolean>(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setVaultFolderWidth(window.innerWidth < 420 ? 285 : 330);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const folderTone: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
 
   // Quick-Look Forensic Modal State
   const [quickLookApp, setQuickLookApp] = useState<InstitutionalApplication | null>(null);
@@ -88,7 +114,7 @@ export default function OverviewPage() {
         ghostFaculty: ghost.toLocaleString(),
         ghostColleges: `${Math.round(ghost * 0.32)} Institutions`,
         authorityRate: '98.2%',
-        authorityLatency: '148ms latency',
+        authorityLatency: '148ms avg',
       };
     }
 
@@ -110,7 +136,7 @@ export default function OverviewPage() {
       ghostFaculty: ghost.toLocaleString(),
       ghostColleges: '94 Institutions',
       authorityRate: '98.4%',
-      authorityLatency: '142ms latency',
+      authorityLatency: '142ms avg',
     };
   }, [activeRegionStat, applications, filters.region]);
 
@@ -274,7 +300,7 @@ export default function OverviewPage() {
           </div>
           <div className="flex items-baseline justify-between gap-2 my-2">
             <span className="metric-value">{dynamicKpis.authorityRate}</span>
-            <span className="px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-semibold inline-flex items-center gap-0.5">
+            <span className="px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-semibold inline-flex items-center gap-0.5 whitespace-nowrap">
               {dynamicKpis.authorityLatency}
             </span>
           </div>
@@ -334,6 +360,316 @@ export default function OverviewPage() {
             <span>{t.btnGenerateNotice}</span>
           </button>
         </div>
+      </section>
+
+      {/* =========================================================================
+          ACTIVE STATUTORY EVIDENCE VAULTS (3D GLASS FOLDERS)
+          (Interactive 3D Evidence Pockets with Action='more' Context Menus)
+          ========================================================================= */}
+      <section className="liquid-glass-card rounded-[22px] p-4 sm:p-6 space-y-4 shadow-lg border border-[var(--glass-border)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--glass-well-border)] pb-3.5">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
+              <FolderArchive className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                  Active Statutory Evidence Vaults (3D Glass Folders)
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[10px] font-bold">
+                  Live 3D Forensic Pockets
+                </span>
+              </div>
+              <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-0.5">
+                Statutory Physical &amp; Digital Document Repositories
+              </h2>
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                Hover to tilt and click to expand 3D glass dossier folders • Use &apos;•••&apos; menu to open workbench, verify DPI, or escalate summons
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-end sm:self-center">
+            <button
+              onClick={() => setIsVaultSectionOpen((prev) => !prev)}
+              className="btn-liquid-secondary px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            >
+              <span>{isVaultSectionOpen ? 'Collapse Vaults' : 'Expand Vaults'}</span>
+              {isVaultSectionOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
+            <Link
+              href="/applications"
+              className="btn-liquid-primary px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs"
+            >
+              <span>All Folders</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        {isVaultSectionOpen && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 items-start">
+            {/* Vault 1: Fatal Forgery Dossiers */}
+            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-4 top-rule-fatal shadow-md">
+              <div className="w-full space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="pill-fatal text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <ShieldAlert className="w-3 h-3 text-rose-600 animate-pulse" />
+                    RPN ≥ 850 Gate Veto
+                  </span>
+                  <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">
+                    18.9% Spike
+                  </span>
+                </div>
+                <h3 className="font-bold text-sm text-[var(--text-primary)] pt-1">
+                  1. Fatal Forgery Dossiers Vault
+                </h3>
+                <p className="text-[11px] text-[var(--text-muted)]">
+                  Adversarially spliced Fire NOCs, synthetic seals, and dual-employment manifests
+                </p>
+              </div>
+
+              <div className="py-2 flex justify-center w-full overflow-visible">
+                <GlassFolder
+                  width={vaultFolderWidth}
+                  tone={folderTone}
+                  art="ember"
+                  label="Fatal Forgeries"
+                  meta="3 Critical Dossiers"
+                  files={[
+                    {
+                      name: 'NW-0842 Fire NOC (Spliced 2027).pdf',
+                      meta: 'RPN 912 · TruFor 97.4%',
+                      art: 'ember',
+                      href: '/applications/AICTE-2026-NW-0842',
+                    },
+                    {
+                      name: 'EPFO UAN Dual-Employment Roll.csv',
+                      meta: '3 Ghost Faculty Flagged',
+                      art: 'dusk',
+                      href: '/applications/AICTE-2026-NW-0842',
+                    },
+                    {
+                      name: 'Land Sale Deed Index-II Splicing.pdf',
+                      meta: '2.1 vs 2.5 Contiguous Acres',
+                      art: 'ember',
+                      href: '/applications/AICTE-2026-NW-0842',
+                    },
+                  ]}
+                  action="more"
+                  menu={[
+                    {
+                      label: 'Open in Scrutiny Workbench',
+                      onSelect: () => router.push('/applications/AICTE-2026-NW-0842'),
+                    },
+                    {
+                      label: 'Verify via Authority Bridge',
+                      onSelect: () => router.push('/authority-bridge'),
+                    },
+                    {
+                      label: 'Escalate to SHC Show-Cause',
+                      danger: true,
+                      onSelect: () => handleGenerateNoticeToast('AICTE-2026-NW-0842'),
+                    },
+                  ]}
+                  onFileSelect={(file) => {
+                    toast.info(`Opening Fatal Anomaly: ${file.name}`, {
+                      description: 'Loading multi-spectral TruFor canvas in Scrutiny Workbench...',
+                    });
+                    router.push('/applications/AICTE-2026-NW-0842');
+                  }}
+                />
+              </div>
+
+              <div className="w-full pt-2.5 border-t border-[var(--glass-well-border)] flex items-center justify-between text-xs">
+                <span className="text-[11px] text-[var(--text-muted)] font-mono">
+                  3 Inactive / Quarantined
+                </span>
+                <Link
+                  href="/deficiencies?appId=AICTE-2026-NW-0842"
+                  className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1"
+                >
+                  <span>Draft Form-B Order</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Vault 2: EVC 15-Day Rectification Queue */}
+            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-4 top-rule-deficiency shadow-md">
+              <div className="w-full space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="pill-deficiency text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-amber-600" />
+                    15-Day Clock Active
+                  </span>
+                  <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400">
+                    42 In Rectification
+                  </span>
+                </div>
+                <h3 className="font-bold text-sm text-[var(--text-primary)] pt-1">
+                  2. EVC Rectification Queue Vault
+                </h3>
+                <p className="text-[11px] text-[var(--text-muted)]">
+                  Architectural Shoelace shortfall, cadre imbalance, and e-District verification gaps
+                </p>
+              </div>
+
+              <div className="py-2 flex justify-center w-full overflow-visible">
+                <GlassFolder
+                  width={vaultFolderWidth}
+                  tone={folderTone}
+                  art="dusk"
+                  label="EVC Shortfalls"
+                  meta="4 Pending Filings"
+                  files={[
+                    {
+                      name: 'CAD Lab Floor Polygon Deficit.dwg',
+                      meta: '48.0 m² actual vs 66.0 m² label',
+                      art: 'dusk',
+                      href: '/applications/AICTE-2026-SO-0914',
+                    },
+                    {
+                      name: 'Cadre Ratio Professor Shortfall.pdf',
+                      meta: 'Prof 2/7 · SFR UG 1:27.2',
+                      art: 'aurora',
+                      href: '/applications/AICTE-2026-SO-0914',
+                    },
+                    {
+                      name: 'State Jamabandi Revenue Survey.pdf',
+                      meta: 'Plot Contiguity Gap (0.42 km)',
+                      art: 'glacier',
+                      href: '/applications/AICTE-2026-SO-0914',
+                    },
+                  ]}
+                  action="more"
+                  menu={[
+                    {
+                      label: 'Open in Scrutiny Workbench',
+                      onSelect: () => router.push('/applications/AICTE-2026-SO-0914'),
+                    },
+                    {
+                      label: 'Verify via Authority Bridge',
+                      onSelect: () => router.push('/authority-bridge'),
+                    },
+                    {
+                      label: 'Dispatch 15-Day Form-A Notice',
+                      onSelect: () => handleGenerateNoticeToast('AICTE-2026-SO-0914'),
+                    },
+                  ]}
+                  onFileSelect={(file) => {
+                    toast.info(`Opening Rectification Dossier: ${file.name}`, {
+                      description: 'Loading Blueprint CV & CAD vector viewer...',
+                    });
+                    router.push('/applications/AICTE-2026-SO-0914');
+                  }}
+                />
+              </div>
+
+              <div className="w-full pt-2.5 border-t border-[var(--glass-well-border)] flex items-center justify-between text-xs">
+                <span className="text-[11px] text-[var(--text-muted)] font-mono">
+                  14d 23h Remaining
+                </span>
+                <Link
+                  href="/deficiencies?appId=AICTE-2026-SO-0914"
+                  className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1"
+                >
+                  <span>Form-A Notice</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Vault 3: Auto-Cleared 3-Year EoA Vault */}
+            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-4 top-rule-verified shadow-md">
+              <div className="w-full space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="pill-verified text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3 text-emerald-600" />
+                    Zero Shortfall Verified
+                  </span>
+                  <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                    68.4% Auto-Cleared
+                  </span>
+                </div>
+                <h3 className="font-bold text-sm text-[var(--text-primary)] pt-1">
+                  3. Auto-Cleared 3-Year EoA Vault
+                </h3>
+                <p className="text-[11px] text-[var(--text-muted)]">
+                  100% DPI cross-verified with DigiLocker pull URI, EPFO clean payroll, and CAD FSI
+                </p>
+              </div>
+
+              <div className="py-2 flex justify-center w-full overflow-visible">
+                <GlassFolder
+                  width={vaultFolderWidth}
+                  tone={folderTone}
+                  art="verdant"
+                  label="Approved 3-Yr EoA"
+                  meta="5 Verified Deeds"
+                  files={[
+                    {
+                      name: 'DigiLocker Certified Land Deed.pdf',
+                      meta: '12.4 Acres Contiguous · Verified',
+                      art: 'verdant',
+                      href: '/applications/AICTE-2026-WE-0721',
+                    },
+                    {
+                      name: 'EPFO ECR Clean Payroll Roll.csv',
+                      meta: '124 Faculty · 0 UAN Conflicts',
+                      art: 'glacier',
+                      href: '/applications/AICTE-2026-WE-0721',
+                    },
+                    {
+                      name: 'Smart Campus Green FSI Rating.pdf',
+                      meta: 'FSI 1.68 vs Sanctioned 2.0',
+                      art: 'verdant',
+                      href: '/applications/AICTE-2026-WE-0721',
+                    },
+                  ]}
+                  action="more"
+                  menu={[
+                    {
+                      label: 'Open in Scrutiny Workbench',
+                      onSelect: () => router.push('/applications/AICTE-2026-WE-0721'),
+                    },
+                    {
+                      label: 'Verify via Authority Bridge',
+                      onSelect: () => router.push('/authority-bridge'),
+                    },
+                    {
+                      label: 'Print Statutory Approval Letter',
+                      onSelect: () => {
+                        toast.success('Generated 3-Year EoA Approval Certificate for AICTE-2026-WE-0721');
+                        router.push('/deficiencies?appId=AICTE-2026-WE-0721');
+                      },
+                    },
+                  ]}
+                  onFileSelect={(file) => {
+                    toast.info(`Opening Compliant Dossier: ${file.name}`, {
+                      description: 'Inspecting verified statutory credentials...',
+                    });
+                    router.push('/applications/AICTE-2026-WE-0721');
+                  }}
+                />
+              </div>
+
+              <div className="w-full pt-2.5 border-t border-[var(--glass-well-border)] flex items-center justify-between text-xs">
+                <span className="text-[11px] text-[var(--text-muted)] font-mono">
+                  Valid 2024–2027
+                </span>
+                <Link
+                  href="/authority-bridge"
+                  className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                >
+                  <span>DPI Proofs</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* =========================================================================

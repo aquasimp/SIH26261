@@ -1,7 +1,32 @@
 @import "tailwindcss";
+@import "blobatar/motion.css";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+}
+
 :root {
+  --background: #F3F6FA;
+  --foreground: #0F172A;
+  --card: rgba(255, 255, 255, 0.86);
+  --card-foreground: #0F172A;
+  --border: rgba(203, 213, 225, 0.9);
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #E2E8F0;
+  --accent-foreground: #0F172A;
+  --ring: #94A3B8;
+
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -43,36 +68,63 @@
 }
 
 .dark {
-  --bg-canvas: #070B14;
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
-  --text-faint: #64748B;
+  color-scheme: dark;
 
-  /* Crisp 1px Structural Liquid Glass (Dark Mode) */
-  --glass-bg: rgba(15, 23, 42, 0.82);
-  --glass-bg-hover: rgba(22, 33, 58, 0.92);
-  --glass-border: rgba(51, 65, 85, 0.85);
-  --glass-border-strong: rgba(71, 85, 105, 1);
+  /* True OLED Pitch-Black & Carbon Hierarchy */
+  --bg-canvas: #030304;
+  --text-primary: #FAFAFC;
+  --text-secondary: #D4D4D8;
+  --text-muted: #8E8E98;
+  --text-faint: #52525B;
+
+  /* Shadcn Semantic Tokens (Obsidian Dark) */
+  --background: #030304;
+  --foreground: #FAFAFC;
+  --card: #09090B;
+  --card-foreground: #FAFAFC;
+  --popover: #09090B;
+  --popover-foreground: #FAFAFC;
+  --primary: #FAFAFC;
+  --primary-foreground: #050507;
+  --secondary: #121215;
+  --secondary-foreground: #E4E4E7;
+  --muted: #0E0E11;
+  --muted-foreground: #8E8E98;
+  --accent: #16161A;
+  --accent-foreground: #FAFAFC;
+  --border: rgba(255, 255, 255, 0.075);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: rgba(255, 255, 255, 0.22);
+
+  /* Smoked Obsidian Liquid Glass Surface (Zero Navy Tint) */
+  --glass-bg: linear-gradient(180deg, rgba(17, 17, 20, 0.88) 0%, rgba(10, 10, 12, 0.94) 100%);
+  --glass-bg-hover: linear-gradient(180deg, rgba(24, 24, 28, 0.92) 0%, rgba(14, 14, 17, 0.96) 100%);
+  --glass-border: rgba(255, 255, 255, 0.075);
+  --glass-border-strong: rgba(255, 255, 255, 0.15);
   --glass-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.10),
-    0 2px 4px rgba(0, 0, 0, 0.4),
-    0 12px 24px -6px rgba(0, 0, 0, 0.55);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 4px 12px rgba(0, 0, 0, 0.65),
+    0 20px 44px -10px rgba(0, 0, 0, 0.88);
   --glass-shadow-hover:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
-    0 6px 14px -2px rgba(0, 0, 0, 0.55),
-    0 18px 32px -8px rgba(0, 0, 0, 0.7);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 8px 20px rgba(0, 0, 0, 0.75),
+    0 24px 52px -8px rgba(0, 0, 0, 0.95);
 
-  /* Recessed Inner Well (Dark Mode — NO nested blur) */
-  --well-bg: rgba(9, 14, 26, 0.78);
-  --well-border: rgba(51, 65, 85, 0.75);
-  --well-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.04);
+  /* Recessed Carbon Well — Deep Pitch Black Inner Surface */
+  --well-bg: #050507;
+  --well-border: rgba(255, 255, 255, 0.065);
+  --well-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(255, 255, 255, 0.045);
 
   /* Fallback aliases for compatibility */
   --glass-well-bg: var(--well-bg);
   --glass-well-border: var(--well-border);
   --glass-well-shadow: var(--well-shadow);
 
+  /* Luminous Jewel-Tone Regulatory Accents on Black */
   --rule-fatal: #FB7185;
   --rule-deficiency: #FBBF24;
   --rule-verified: #34D399;
@@ -104,10 +156,12 @@ body {
 }
 
 .dark body {
+  background-color: #030304;
   background-image:
-    radial-gradient(ellipse 75% 35% at 50% 0%, rgba(14, 165, 233, 0.08), transparent 70%),
-    radial-gradient(rgba(51, 65, 85, 0.25) 1px, transparent 1px);
-  background-size: 100% 100%, 24px 24px;
+    radial-gradient(ellipse 75% 32% at 50% -5%, rgba(255, 255, 255, 0.045), transparent 70%),
+    radial-gradient(ellipse 50% 25% at 80% 0%, rgba(14, 165, 233, 0.035), transparent 65%),
+    radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
 }
 
 /* Primary Structural Glass Card — Crisp 12px Blur + 1px Solid Border + Specular Top Hairline */
@@ -146,6 +200,26 @@ body {
   box-shadow: var(--well-shadow);
 }
 
+/* Ensure .liquid-glass-card and .glass-interactive support gradient backgrounds cleanly */
+.dark .liquid-glass-card,
+.dark .glass-interactive {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.dark .glass-interactive:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.dark .glass-well {
+  background: var(--well-bg);
+  border-color: var(--well-border);
+  box-shadow: var(--well-shadow);
+}
+
 .btn-liquid-primary {
   background: #0F172A;
   color: #F8FAFC;
@@ -154,11 +228,15 @@ body {
   transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* High-Contrast Titanium White Primary Button in Dark Mode */
 .dark .btn-liquid-primary {
-  background: #F8FAFC;
-  color: #090D16;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 100%);
+  color: #050507;
   border: 1px solid #FFFFFF;
-  box-shadow: inset 0 1px 0 0 #FFFFFF, 0 2px 6px rgba(14, 165, 233, 0.2);
+  box-shadow:
+    inset 0 1px 0 0 #FFFFFF,
+    0 2px 12px rgba(255, 255, 255, 0.14),
+    0 8px 20px -4px rgba(0, 0, 0, 0.8);
 }
 
 .btn-liquid-primary:hover {
@@ -175,12 +253,17 @@ body {
 }
 
 .dark .btn-liquid-secondary {
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, #141418 0%, #0B0B0E 100%);
+  color: #F4F4F5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.65);
 }
 
-.btn-liquid-secondary:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--glass-border-strong);
+.dark .btn-liquid-secondary:hover {
+  background: linear-gradient(180deg, #1C1C22 0%, #111115 100%);
+  border-color: rgba(255, 255, 255, 0.18);
   transform: translateY(-1px);
 }
 
@@ -294,10 +377,45 @@ select option {
   color: #0f172a;
 }
 
+/* Native <select> options in Dark Mode must be pitch-black, never browser-gray */
 .dark select option,
 html.dark select option {
-  background-color: #1e293b;
-  color: #f8fafc;
+  background-color: #09090B;
+  color: #FAFAFC;
 }
+
+/* Neutralize any hardcoded dark:*-slate-* classes across all pages into Pure Carbon/Obsidian */
+.dark .dark\:bg-slate-950 { background-color: #030304 !important; }
+.dark .dark\:bg-slate-950\/70 { background-color: rgba(3, 3, 4, 0.72) !important; }
+.dark .dark\:bg-slate-900 { background-color: #09090B !important; }
+.dark .dark\:bg-slate-900\/90 { background-color: rgba(9, 9, 11, 0.92) !important; }
+.dark .dark\:bg-slate-900\/80 { background-color: rgba(9, 9, 11, 0.84) !important; }
+.dark .dark\:bg-slate-900\/60 { background-color: rgba(9, 9, 11, 0.65) !important; }
+.dark .dark\:bg-slate-900\/50 { background-color: rgba(9, 9, 11, 0.55) !important; }
+.dark .dark\:bg-slate-900\/40 { background-color: rgba(9, 9, 11, 0.45) !important; }
+.dark .dark\:bg-slate-800 { background-color: #141418 !important; }
+.dark .dark\:bg-slate-800\/80 { background-color: rgba(20, 20, 24, 0.82) !important; }
+.dark .dark\:bg-slate-800\/60 { background-color: rgba(20, 20, 24, 0.62) !important; }
+.dark .dark\:bg-slate-800\/50 { background-color: rgba(20, 20, 24, 0.52) !important; }
+.dark .dark\:bg-slate-800\/40 { background-color: rgba(20, 20, 24, 0.42) !important; }
+.dark .dark\:bg-slate-700 { background-color: #1a1a20 !important; }
+.dark .dark\:bg-slate-700\/40 { background-color: rgba(26, 26, 32, 0.42) !important; }
+
+.dark .dark\:border-slate-800,
+.dark .dark\:border-slate-800\/80,
+.dark .dark\:border-slate-800\/60,
+.dark .dark\:border-slate-700 {
+  border-color: rgba(255, 255, 255, 0.075) !important;
+}
+
+.dark .dark\:divide-slate-800 > :not([hidden]) ~ :not([hidden]),
+.dark .dark\:divide-slate-800\/80 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+.dark .dark\:text-slate-400 { color: #9E9EA8 !important; }
+.dark .dark\:text-slate-500 { color: #71717A !important; }
+.dark .dark\:text-slate-300 { color: #D4D4D8 !important; }
+.dark .dark\:text-slate-200 { color: #E4E4E7 !important; }
 
 nextjs-portal { display: none !important; }

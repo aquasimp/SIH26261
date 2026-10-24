@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useLanguage, useFilters } from '@/lib/context';
 import { InstitutionalApplication } from '@/lib/mock-data';
 import { computeSha256 } from '@/lib/crypto-utils';
+import GroupChat, { ChatMessage } from '@/components/ui/group-chat';
 import { toast } from 'sonner';
 import { AICTELogo } from '@/components/brand/AICTELogo';
 import {
@@ -25,6 +26,7 @@ import {
   X,
   ExternalLink,
   ShieldAlert,
+  MessageSquare,
 } from 'lucide-react';
 
 function DeficienciesContent() {
@@ -59,6 +61,83 @@ function DeficienciesContent() {
       setFormType('FORM_A');
     }
   }, [application.fatalGateTriggered]);
+
+  // Dynamic Deliberation Stream Seeding based on Institution Anomalies
+  const getDeliberationMessages = (app: InstitutionalApplication, currentFormType: 'FORM_A' | 'FORM_B'): ChatMessage[] => {
+    const topAnom = app.anomalies[0];
+    const isFatal = app.fatalGateTriggered || currentFormType === 'FORM_B';
+    const hasGhost = app.facultyMetrics.ghostFlaggedCount > 0;
+
+    return [
+      {
+        name: 'trufor-sentinel',
+        title: 'TruFor AI Sentinel',
+        text: topAnom
+          ? `[FORENSIC EVIDENCE] Tamper localization confirmed on ${topAnom.documentTitle} with ${(topAnom.tamperProbability * 100).toFixed(1)}% confidence. ${topAnom.modelUsed} identified adversarial splice window altering dates.`
+          : `[FORENSIC EVIDENCE] Multi-spectral validation complete: Zero tampering detected. All uploaded credentials match issuing repository hash.`,
+        time: '09:42 AM',
+      },
+      {
+        name: 'dpi-auditor',
+        title: 'API Setu / EPFO Auditor',
+        text: hasGhost
+          ? `[DPI AUDIT] DigiLocker URI & EPFO gateway reconciliation completed. Flagged ${app.facultyMetrics.ghostFlaggedCount} ghost faculty entries with concurrent EPFO payroll in other institutes.`
+          : `[DPI AUDIT] DigiLocker pull URI handshake verified. Land sale deed acreage verified at ${app.landAndBuiltUp.landAvailableAcres} acres with Jamabandi GIS.`,
+        time: '09:48 AM',
+      },
+      {
+        name: 'evc-sharma',
+        title: 'Dr. A. Sharma (EVC)',
+        text: isFatal
+          ? `Physical inspection concurs with TruFor Sentinel. Institutional trust has failed to produce original non-expired NOC. Immediate SHC summons is mandatory.`
+          : `15-day rectification window is sufficient for institution to rectify CAD instructional area shortfalls and file verified faculty affidavit under APH Chapter VII.`,
+        time: '09:55 AM',
+      },
+      {
+        name: 'ro-verma',
+        title: 'Shri R.K. Verma (RO-04)',
+        text: isFatal
+          ? `Drafting Form-B Standing Hearing Committee Show-Cause Order under APH Chapter VIII. Ready for cryptographic Class-3 DSC endorsement.`
+          : `Drafting Form-A 15-Day EVC Rectification Notice under APH Chapter VII Clause 2.1. Ready for cryptographic Class-3 DSC endorsement.`,
+        time: '10:05 AM',
+      },
+    ];
+  };
+
+  const [deliberationMessages, setDeliberationMessages] = useState<ChatMessage[]>(() =>
+    getDeliberationMessages(application, formType)
+  );
+  const [deliberationInput, setDeliberationInput] = useState<string>('');
+
+  useEffect(() => {
+    setDeliberationMessages(getDeliberationMessages(application, formType));
+  }, [application.id, formType]);
+
+  const handleAddDeliberationNote = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!deliberationInput.trim()) return;
+
+    const note = deliberationInput.trim();
+    const timeStr = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+    setDeliberationMessages((prev) => [
+      ...prev,
+      {
+        name: 'ro-verma',
+        title: 'Shri R.K. Verma (RO-04)',
+        text: note,
+        time: timeStr,
+      },
+    ]);
+    setDeliberationInput('');
+
+    const digest = await computeSha256(
+      `DELIBERATION_ENDORSEMENT|${application.id}|${formType}|${note}|${new Date().toISOString()}`
+    );
+    toast.success('Deliberation Endorsement Appended to SHC Record', {
+      description: `Cryptographic SHA-256 certificate (${digest.slice(0, 16)}...) attached to official scrutiny dossier.`,
+    });
+  };
 
   // Notice Language Toggle ('en' | 'hi' | 'bilingual')
   const [noticeLang, setNoticeLang] = useState<'en' | 'hi' | 'bilingual'>('bilingual');
@@ -331,8 +410,75 @@ function DeficienciesContent() {
         </div>
       </div>
 
-      {/* Official Government Order Sheet */}
-      <div className="rounded-[18px] p-5 sm:p-10 space-y-6 liquid-glass-card shadow-2xl print:border-none print:shadow-none">
+      {/* 2-Column Responsive Workspace: Committee Deliberation Log alongside Official Order Sheet */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+        {/* Left Column (xl:col-span-4): Live Committee Deliberation Stream */}
+        <div className="xl:col-span-4 space-y-4 print:hidden">
+          <div className="liquid-glass-card rounded-[18px] p-4 space-y-3.5 shadow-md border border-[var(--glass-border)]">
+            <div className="border-b border-[var(--glass-well-border)] pb-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Statutory Deliberation Record
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold">
+                  #shc-{application.id.toLowerCase()}
+                </span>
+              </div>
+              <h3 className="font-bold text-sm text-[var(--text-primary)] mt-1 flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-sky-600" />
+                <span>Committee Forensic Stream</span>
+              </h3>
+              <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                Pre-sign deliberation transcript between Regional Officer, EVC Chair, TruFor Sentinel, and API Setu Auditor
+              </p>
+            </div>
+
+            {/* Deliberation GroupChat Feed */}
+            <div className="max-h-[560px] overflow-y-auto pr-1">
+              <GroupChat
+                channel={`shc-${application.id.toLowerCase()}`}
+                members={["ro-verma", "evc-sharma", "trufor-sentinel", "dpi-auditor"]}
+                extra={3}
+                messages={deliberationMessages}
+                className="bg-transparent border-0 shadow-none p-0"
+              />
+            </div>
+
+            {/* Officer Deliberation Endorsement Input */}
+            <div className="pt-3 border-t border-[var(--glass-well-border)] space-y-2">
+              <form onSubmit={handleAddDeliberationNote} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={deliberationInput}
+                  onChange={(e) => setDeliberationInput(e.target.value)}
+                  placeholder="Record officer endorsement note before DSC signing..."
+                  className="flex-1 px-3 py-2 rounded-xl glass-well text-xs font-medium text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:outline-none focus:ring-1 focus:ring-sky-500"
+                />
+                <button
+                  type="submit"
+                  disabled={!deliberationInput.trim()}
+                  className="btn-liquid-primary px-3 py-2 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-2xs"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Post</span>
+                </button>
+              </form>
+              <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] px-0.5">
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  Signatory: <strong>Shri R.K. Verma (RO-04)</strong>
+                </span>
+                <span className="font-mono">SHA-256 Ledger Chained</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column (xl:col-span-8): Official Government Order Sheet */}
+        <div className="xl:col-span-8 space-y-6">
+          {/* Official Government Order Sheet */}
+          <div className="rounded-[18px] p-5 sm:p-10 space-y-6 liquid-glass-card shadow-2xl print:border-none print:shadow-none">
         {/* National Emblem & AICTE Official Header */}
         <div className="text-center pb-6 border-b border-[var(--glass-border)] space-y-1.5">
           {/* Official AICTE Emblem Insignia */}
@@ -552,6 +698,8 @@ function DeficienciesContent() {
               </button>
             )}
           </div>
+        </div>
+      </div>
         </div>
       </div>
 
