@@ -567,7 +567,7 @@ export default function AuthorityBridgePage() {
 
       {/* Live Handshake Stepper */}
       {simulationStep > 0 && (
-        <div className="liquid-glass-card rounded-2xl p-5 border border-sky-500/30 bg-sky-500/5 space-y-3.5">
+        <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 border border-sky-500/30 bg-sky-500/5 space-y-3.5">
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
               <RefreshCw className={`w-3.5 h-3.5 text-sky-600 dark:text-sky-400 ${isSimulating ? 'animate-spin' : ''}`} />
@@ -629,7 +629,7 @@ export default function AuthorityBridgePage() {
       )}
 
       {/* Deterministic Six-State FSM Grid */}
-      <div className="liquid-glass-card rounded-2xl p-5 space-y-3">
+      <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between">
           <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
             Deterministic Six-State Regulatory Verification Protocol
@@ -697,7 +697,7 @@ export default function AuthorityBridgePage() {
       </div>
 
       {/* Main Console Navigation Tabs */}
-      <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
+      <div className="liquid-glass-card rounded-[18px] overflow-hidden shadow-sm">
         <div className="p-3 border-b border-[var(--glass-border)] glass-well flex flex-wrap items-center justify-between gap-3 text-xs font-semibold">
           <div className="inline-flex rounded-xl p-1 glass-well">
             <button
@@ -872,31 +872,32 @@ export default function AuthorityBridgePage() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Authoritative XML */}
-                <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
+                <div className="liquid-glass-card rounded-[18px] overflow-hidden shadow-sm">
                   <div className="px-4 py-2.5 border-b border-[var(--glass-border)] glass-well text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
                     <span>1. Authoritative DPI DataContent (Decoded XML)</span>
                     <span className="text-[10px] text-[var(--text-muted)]">State Gateway Master</span>
                   </div>
-                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
+                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto break-all sm:break-normal whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
                     {activePreset.authoritativeXml}
                   </pre>
                 </div>
 
                 {/* Uploaded Document JSON */}
-                <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
+                <div className="liquid-glass-card rounded-[18px] overflow-hidden shadow-sm">
                   <div className="px-4 py-2.5 border-b border-[var(--glass-border)] glass-well text-xs font-semibold text-sky-600 dark:text-sky-400 flex items-center justify-between">
                     <span>2. Uploaded Institutional PDF (LayoutLMv3 OCR JSON)</span>
                     <span className="text-[10px] text-[var(--text-muted)]">Applicant Submission</span>
                   </div>
-                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
+                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto break-all sm:break-normal whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
                     {activePreset.uploadedJson}
                   </pre>
                 </div>
               </div>
 
               {/* Exact Attribute Reconciliation Table */}
-              <div className="liquid-glass-card rounded-2xl overflow-hidden mt-4">
-                <table className="w-full text-left text-xs">
+              <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 overflow-hidden mt-4">
+                <div className="w-full overflow-x-auto rounded-xl">
+                  <table className="w-full min-w-[760px] text-left border-collapse text-xs">
                   <thead className="glass-well text-[10.5px] uppercase tracking-wider text-[var(--text-muted)] font-semibold border-b border-[var(--glass-border)]">
                     <tr>
                       <th className="py-3 px-4">Statutory Attribute</th>
@@ -957,6 +958,7 @@ export default function AuthorityBridgePage() {
               </div>
             </div>
           </div>
+        </div>
         )}
 
         {/* Console View 2: EPFO ECR 2.0 & 50% Basic Wage Rule Inspector */}
@@ -981,8 +983,9 @@ export default function AuthorityBridgePage() {
             </div>
 
             {/* Interactive Wage & Shortfall Table */}
-            <div className="liquid-glass-card rounded-2xl overflow-x-auto shadow-sm">
-              <table className="w-full text-left text-xs min-w-[950px]">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 overflow-hidden shadow-sm">
+              <div className="w-full overflow-x-auto rounded-xl">
+                <table className="w-full text-left text-xs min-w-[950px] border-collapse">
                 <thead className="glass-well text-[10.5px] font-semibold uppercase tracking-wider text-[var(--text-muted)] border-b border-[var(--glass-border)]">
                   <tr>
                     <th className="py-3 px-3.5">Faculty / 12-Digit UAN</th>
@@ -1139,6 +1142,7 @@ export default function AuthorityBridgePage() {
                 </tbody>
               </table>
             </div>
+          </div>
 
             {/* Qdrant 512-D ArcFace HNSW ANN Search Simulator */}
             <div className="p-5 rounded-2xl border border-indigo-500/20 bg-slate-950 space-y-4 shadow-xl text-slate-200">
@@ -1265,7 +1269,7 @@ export default function AuthorityBridgePage() {
                 <span className="text-xs text-[var(--text-muted)] font-mono">ECDSA secp256r1 (88ms latency)</span>
               </div>
 
-              <div className="p-5 rounded-2xl bg-slate-950/90 text-slate-200 font-mono text-xs overflow-x-auto space-y-2 border border-white/10 shadow-xl">
+              <div className="p-4 sm:p-5 rounded-[18px] bg-slate-950/90 text-slate-200 font-mono text-xs overflow-x-auto break-all sm:break-normal space-y-2 border border-white/10 shadow-xl">
                 <div className="text-slate-500">
                   // Decoded JSON Web Signature (JWS) Payload from Fire NOC 2D QR Code Matrix
                 </div>
@@ -1297,7 +1301,7 @@ export default function AuthorityBridgePage() {
             </div>
 
             {/* Strict FQDN Whitelist & Domain Spoofing Inspector */}
-            <div className="liquid-glass-card rounded-2xl p-5 space-y-3.5">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-3.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <div>
                   <h4 className="font-semibold text-[var(--text-primary)]">

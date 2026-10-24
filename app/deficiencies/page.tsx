@@ -193,7 +193,7 @@ function DeficienciesContent() {
       </div>
 
       {/* Control Strip: Document Type Toggle & Language Selector */}
-      <div className="p-4 rounded-2xl liquid-glass-card flex flex-wrap items-center justify-between gap-3 shadow-xs">
+      <div className="p-4 sm:p-5 rounded-[18px] liquid-glass-card flex flex-wrap items-center justify-between gap-3 shadow-xs">
         {/* Form A / Form B Toggle */}
         <div className="flex items-center gap-2.5">
           <span className="text-xs font-semibold text-[var(--text-secondary)]">
@@ -271,7 +271,7 @@ function DeficienciesContent() {
 
       {/* 15-Day EVC Rectification Countdown Clock */}
       <div
-        className={`p-5 rounded-2xl liquid-glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 border ${
+        className={`p-4 sm:p-5 rounded-[18px] liquid-glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 border ${
           isFatal
             ? 'border-rose-500/30'
             : 'border-amber-500/30'
@@ -332,7 +332,7 @@ function DeficienciesContent() {
       </div>
 
       {/* Official Government Order Sheet */}
-      <div className="rounded-3xl p-8 sm:p-12 space-y-6 liquid-glass-card shadow-2xl print:border-none print:shadow-none">
+      <div className="rounded-[18px] p-5 sm:p-10 space-y-6 liquid-glass-card shadow-2xl print:border-none print:shadow-none">
         {/* National Emblem & AICTE Official Header */}
         <div className="text-center pb-6 border-b border-[var(--glass-border)] space-y-1.5">
           {/* Official AICTE Emblem Insignia */}
@@ -562,7 +562,7 @@ function DeficienciesContent() {
           onClick={() => setIsDscModalOpen(false)}
         >
           <div
-            className="w-full max-w-lg liquid-glass-card rounded-2xl overflow-hidden shadow-2xl p-6 space-y-4"
+            className="w-full max-w-lg liquid-glass-card rounded-[18px] overflow-hidden shadow-2xl p-6 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-3">

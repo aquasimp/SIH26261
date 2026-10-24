@@ -489,3 +489,5 @@ export function AICTELogo({
     </div>
   );
 }
+
+export default AICTELogo;

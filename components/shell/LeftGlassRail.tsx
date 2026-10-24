@@ -3,172 +3,220 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useLanguage } from '@/lib/context';
-import { AICTELogo } from '@/components/brand/AICTELogo';
 import {
-  LayoutDashboard,
-  Building2,
-  FileSearch,
-  ScanEye,
-  Layers,
+  LayoutGrid,
+  FolderKanban,
+  ScanSearch,
+  ShieldAlert,
+  Compass,
   Network,
-  AlertTriangle,
-  History,
+  FileWarning,
+  Link2,
+  X,
 } from 'lucide-react';
+import AICTELogo from '@/components/brand/AICTELogo';
+import { useFilters, useLanguage } from '@/lib/context';
 
-export function LeftGlassRail() {
+export interface LeftGlassRailProps {
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
+}
+
+export function LeftGlassRail({ mobileOpen = false, onCloseMobile }: LeftGlassRailProps) {
   const pathname = usePathname();
-  const { t } = useLanguage();
+  const { applications } = useFilters();
+  const { t, language } = useLanguage();
+
+  const fatalCount = applications.filter((a) => a.scrutinyStatus === 'Fatal Fraud Alert').length;
+  const deficiencyCount = applications.filter((a) => a.scrutinyStatus === 'Deficiency Issued').length;
 
   const navGroups = [
     {
-      label: t.navCore,
+      groupLabel: language === 'hi' ? 'मुख्य इंटेलिजेंस' : 'CORE INTELLIGENCE',
       items: [
         {
           href: '/overview',
-          label: t.navOverview,
-          icon: LayoutDashboard,
+          label: t('nav.overview', 'Executive Overview'),
+          icon: LayoutGrid,
           badge: null,
-          badgeColor: '',
+          badgeClass: '',
         },
         {
           href: '/applications',
-          label: t.navApplications,
-          icon: Building2,
+          label: t('nav.applications', 'Institutional Registry'),
+          icon: FolderKanban,
           badge: '4,820',
-          badgeColor: 'border border-slate-300 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300',
+          badgeClass: 'glass-well text-slate-600 dark:text-slate-300',
         },
         {
           href: '/applications/AICTE-2026-NW-0842',
-          label: t.navWorkbench,
-          icon: FileSearch,
+          label: t('nav.workbench', 'Scrutiny Workbench'),
+          icon: ScanSearch,
           badge: 'LIVE',
-          badgeColor: 'border border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400 font-bold',
+          badgeClass: 'bg-rose-500/12 text-rose-600 dark:text-rose-300 border border-rose-500/25',
         },
       ],
     },
     {
-      label: t.navForensics,
+      groupLabel: language === 'hi' ? 'फॉरेंसिक और विज़न' : 'FORENSICS & VISION',
       items: [
         {
           href: '/forensics',
-          label: t.navForensicsStudio,
-          icon: ScanEye,
-          badge: '148',
-          badgeColor: 'border border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-400',
+          label: t('nav.forensics', 'Document Forensics'),
+          icon: ShieldAlert,
+          badge: String(146 + fatalCount),
+          badgeClass: 'bg-rose-500/12 text-rose-600 dark:text-rose-300 border border-rose-500/25',
         },
         {
           href: '/infrastructure',
-          label: t.navInfrastructure,
-          icon: Layers,
+          label: t('nav.infrastructure', 'Blueprint & Campus CV'),
+          icon: Compass,
           badge: '64',
-          badgeColor: 'border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400',
+          badgeClass: 'bg-amber-500/12 text-amber-700 dark:text-amber-300 border border-amber-500/25',
         },
       ],
     },
     {
-      label: t.navGovernance,
+      groupLabel: language === 'hi' ? 'गवर्नेंस और डीपीआई' : 'GOVERNANCE & DPI',
       items: [
         {
           href: '/authority-bridge',
-          label: t.navAuthorityBridge,
+          label: t('nav.authority', 'Authority Bridge (DPI)'),
           icon: Network,
           badge: '98.4%',
-          badgeColor: 'border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+          badgeClass: 'bg-emerald-500/12 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25',
         },
         {
           href: '/deficiencies',
-          label: t.navDeficiencies,
-          icon: AlertTriangle,
-          badge: null,
-          badgeColor: '',
+          label: t('nav.deficiencies', 'Deficiency & EVC Notices'),
+          icon: FileWarning,
+          badge: deficiencyCount > 0 ? String(deficiencyCount) : null,
+          badgeClass: 'bg-amber-500/12 text-amber-700 dark:text-amber-300 border border-amber-500/25',
         },
         {
           href: '/audit-trail',
-          label: t.navAuditTrail,
-          icon: History,
+          label: t('nav.audit', 'SHA-256 Audit Ledger'),
+          icon: Link2,
           badge: null,
-          badgeColor: '',
+          badgeClass: '',
         },
       ],
     },
   ];
 
   return (
-    <aside className="w-64 !fixed fixed top-3 bottom-3 left-3 z-40 flex flex-col liquid-glass-card rounded-2xl overflow-hidden shadow-2xl transition-all">
-      {/* Brand Header */}
-      <div className="h-14 px-3.5 border-b border-[var(--glass-well-border)] flex items-center justify-between">
-        <AICTELogo
-          variant="full"
-          size="sm"
-          interactive={true}
-          title={t.portalTitle}
-          subtitle={t.portalSubtitle}
+    <>
+      {/* Mobile & Tablet Backdrop Overlay */}
+      {mobileOpen && (
+        <div
+          onClick={onCloseMobile}
+          className="fixed inset-0 z-40 bg-slate-950/45 backdrop-blur-xs lg:hidden transition-opacity cursor-pointer"
+          aria-hidden="true"
         />
-      </div>
+      )}
 
-      {/* Navigation Groups */}
-      <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-4">
-        {navGroups.map((group, gIdx) => (
-          <div key={gIdx} className="space-y-1">
-            <div className="px-2.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-faint)] mb-1.5">
-              {group.label}
-            </div>
-            {group.items.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                pathname === item.href ||
-                (item.href !== '/overview' && item.href !== '/applications' && pathname.startsWith(item.href)) ||
-                (item.href.startsWith('/applications/') && pathname.startsWith('/applications/'));
+      <aside
+        className={`!fixed top-2.5 bottom-2.5 left-2.5 lg:top-3.5 lg:bottom-3.5 lg:left-3.5 w-[248px] z-50 lg:z-30 liquid-glass-card rounded-[20px] flex flex-col justify-between overflow-hidden transition-transform duration-300 ease-out ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-[110%] lg:translate-x-0'
+        }`}
+      >
+        {/* Top Brand Header */}
+        <div>
+          <div className="p-3.5 pb-3 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between gap-2">
+            <Link className="flex items-center gap-2.5 min-w-0" href="/overview">
+              <div className="h-9 w-9 rounded-xl glass-well flex items-center justify-center shrink-0">
+                <AICTELogo className="h-6 w-6" size="sm" variant="icon" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[13px] font-bold tracking-tight text-slate-900 dark:text-white truncate">
+                  AICTE SCRUTINY
+                </div>
+                <div className="text-[10px] font-mono uppercase tracking-[0.06em] text-slate-500 dark:text-slate-400 truncate">
+                  REGULATION BUREAU • v4.2
+                </div>
+              </div>
+            </Link>
+            <button
+              onClick={onCloseMobile}
+              className="lg:hidden glass-well h-7 w-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white shrink-0 cursor-pointer"
+              aria-label="Close navigation menu"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`group relative flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 ${
-                    isActive
-                      ? 'btn-liquid-primary font-semibold shadow-sm'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-200/50 dark:hover:bg-slate-800/40'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <Icon
-                      className={`w-4 h-4 shrink-0 transition-transform ${
-                        isActive ? 'text-amber-400 dark:text-sky-300' : 'text-[var(--text-faint)] group-hover:text-[var(--text-secondary)]'
+          {/* Navigation Groups */}
+          <nav className="p-2.5 space-y-4 overflow-y-auto max-h-[calc(100vh-170px)] no-scrollbar">
+            {navGroups.map((group, gIdx) => (
+              <div key={gIdx} className="space-y-1">
+                <div className="px-2.5 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500">
+                  {group.groupLabel}
+                </div>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive =
+                    pathname === item.href ||
+                    (item.href !== '/overview' && item.href !== '/applications' && pathname.startsWith(item.href)) ||
+                    (item.href.startsWith('/applications/') && pathname.startsWith('/applications/'));
+
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={onCloseMobile}
+                      className={`group relative flex items-center justify-between px-2.5 py-2 rounded-xl text-[12.5px] font-medium transition-all duration-150 ${
+                        isActive
+                          ? 'glass-well font-semibold text-slate-950 dark:text-white'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-900/[0.03] dark:hover:bg-white/[0.04]'
                       }`}
-                    />
-                    <span className="truncate">{item.label}</span>
-                  </div>
+                    >
+                      {isActive && (
+                        <span className="absolute left-0.5 top-1/2 -translate-y-1/2 h-4 w-1 rounded-full bg-sky-500" />
+                      )}
+                      <span className="flex items-center gap-2.5 min-w-0 pl-1">
+                        <Icon
+                          className={`h-4 w-4 shrink-0 ${
+                            isActive
+                              ? 'text-sky-600 dark:text-sky-400'
+                              : 'text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200'
+                          }`}
+                        />
+                        <span className="truncate">{item.label}</span>
+                      </span>
+                      {item.badge && (
+                        <span
+                          className={`text-[10px] font-mono font-semibold tabular-nums px-1.5 py-0.5 rounded-full shrink-0 ${item.badgeClass}`}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            ))}
+          </nav>
+        </div>
 
-                  {item.badge && (
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full tabular-nums ${item.badgeColor}`}>
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* Officer Credential Footer - Floating Glass Well safely positioned away from screen edges */}
-      <div className="p-2.5 border-t border-[var(--glass-well-border)]">
-        <div className="flex items-center gap-2.5 p-2 rounded-xl glass-well shadow-2xs">
-          <div className="relative w-7 h-7 rounded-lg bg-slate-900 dark:bg-slate-800 text-slate-200 flex items-center justify-center font-bold text-[10px] shrink-0 border border-slate-700/60 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]">
-            RO
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-[11px] font-semibold text-[var(--text-primary)] truncate">
-              Shri R.K. Verma (RO-04)
+        {/* Bottom Officer Profile Card */}
+        <div className="p-2.5 border-t border-slate-200/80 dark:border-slate-800/80">
+          <div className="glass-well rounded-xl p-2.5 flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-xs font-bold text-sky-700 dark:text-sky-300 shrink-0">
+              RV
             </div>
-            <div className="text-[10px] text-[var(--text-muted)] truncate">
-              Regional Scrutiny Officer
+            <div className="min-w-0 flex-1">
+              <div className="text-xs font-semibold text-slate-900 dark:text-white truncate">
+                Shri R.K. Verma (RO-04)
+              </div>
+              <div className="text-[10.5px] text-slate-500 dark:text-slate-400 truncate">
+                Regional Scrutiny Officer
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
+
+export default LeftGlassRail;

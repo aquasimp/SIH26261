@@ -1,107 +1,116 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useLanguage } from '@/lib/context';
 import { useTheme } from 'next-themes';
-import {
-  Search,
-  Sun,
-  Moon,
-  Clock,
-} from 'lucide-react';
+import { Menu, Search, Sun, Moon, Clock } from 'lucide-react';
+import { useLanguage } from '@/lib/context';
 
-interface FloatingTopHeaderProps {
+export interface FloatingTopHeaderProps {
+  onOpenMobileMenu?: () => void;
   onOpenCommandPalette?: () => void;
 }
 
-export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderProps) {
+export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: FloatingTopHeaderProps) {
   const pathname = usePathname();
-  const { t, language, setLanguage } = useLanguage();
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const { language, setLanguage, t } = useLanguage();
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
+  const getRouteLabel = () => {
+    if (pathname.startsWith('/overview')) return t('nav.overview', 'Executive Overview');
+    if (pathname.startsWith('/applications/')) return t('nav.workbench', 'Scrutiny Workbench');
+    if (pathname.startsWith('/applications')) return t('nav.applications', 'Institutional Registry');
+    if (pathname.startsWith('/forensics')) return t('nav.forensics', 'Document Forensics Studio');
+    if (pathname.startsWith('/infrastructure')) return t('nav.infrastructure', 'Blueprint & Campus CV');
+    if (pathname.startsWith('/authority-bridge')) return t('nav.authority', 'Authority Bridge (DPI)');
+    if (pathname.startsWith('/deficiencies')) return t('nav.deficiencies', 'Deficiency & EVC Notices');
+    if (pathname.startsWith('/audit-trail')) return t('nav.audit', 'SHA-256 Audit Ledger');
+    return 'Executive Overview';
+  };
+
+  const triggerCommandPalette = () => {
+    if (onOpenCommandPalette) {
+      onOpenCommandPalette();
+    } else {
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, ctrlKey: true }));
+    }
+  };
+
   const isDark = mounted && (resolvedTheme === 'dark' || theme === 'dark');
 
-  const toggleTheme = () => {
-    setTheme(isDark ? 'light' : 'dark');
-  };
-
-  // Compute breadcrumbs
-  const getBreadcrumb = () => {
-    if (pathname === '/overview') return t.navOverview;
-    if (pathname === '/applications') return t.navApplications;
-    if (pathname.startsWith('/applications/')) return `${t.navWorkbench} • ${pathname.split('/')[2]}`;
-    if (pathname === '/forensics') return t.navForensicsStudio;
-    if (pathname === '/infrastructure') return t.navInfrastructure;
-    if (pathname === '/authority-bridge') return t.navAuthorityBridge;
-    if (pathname === '/deficiencies') return t.navDeficiencies;
-    if (pathname === '/audit-trail') return t.navAuditTrail;
-    return 'Scrutiny Portal';
-  };
-
   return (
-    <header className="!sticky sticky top-3 z-30 mx-3 mb-2.5 h-13 flex items-center justify-between px-4 liquid-glass-card rounded-2xl shadow-lg transition-all">
-      {/* Left: Breadcrumbs & Telemetry */}
-      <div className="flex items-center gap-3.5 min-w-0">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">
-          <span className="text-[11px] font-semibold text-[var(--text-faint)] tracking-tight">AICTE / APH-26 /</span>
-          <span className="truncate tracking-tight">{getBreadcrumb()}</span>
-        </div>
+    <header className="liquid-glass-card rounded-[16px] px-3 py-2 sm:px-4 sm:py-2.5 mb-2.5 flex items-center justify-between gap-2">
+      {/* Left: Hamburger + Breadcrumb + DPI Status */}
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+        <button
+          onClick={onOpenMobileMenu}
+          className="lg:hidden glass-well h-8 w-8 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 shrink-0 cursor-pointer"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="h-4 w-4" />
+        </button>
 
-        {/* Live DPI Status Tactile Pill */}
-        <div className="hidden md:inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold shadow-2xs">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+        <div className="flex items-center gap-1.5 text-xs min-w-0">
+          <span className="hidden sm:inline font-mono text-[11px] text-slate-400 dark:text-slate-500 shrink-0">
+            AICTE/APH-26 /
           </span>
-          <span>{t.dpiStatus}</span>
+          <span className="font-semibold text-slate-900 dark:text-white truncate">
+            {getRouteLabel()}
+          </span>
         </div>
 
-        {/* Pipeline run clock */}
-        <div className="hidden lg:flex items-center gap-1.5 text-[var(--text-muted)] text-[11px] font-medium">
-          <Clock className="w-3.5 h-3.5 text-[var(--text-faint)]" />
-          <span>{t.pipelineRun}</span>
-        </div>
+        <Link
+          className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25 shrink-0"
+          href="/authority-bridge"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span>DPI Bridge: 6/6 Authorities Online</span>
+        </Link>
+
+        <span className="hidden xl:inline-flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 shrink-0">
+          <Clock className="h-3 w-3" />
+          <span>Pipeline Run: 4 mins ago</span>
+        </span>
       </div>
 
-      {/* Right: Quick Search, Language Switcher, Theme Toggle */}
-      <div className="flex items-center gap-2.5 shrink-0">
-        {/* Command Palette Trigger */}
+      {/* Right: Command Search + Language Toggle + Theme Toggle */}
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
         <button
-          onClick={onOpenCommandPalette}
-          className="btn-liquid-secondary flex items-center gap-2 px-3 py-1.5 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs shadow-2xs transition-all group cursor-pointer"
-          title="Quick search (⌘K / Ctrl+K)"
+          onClick={triggerCommandPalette}
+          className="glass-well rounded-xl px-2.5 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-2 transition-colors cursor-pointer"
+          title="Search PID, Institution, UAN, or APH Clause (⌘K)"
         >
-          <Search className="w-3.5 h-3.5 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors" />
-          <span className="hidden sm:inline font-normal">{t.searchPlaceholder.slice(0, 24)}...</span>
-          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold bg-white/40 dark:bg-black/30 border border-[var(--glass-well-border)] rounded-md text-[var(--text-secondary)] shadow-2xs">
+          <Search className="h-3.5 w-3.5 shrink-0" />
+          <span className="hidden sm:inline text-[11.5px]">Search PID, Institution...</span>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
             ⌘K
           </kbd>
         </button>
 
-        {/* Bilingual Switcher (EN | हिन्दी) */}
-        <div className="glass-well inline-flex rounded-xl p-0.5 text-xs font-semibold shadow-2xs">
+        {/* Bilingual Segmented Control */}
+        <div className="glass-well rounded-xl p-0.5 inline-flex items-center">
           <button
             onClick={() => setLanguage('en')}
-            className={`px-2.5 py-1 rounded-lg transition-all text-[11px] cursor-pointer ${
+            className={`px-2 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
               language === 'en'
-                ? 'btn-liquid-primary font-bold shadow-xs'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-2xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             EN
           </button>
           <button
             onClick={() => setLanguage('hi')}
-            className={`px-2.5 py-1 rounded-lg transition-all text-[11px] cursor-pointer ${
+            className={`px-2 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
               language === 'hi'
-                ? 'btn-liquid-primary font-bold shadow-xs'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-2xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             हिन्दी
@@ -110,18 +119,23 @@ export function FloatingTopHeader({ onOpenCommandPalette }: FloatingTopHeaderPro
 
         {/* Theme Toggle */}
         <button
-          onClick={toggleTheme}
-          className="btn-liquid-secondary p-2 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all shadow-2xs cursor-pointer"
-          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          aria-label="Toggle Theme"
+          onClick={() => setTheme(isDark ? 'light' : 'dark')}
+          className="glass-well h-8 w-8 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          aria-label="Toggle theme"
         >
-          {isDark ? (
-            <Sun className="w-3.5 h-3.5 text-amber-400" />
+          {mounted ? (
+            isDark ? (
+              <Sun className="h-4 w-4 text-amber-400" />
+            ) : (
+              <Moon className="h-4 w-4 text-slate-700" />
+            )
           ) : (
-            <Moon className="w-3.5 h-3.5 text-slate-700 dark:text-slate-200" />
+            <span className="h-4 w-4" />
           )}
         </button>
       </div>
     </header>
   );
 }
+
+export default FloatingTopHeader;

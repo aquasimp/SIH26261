@@ -152,7 +152,7 @@ export default function AuditTrailPage() {
 
       {/* Real-time Verification Progress Bar */}
       {isVerifying && (
-        <div className="p-4 rounded-2xl liquid-glass-card border border-emerald-500/30 bg-emerald-500/5 space-y-2">
+        <div className="p-4 sm:p-5 rounded-[18px] liquid-glass-card border border-emerald-500/30 bg-emerald-500/5 space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
               <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
@@ -172,7 +172,7 @@ export default function AuditTrailPage() {
       )}
 
       {/* Chain Status Bar */}
-      <div className="p-5 rounded-2xl liquid-glass-card border border-emerald-500/30 bg-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-4 sm:p-5 rounded-[18px] liquid-glass-card border border-emerald-500/30 bg-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
             <CheckCircle2 className="w-6 h-6" />
@@ -237,7 +237,7 @@ export default function AuditTrailPage() {
       {/* Chained Blocks List */}
       <div className="space-y-4">
         {filteredBlocks.length === 0 ? (
-          <div className="p-8 text-center text-xs text-[var(--text-muted)] liquid-glass-card rounded-2xl">
+          <div className="p-8 text-center text-xs text-[var(--text-muted)] liquid-glass-card rounded-[18px]">
             No audit ledger blocks match the selected query.
           </div>
         ) : (
@@ -247,7 +247,7 @@ export default function AuditTrailPage() {
             return (
               <div
                 key={block.blockIndex}
-                className="liquid-glass-card glass-interactive rounded-2xl p-5 space-y-3.5 shadow-sm"
+                className="liquid-glass-card glass-interactive rounded-[18px] p-4 sm:p-5 space-y-3.5 shadow-sm"
               >
                 {/* Top Row: Block Index & Timestamp */}
                 <div className="flex items-center justify-between text-xs">
@@ -311,16 +311,16 @@ export default function AuditTrailPage() {
                 </div>
 
                 {/* Cryptographic Hashes Link */}
-                <div className="pt-3 border-t border-[var(--glass-border)] text-xs font-mono space-y-1.5">
-                  <div className="flex items-center gap-2 text-[var(--text-muted)] truncate">
+                <div className="pt-3 border-t border-[var(--glass-border)] text-xs font-mono space-y-1.5 overflow-x-auto">
+                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 text-[var(--text-muted)]">
                     <span className="w-24 shrink-0 font-sans text-[11px] font-semibold text-[var(--text-muted)]">Previous Hash:</span>
-                    <span className="truncate select-all text-xs">{block.previousHash}</span>
+                    <span className="break-all sm:break-normal select-all text-xs">{block.previousHash}</span>
                   </div>
 
-                  <div className="flex items-center justify-between gap-2 text-emerald-600 dark:text-emerald-400">
-                    <div className="flex items-center gap-2 truncate font-semibold">
+                  <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-emerald-600 dark:text-emerald-400">
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 font-semibold min-w-0">
                       <span className="w-24 shrink-0 font-sans text-[11px] text-[var(--text-muted)] font-normal">Block Hash:</span>
-                      <span className="truncate select-all text-xs">{block.currentHash}</span>
+                      <span className="break-all sm:break-normal select-all text-xs">{block.currentHash}</span>
                     </div>
 
                     <button

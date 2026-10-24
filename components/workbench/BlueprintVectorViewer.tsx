@@ -219,17 +219,20 @@ export function BlueprintVectorViewer({
     setRoomList(INITIAL_ROOMS);
   };
 
-  // Handle vertex drag start
-  const handleVertexMouseDown = (e: React.MouseEvent, roomId: string, vertexIndex: number) => {
+  // Handle vertex drag start with Pointer Events
+  const handleVertexPointerDown = (e: React.PointerEvent, roomId: string, vertexIndex: number) => {
     e.stopPropagation();
+    try {
+      (e.target as Element).setPointerCapture?.(e.pointerId);
+    } catch {}
     setDraggingVertex({ roomId, vertexIndex });
     setSelectedRoomId(roomId);
     if (onSelectRoom) onSelectRoom(roomId);
   };
 
-  // SVG Mouse Move for Dragging
-  const handleSvgMouseMove = useCallback(
-    (e: React.MouseEvent<SVGSVGElement>) => {
+  // SVG Pointer Move for Dragging
+  const handleSvgPointerMove = useCallback(
+    (e: React.PointerEvent<SVGSVGElement>) => {
       if (!draggingVertex || !svgRef.current) return;
 
       const svg = svgRef.current;
@@ -257,8 +260,13 @@ export function BlueprintVectorViewer({
     [draggingVertex]
   );
 
-  const handleSvgMouseUp = () => {
-    setDraggingVertex(null);
+  const handleSvgPointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (draggingVertex) {
+      try {
+        (e.target as Element).releasePointerCapture?.(e.pointerId);
+      } catch {}
+      setDraggingVertex(null);
+    }
   };
 
   return (
@@ -266,13 +274,13 @@ export function BlueprintVectorViewer({
       {/* Top Toolbar: 4 CAD Layer Toggles */}
       <div className="p-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-wrap items-center justify-between gap-3 text-xs">
         {/* Layer Filters */}
-        <div className="flex flex-wrap items-center gap-1.5 font-semibold">
-          <span className="text-[10px] uppercase tracking-wider text-slate-400 mr-1 hidden sm:inline">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 max-w-full font-semibold">
+          <span className="text-[10px] uppercase tracking-wider text-slate-400 mr-1 hidden sm:inline shrink-0">
             Layers:
           </span>
           <button
             onClick={() => setShowMask2Former(!showMask2Former)}
-            className={`px-2.5 py-1 rounded-lg border transition-all ${
+            className={`px-2.5 py-1 rounded-lg border transition-all shrink-0 ${
               showMask2Former
                 ? 'bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/30 font-bold'
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
@@ -282,7 +290,7 @@ export function BlueprintVectorViewer({
           </button>
           <button
             onClick={() => setShowRmbgWalls(!showRmbgWalls)}
-            className={`px-2.5 py-1 rounded-lg border transition-all ${
+            className={`px-2.5 py-1 rounded-lg border transition-all shrink-0 ${
               showRmbgWalls
                 ? 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border-slate-500/30 font-bold'
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
@@ -292,7 +300,7 @@ export function BlueprintVectorViewer({
           </button>
           <button
             onClick={() => setShowPcpRecalib(!showPcpRecalib)}
-            className={`px-2.5 py-1 rounded-lg border transition-all ${
+            className={`px-2.5 py-1 rounded-lg border transition-all shrink-0 ${
               showPcpRecalib
                 ? 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/30 font-bold'
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
@@ -302,7 +310,7 @@ export function BlueprintVectorViewer({
           </button>
           <button
             onClick={() => setShowRdpVertices(!showRdpVertices)}
-            className={`px-2.5 py-1 rounded-lg border transition-all ${
+            className={`px-2.5 py-1 rounded-lg border transition-all shrink-0 ${
               showRdpVertices
                 ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30 font-bold'
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
@@ -380,9 +388,9 @@ export function BlueprintVectorViewer({
           <svg
             ref={svgRef}
             viewBox="0 0 820 420"
-            className="w-[740px] h-[380px] select-none"
-            onMouseMove={handleSvgMouseMove}
-            onMouseUp={handleSvgMouseUp}
+            className="w-[740px] h-[380px] select-none touch-none"
+            onPointerMove={handleSvgPointerMove}
+            onPointerUp={handleSvgPointerUp}
           >
             {/* Architectural Grid Lines */}
             <defs>
@@ -513,8 +521,8 @@ export function BlueprintVectorViewer({
                           fill="#FACC15"
                           stroke="#1E293B"
                           strokeWidth={2}
-                          className="cursor-move hover:scale-125 transition-transform"
-                          onMouseDown={(e) => handleVertexMouseDown(e, room.id, vIdx)}
+                          className="cursor-move hover:scale-125 transition-transform touch-none"
+                          onPointerDown={(e) => handleVertexPointerDown(e, room.id, vIdx)}
                         />
                         <text
                           x={pt[0]}
@@ -594,3 +602,5 @@ export function BlueprintVectorViewer({
     </div>
   );
 }
+
+export default BlueprintVectorViewer;

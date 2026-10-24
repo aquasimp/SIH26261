@@ -183,7 +183,7 @@ export default function OverviewPage() {
           ROW 1: UNIFIED 6-COLUMN METRIC GRID
           (2px Top Severity Rules, Monochrome High-Contrast Display Numerals, No Truncation)
           ========================================================================= */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-[var(--glass-well-border)] liquid-glass-card rounded-2xl overflow-hidden shadow-lg">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/80 dark:divide-slate-800/80 liquid-glass-card rounded-[18px] overflow-hidden mb-4">
         {/* Metric 1: Ingested */}
         <div className="top-rule-registry p-4 flex flex-col justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
           <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
@@ -288,7 +288,7 @@ export default function OverviewPage() {
           ROW 2: PRIORITY INTERVENTION / HIGH-RISK ALERT BANNER
           (Dual Pulsing Radar Dot, Dynamic Highest-RPN Dossier Binding, Forensic Modal)
           ========================================================================= */}
-      <section className="glass-interactive border border-rose-500/35 bg-rose-500/8 dark:bg-rose-950/25 rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 shadow-sm">
+      <section className="glass-interactive border border-rose-500/35 bg-rose-500/8 dark:bg-rose-950/25 rounded-[18px] p-4 sm:p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 shadow-sm">
         <div className="flex items-start gap-3.5 min-w-0">
           {/* Dual Pulsing Radar Dot */}
           <div className="relative flex h-3.5 w-3.5 mt-1 shrink-0">
@@ -342,7 +342,7 @@ export default function OverviewPage() {
           ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left: All-India 8-Region AICTE Scrutiny Matrix (7 cols) */}
-        <section className="lg:col-span-7 liquid-glass-card rounded-2xl p-4 sm:p-5 space-y-4 shadow-md">
+        <section className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
           <div className="flex items-center justify-between border-b border-[var(--glass-well-border)] pb-3">
             <div>
               <div className="flex items-center gap-2">
@@ -433,7 +433,7 @@ export default function OverviewPage() {
         </section>
 
         {/* Right: Subsystem Anomaly Telemetry & National DPI Bridge Health (5 cols) */}
-        <section className="lg:col-span-5 liquid-glass-card rounded-2xl p-4 sm:p-5 space-y-4 flex flex-col justify-between shadow-md">
+        <section className="lg:col-span-5 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 flex flex-col justify-between shadow-md">
           <div>
             <div className="border-b border-[var(--glass-well-border)] pb-3">
               <div className="flex items-center gap-2">
@@ -550,7 +550,7 @@ export default function OverviewPage() {
           ROW 4: HIGH-RISK INSTITUTIONAL DOSSIER QUEUE
           (Sorted by RPN, Live Mutated Status, 5-Domain Spark-Bars, Top Forensic Badges)
           ========================================================================= */}
-      <section className="liquid-glass-card rounded-2xl p-4 sm:p-5 space-y-4 shadow-md">
+      <section className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--glass-well-border)] pb-3">
           <div>
             <div className="flex items-center gap-2">
@@ -575,8 +575,8 @@ export default function OverviewPage() {
         </div>
 
         {/* Dense Workstation Table */}
-        <div className="overflow-x-auto rounded-xl glass-well">
-          <table className="w-full text-left text-xs">
+        <div className="w-full overflow-x-auto rounded-xl">
+          <table className="w-full min-w-[760px] text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-[var(--glass-well-border)] text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
                 <th className="py-3 px-3.5">{t.colInstitution}</th>

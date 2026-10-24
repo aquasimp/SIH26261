@@ -599,7 +599,7 @@ export default function InfrastructureStudioPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Cell 1: Total Built-up Area */}
         <div
-          className={`p-4 rounded-2xl liquid-glass-card flex flex-col justify-between shadow-md ${
+          className={`p-4 rounded-[18px] liquid-glass-card flex flex-col justify-between shadow-md ${
             selectedApp.landAndBuiltUp.totalBuiltUpAvailableSqm < selectedApp.landAndBuiltUp.totalBuiltUpRequiredSqm
               ? 'top-rule-deficiency'
               : 'top-rule-verified'
@@ -639,7 +639,7 @@ export default function InfrastructureStudioPage() {
 
         {/* Cell 2: FSI & Land Norm */}
         <div
-          className={`p-4 rounded-2xl liquid-glass-card flex flex-col justify-between shadow-md ${
+          className={`p-4 rounded-[18px] liquid-glass-card flex flex-col justify-between shadow-md ${
             selectedApp.landAndBuiltUp.landAvailableAcres < selectedApp.landAndBuiltUp.landRequiredAcres
               ? 'top-rule-fatal'
               : 'top-rule-verified'
@@ -678,7 +678,7 @@ export default function InfrastructureStudioPage() {
         </div>
 
         {/* Cell 3: CubiCasa5K Wall Continuity */}
-        <div className="p-4 rounded-2xl liquid-glass-card flex flex-col justify-between top-rule-registry shadow-md">
+        <div className="p-4 rounded-[18px] liquid-glass-card flex flex-col justify-between top-rule-registry shadow-md">
           <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
             CubiCasa5K Wall Continuity
           </div>
@@ -701,7 +701,7 @@ export default function InfrastructureStudioPage() {
 
         {/* Cell 4: Multi-Plot Contiguity & Haversine */}
         <div
-          className={`p-4 rounded-2xl liquid-glass-card flex flex-col justify-between shadow-md ${
+          className={`p-4 rounded-[18px] liquid-glass-card flex flex-col justify-between shadow-md ${
             isDistanceViolated ? 'top-rule-fatal' : 'top-rule-verified'
           }`}
         >
@@ -754,7 +754,7 @@ export default function InfrastructureStudioPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left: BlueprintVectorViewer (7 cols) */}
-          <div className="lg:col-span-7 h-[650px] liquid-glass-card rounded-2xl overflow-hidden shadow-sm">
+          <div className="lg:col-span-7 h-[650px] liquid-glass-card rounded-[18px] overflow-hidden shadow-sm">
             <BlueprintVectorViewer
               rooms={selectedApp.blueprintRooms}
               selectedRoomId={selectedRoomId}
@@ -767,7 +767,7 @@ export default function InfrastructureStudioPage() {
           {/* Right: What-If Simulator & CubiCasa5K Telemetry (5 cols) */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             {/* Interactive APH Chapter VII Simulator */}
-            <div className="liquid-glass-card rounded-2xl p-4 space-y-3.5">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-3.5">
               <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2">
                 <h3 className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 uppercase font-mono tracking-wider">
                   <Sliders className="w-3.5 h-3.5 text-sky-600" />
@@ -941,7 +941,7 @@ export default function InfrastructureStudioPage() {
             </div>
 
             {/* CubiCasa5K Benchmark & Architecture Telemetry Card */}
-            <div className="liquid-glass-card rounded-2xl p-4 space-y-2.5 text-xs font-mono flex-1 flex flex-col justify-between">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-2.5 text-xs font-mono flex-1 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-1.5 mb-2">
                   <h3 className="font-bold text-[var(--text-primary)] text-xs uppercase tracking-wider flex items-center gap-1.5">
@@ -1046,7 +1046,7 @@ export default function InfrastructureStudioPage() {
               <div
                 key={photo.id}
                 onClick={() => setActivePhotoId(photo.id)}
-                className={`liquid-glass-card rounded-2xl overflow-hidden flex flex-col justify-between border transition-all cursor-pointer ${
+                className={`liquid-glass-card rounded-[18px] overflow-hidden flex flex-col justify-between border transition-all cursor-pointer ${
                   photo.isDuplicate
                     ? 'border-red-500/60 ring-1 ring-red-500/30'
                     : isActive
@@ -1291,7 +1291,7 @@ export default function InfrastructureStudioPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left: Interactive SVG Cadastral GIS Survey Map (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-xs uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-2">
                 <Compass className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -1444,7 +1444,7 @@ export default function InfrastructureStudioPage() {
           {/* Right: Multi-Plot Distance Diagnostics & Shapely Verification (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
             {/* Plot Breakdown Cards */}
-            <div className="liquid-glass-card rounded-2xl p-5 space-y-3.5">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-3.5">
               <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2.5">
                 <h4 className="font-semibold text-xs uppercase tracking-wider text-[var(--text-primary)]">
                   Cadastral Plot Schedule (Jamabandi Records)
@@ -1508,7 +1508,7 @@ export default function InfrastructureStudioPage() {
             </div>
 
             {/* Shapely Point-in-Polygon Results */}
-            <div className="liquid-glass-card rounded-2xl p-5 space-y-3 text-xs">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-3 text-xs">
               <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-2.5">
                 <span className="font-semibold text-[var(--text-primary)] uppercase text-[11px] tracking-wider">
                   Shapely Point-in-Polygon Boundary Verification

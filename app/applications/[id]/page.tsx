@@ -234,6 +234,9 @@ export default function ScrutinyWorkbenchPage() {
   // Selected anomaly or entity ID for bidirectional synchronization
   const [selectedAnomalyId, setSelectedAnomalyId] = useState<string | null>('Valid Upto Date');
 
+  // Mobile / Tablet pane switcher state
+  const [mobileActivePane, setMobileActivePane] = useState<'canvas' | 'inspector'>('canvas');
+
   // Active APH Citation banner
   const [activeAphCitation, setActiveAphCitation] = useState<{
     clause: string;
@@ -343,7 +346,7 @@ export default function ScrutinyWorkbenchPage() {
   return (
     <div className="space-y-4 animate-glass-in">
       {/* Top Workbench Control Bar */}
-      <div className="p-4 sm:p-5 liquid-glass-card rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
+      <div className="p-4 sm:p-5 liquid-glass-card rounded-[18px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
         {/* Left: Institution Selector & Badges */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative">
@@ -464,10 +467,34 @@ export default function ScrutinyWorkbenchPage() {
         })}
       </div>
 
+      {/* Mobile / Tablet Segmented Pane Switcher (< 1280px) */}
+      <div className="xl:hidden glass-well p-1 rounded-xl grid grid-cols-2 gap-1 mb-3">
+        <button
+          onClick={() => setMobileActivePane('canvas')}
+          className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+            mobileActivePane === 'canvas'
+              ? 'btn-liquid-primary shadow-xs font-bold'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+          }`}
+        >
+          <span>📄 Document &amp; Forensics</span>
+        </button>
+        <button
+          onClick={() => setMobileActivePane('inspector')}
+          className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+            mobileActivePane === 'inspector'
+              ? 'btn-liquid-primary shadow-xs font-bold'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+          }`}
+        >
+          <span>⚖️ Compliance &amp; KIE Inspector</span>
+        </button>
+      </div>
+
       {/* Synchronized Split-Pane Workstation */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 min-h-[750px]">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 min-h-[750px]">
         {/* Left Pane (7 cols / 55%): Interactive Multi-Spectral Document Viewer / Blueprint CAD */}
-        <div className="lg:col-span-7 flex flex-col h-[750px]">
+        <div className={`xl:col-span-7 flex flex-col h-[750px] ${mobileActivePane === 'canvas' ? 'block' : 'hidden xl:block'}`}>
           {activeDocument.docType === 'BLUEPRINT' ? (
             <BlueprintVectorViewer
               rooms={application.blueprintRooms}
@@ -485,7 +512,7 @@ export default function ScrutinyWorkbenchPage() {
         </div>
 
         {/* Right Pane (5 cols / 45%): Evidence-Linked Inspector */}
-        <div className="lg:col-span-5 flex flex-col h-[750px] liquid-glass-card rounded-2xl overflow-hidden shadow-md">
+        <div className={`xl:col-span-5 flex flex-col h-[750px] liquid-glass-card rounded-[18px] overflow-hidden shadow-md ${mobileActivePane === 'inspector' ? 'block' : 'hidden xl:block'}`}>
           {/* Right Pane Tabs */}
           <div className="p-2 border-b border-[var(--glass-well-border)] flex items-center justify-between text-xs font-semibold">
             <div className="glass-well inline-flex rounded-xl p-0.5 w-full text-[11px]">

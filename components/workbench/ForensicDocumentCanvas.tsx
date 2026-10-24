@@ -72,9 +72,9 @@ export function ForensicDocumentCanvas({
   const offscreenCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Canvas intrinsic dimensions (High-DPI A4 aspect ratio: 800 x 1130)
-  const CANVAS_WIDTH = 800;
-  const CANVAS_HEIGHT = 1130;
+  // Canvas intrinsic dimensions (Logical aspect ratio: 760 x 980)
+  const CANVAS_WIDTH = 760;
+  const CANVAS_HEIGHT = 980;
 
   // Render the base authentic Indian statutory document to any canvas context
   const renderBaseDocument = useCallback((ctx: CanvasRenderingContext2D, doc: DocumentArtifact) => {
@@ -397,16 +397,22 @@ export function ForensicDocumentCanvas({
     ctx.fillText(`Issuing Authority: ${doc.issuingAuthority}`, 400, 105);
   };
 
-  // Main Canvas Rendering Loop
+  // Main Canvas Rendering Loop with Retina DPI Scaling
   useEffect(() => {
     const canvas = mainCanvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set physical resolution
-    canvas.width = CANVAS_WIDTH;
-    canvas.height = CANVAS_HEIGHT;
+    const dpr = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+    const logicalWidth = 760;
+    const logicalHeight = 980;
+    if (canvas.width !== logicalWidth * dpr || canvas.height !== logicalHeight * dpr) {
+      canvas.width = logicalWidth * dpr;
+      canvas.height = logicalHeight * dpr;
+    }
+    ctx.save();
+    ctx.scale(dpr, dpr);
 
     // Draw base document first
     renderBaseDocument(ctx, docArtifact);
@@ -424,6 +430,8 @@ export function ForensicDocumentCanvas({
     if (activeAnomalyId) {
       drawActiveAnomalyPulse(ctx);
     }
+
+    ctx.restore();
   }, [
     docArtifact,
     inspectionMode,
@@ -745,8 +753,8 @@ export function ForensicDocumentCanvas({
     loupeCtx.stroke();
   }, [loupeActive, mousePos, inspectionMode, truForMapType, normAblation, jpegQuality, elaMultiplier]);
 
-  // Handle Mouse Movement over Canvas for Magnifier Loupe
-  const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Handle Pointer Movement over Canvas for Magnifier Loupe
+  const handleCanvasPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = mainCanvasRef.current;
     if (!canvas) return;
 
@@ -764,8 +772,8 @@ export function ForensicDocumentCanvas({
     });
   };
 
-  // Handle clicking on Canvas to select corresponding anomaly or entity
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Handle pointer down on Canvas to select corresponding anomaly or entity
+  const handleCanvasPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = mainCanvasRef.current;
     if (!canvas) return;
 
@@ -995,11 +1003,11 @@ export function ForensicDocumentCanvas({
           {/* Main HTML5 Canvas */}
           <canvas
             ref={mainCanvasRef}
-            onClick={handleCanvasClick}
-            onMouseMove={handleCanvasMouseMove}
-            onMouseEnter={() => setMousePos((p) => ({ ...p, inCanvas: true }))}
-            onMouseLeave={() => setMousePos((p) => ({ ...p, inCanvas: false }))}
-            className="block w-[600px] h-[848px] bg-white"
+            onPointerDown={handleCanvasPointerDown}
+            onPointerMove={handleCanvasPointerMove}
+            onPointerEnter={() => setMousePos((p) => ({ ...p, inCanvas: true }))}
+            onPointerLeave={() => setMousePos((p) => ({ ...p, inCanvas: false }))}
+            className="w-full max-w-[760px] h-auto aspect-[760/980] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs touch-pan-y block bg-white"
           />
 
           {/* Floating 4x Magnifier Loupe Lens */}
@@ -1027,3 +1035,5 @@ export function ForensicDocumentCanvas({
     </div>
   );
 }
+
+export default ForensicDocumentCanvas;

@@ -1,140 +1,208 @@
 'use client';
 
-import React from 'react';
-import { useFilters, useLanguage } from '@/lib/context';
-import { Filter, RotateCcw, ChevronDown } from 'lucide-react';
+import React, { useState } from 'react';
+import { Filter, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
+import { useFilters } from '@/lib/context';
 
 export function GlobalFilterBar() {
-  const { filters, setFilters, resetFilters, resetDemoState, filteredApplications } = useFilters();
-  const { t } = useLanguage();
+  const {
+    academicYear,
+    setAcademicYear,
+    region,
+    setRegion,
+    institutionType,
+    setInstitutionType,
+    category,
+    setCategory,
+    status,
+    setStatus,
+    filteredApplications,
+    resetFilters,
+  } = useFilters();
 
-  const isFiltered =
-    filters.academicYear !== '2026-27' ||
-    filters.region !== 'All Regions (8)' ||
-    filters.institutionType !== 'All Types' ||
-    filters.applicationCategory !== 'All Categories' ||
-    filters.scrutinyStatus !== 'All Statuses' ||
-    filters.searchQuery !== '';
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const activeFilterCount = [
+    region !== 'All' && region !== 'All Regions (8)',
+    institutionType !== 'All' && institutionType !== 'All Types',
+    category !== 'All' && category !== 'All Categories',
+    status !== 'All' && status !== 'All Statuses',
+  ].filter(Boolean).length;
 
   return (
-    <div className="mx-3 mb-3 px-3.5 py-2 liquid-glass-card rounded-2xl shadow-sm transition-all">
-      <div className="flex flex-wrap items-center justify-between gap-2.5 text-xs">
-        {/* Left: Filter dropdown pills */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1.5 text-[var(--text-muted)] font-semibold uppercase tracking-wider text-[10px] mr-0.5">
-            <Filter className="w-3.5 h-3.5 text-[var(--text-faint)]" />
-            <span>Scope:</span>
-          </div>
+    <div className="liquid-glass-card rounded-[16px] px-3 py-2 sm:px-4 sm:py-2.5 mb-3.5">
+      {/* Top Bar Row (Always visible on mobile & desktop) */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {/* Mobile Filter Drawer Toggle Button */}
+        <button
+          onClick={() => setMobileFiltersOpen((prev) => !prev)}
+          className="sm:hidden glass-well rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 inline-flex items-center gap-1.5 cursor-pointer"
+        >
+          <Filter className="h-3.5 w-3.5 text-sky-500" />
+          <span>Scope & Filters</span>
+          {activeFilterCount > 0 && (
+            <span className="px-1.5 py-0.2 rounded-full bg-sky-500 text-white text-[10px] font-mono">
+              {activeFilterCount}
+            </span>
+          )}
+          {mobileFiltersOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+        </button>
 
-          {/* Academic Year */}
-          <div className="relative">
-            <select
-              value={filters.academicYear}
-              onChange={(e) => setFilters((prev) => ({ ...prev, academicYear: e.target.value }))}
-              className="appearance-none pl-3 pr-7 py-1.5 rounded-xl glass-well font-medium text-[var(--text-primary)] hover:border-slate-400/50 transition-all shadow-2xs focus:outline-none cursor-pointer text-xs"
-            >
-              <option value="2026-27">AY 2026-27 (Current)</option>
-              <option value="2025-26">AY 2025-26 (Archived)</option>
-              <option value="2024-25">AY 2024-25 (Historical)</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-faint)]" />
-          </div>
-
-          {/* AICTE Region */}
-          <div className="relative">
-            <select
-              value={filters.region}
-              onChange={(e) => setFilters((prev) => ({ ...prev, region: e.target.value }))}
-              className="appearance-none pl-3 pr-7 py-1.5 rounded-xl glass-well font-medium text-[var(--text-primary)] hover:border-slate-400/50 transition-all shadow-2xs focus:outline-none cursor-pointer text-xs"
-            >
-              <option value="All Regions (8)">{t.allRegions}</option>
-              <option value="North-Western">North-Western (Delhi/NCR/PB)</option>
-              <option value="Southern">Southern (Chennai/TN)</option>
-              <option value="Western">Western (Mumbai/MH/Goa)</option>
-              <option value="South-Western">South-Western (Bengaluru/KA)</option>
-              <option value="Eastern">Eastern (Kolkata/OD)</option>
-              <option value="Central">Central (Bhopal/MP)</option>
-              <option value="Northern">Northern (Kanpur/UP)</option>
-              <option value="South-Central">South-Central (Hyderabad/TS)</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-faint)]" />
-          </div>
-
-          {/* Institution Type */}
-          <div className="relative">
-            <select
-              value={filters.institutionType}
-              onChange={(e) => setFilters((prev) => ({ ...prev, institutionType: e.target.value }))}
-              className="appearance-none pl-3 pr-7 py-1.5 rounded-xl glass-well font-medium text-[var(--text-primary)] hover:border-slate-400/50 transition-all shadow-2xs focus:outline-none cursor-pointer text-xs"
-            >
-              <option value="All Types">{t.allTypes}</option>
-              <option value="Private Self-Financed">Private Self-Financed</option>
-              <option value="Government / Aided">Government / Aided</option>
-              <option value="Deemed-to-be University">Deemed-to-be University</option>
-              <option value="Autonomous">Autonomous</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-faint)]" />
-          </div>
-
-          {/* Application Category */}
-          <div className="relative">
-            <select
-              value={filters.applicationCategory}
-              onChange={(e) => setFilters((prev) => ({ ...prev, applicationCategory: e.target.value }))}
-              className="appearance-none pl-3 pr-7 py-1.5 rounded-xl glass-well font-medium text-[var(--text-primary)] hover:border-slate-400/50 transition-all shadow-2xs focus:outline-none cursor-pointer text-xs"
-            >
-              <option value="All Categories">{t.allCategories}</option>
-              <option value="Extension of Approval (EoA)">Extension of Approval (EoA)</option>
-              <option value="Increase in Intake / New Course">Increase in Intake / New Course</option>
-              <option value="New Technical Institution">New Technical Institution</option>
-              <option value="Change of Site / Closure">Change of Site / Closure</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-faint)]" />
-          </div>
-
-          {/* Scrutiny Status */}
-          <div className="relative">
-            <select
-              value={filters.scrutinyStatus}
-              onChange={(e) => setFilters((prev) => ({ ...prev, scrutinyStatus: e.target.value }))}
-              className="appearance-none pl-3 pr-7 py-1.5 rounded-xl glass-well font-medium text-[var(--text-primary)] hover:border-slate-400/50 transition-all shadow-2xs focus:outline-none cursor-pointer text-xs"
-            >
-              <option value="All Statuses">{t.allStatuses}</option>
-              <option value="Fatal Fraud Alert">Fatal Fraud Alert (Red Veto)</option>
-              <option value="Deficiency Issued">Deficiency Issued (15-Day EVC)</option>
-              <option value="Auto-Pre-Cleared">Auto-Pre-Cleared (Fast-Track)</option>
-              <option value="Manual Review Required">Manual Review Required</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-faint)]" />
-          </div>
-        </div>
-
-        {/* Right: Matches Count & Reset */}
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="text-[11px] text-[var(--text-muted)] font-medium">
-            Showing <strong className="text-[var(--text-primary)] font-bold tabular-nums">{filteredApplications.length}</strong> Dossiers
+        {/* Desktop & Tablet Inline Filter Selects */}
+        <div className="hidden sm:flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 inline-flex items-center gap-1 mr-1">
+            <Filter className="h-3 w-3" />
+            SCOPE:
           </span>
 
-          {isFiltered && (
+          <select
+            value={academicYear}
+            onChange={(e) => setAcademicYear(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500/30 cursor-pointer"
+          >
+            <option value="2026-27">AY 2026-27 (Current)</option>
+            <option value="2025-26">AY 2025-26</option>
+            <option value="2024-25">AY 2024-25</option>
+          </select>
+
+          <select
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500/30 cursor-pointer"
+          >
+            <option value="All Regions (8)">All Regions (8)</option>
+            <option value="North-Western">North-Western</option>
+            <option value="Southern">Southern</option>
+            <option value="Western">Western</option>
+            <option value="South-Western">South-Western</option>
+            <option value="Eastern">Eastern</option>
+            <option value="Central">Central</option>
+            <option value="Northern">Northern</option>
+            <option value="South-Central">South-Central</option>
+          </select>
+
+          <select
+            value={institutionType}
+            onChange={(e) => setInstitutionType(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500/30 cursor-pointer"
+          >
+            <option value="All Types">All Types</option>
+            <option value="Private Self-Financed">Private Self-Financed</option>
+            <option value="Government / Aided">Government / Aided</option>
+            <option value="Deemed-to-be University">Deemed-to-be University</option>
+            <option value="Autonomous">Autonomous</option>
+          </select>
+
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500/30 cursor-pointer"
+          >
+            <option value="All Categories">All Categories</option>
+            <option value="Extension of Approval (EoA)">Extension of Approval (EoA)</option>
+            <option value="Increase in Intake / New Course">Increase in Intake / New Course</option>
+            <option value="New Technical Institution">New Technical Institution</option>
+            <option value="Change of Site / Closure">Change of Site / Closure</option>
+          </select>
+
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500/30 cursor-pointer"
+          >
+            <option value="All Statuses">All Statuses</option>
+            <option value="Fatal Fraud Alert">Fatal Fraud Alert</option>
+            <option value="Deficiency Issued">Deficiency Issued</option>
+            <option value="Auto-Pre-Cleared">Auto-Pre-Cleared</option>
+            <option value="Manual Review Required">Manual Review Required</option>
+          </select>
+        </div>
+
+        {/* Right Dossier Counter & Reset */}
+        <div className="flex items-center gap-2 ml-auto">
+          <div className="glass-well rounded-full px-3 py-1 text-[11.5px] font-medium text-slate-600 dark:text-slate-300">
+            Showing <span className="font-bold tabular-nums text-slate-950 dark:text-white">{filteredApplications.length}</span> Dossiers
+          </div>
+          {activeFilterCount > 0 && (
             <button
               onClick={resetFilters}
-              className="btn-liquid-secondary inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] shadow-2xs transition-all cursor-pointer"
+              className="btn-liquid-secondary rounded-full px-2.5 py-1 text-[11px] font-semibold inline-flex items-center gap-1 cursor-pointer"
             >
-              <RotateCcw className="w-3 h-3" />
+              <RotateCcw className="h-3 w-3" />
               <span>Reset</span>
             </button>
           )}
-
-          <button
-            onClick={resetDemoState}
-            title="Restore initial 6 flagship institutions and default audit ledger"
-            className="btn-liquid-secondary inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold text-[var(--text-muted)] hover:text-amber-600 dark:hover:text-amber-400 shadow-2xs transition-all cursor-pointer"
-          >
-            <RotateCcw className="w-3 h-3 text-amber-500" />
-            <span>Reset Demo</span>
-          </button>
         </div>
       </div>
+
+      {/* Collapsible Mobile Filter Grid (< 640px) */}
+      {mobileFiltersOpen && (
+        <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 pt-2.5 mt-2.5 border-t border-slate-200/80 dark:border-slate-800/80 sm:hidden">
+          <select
+            value={academicYear}
+            onChange={(e) => setAcademicYear(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 w-full"
+          >
+            <option value="2026-27">AY 2026-27 (Current)</option>
+            <option value="2025-26">AY 2025-26</option>
+            <option value="2024-25">AY 2024-25</option>
+          </select>
+
+          <select
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 w-full"
+          >
+            <option value="All Regions (8)">All Regions (8)</option>
+            <option value="North-Western">North-Western</option>
+            <option value="Southern">Southern</option>
+            <option value="Western">Western</option>
+            <option value="South-Western">South-Western</option>
+            <option value="Eastern">Eastern</option>
+            <option value="Central">Central</option>
+            <option value="Northern">Northern</option>
+            <option value="South-Central">South-Central</option>
+          </select>
+
+          <select
+            value={institutionType}
+            onChange={(e) => setInstitutionType(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 w-full"
+          >
+            <option value="All Types">All Types</option>
+            <option value="Private Self-Financed">Private Self-Financed</option>
+            <option value="Government / Aided">Government / Aided</option>
+            <option value="Deemed-to-be University">Deemed-to-be University</option>
+            <option value="Autonomous">Autonomous</option>
+          </select>
+
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 w-full"
+          >
+            <option value="All Categories">All Categories</option>
+            <option value="Extension of Approval (EoA)">Extension of Approval (EoA)</option>
+            <option value="Increase in Intake / New Course">Increase in Intake / New Course</option>
+            <option value="New Technical Institution">New Technical Institution</option>
+            <option value="Change of Site / Closure">Change of Site / Closure</option>
+          </select>
+
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="glass-well rounded-xl px-2.5 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 w-full xs:col-span-2"
+          >
+            <option value="All Statuses">All Statuses</option>
+            <option value="Fatal Fraud Alert">Fatal Fraud Alert</option>
+            <option value="Deficiency Issued">Deficiency Issued</option>
+            <option value="Auto-Pre-Cleared">Auto-Pre-Cleared</option>
+            <option value="Manual Review Required">Manual Review Required</option>
+          </select>
+        </div>
+      )}
     </div>
   );
 }
+
+export default GlobalFilterBar;

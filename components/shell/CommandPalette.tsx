@@ -20,11 +20,15 @@ import {
 } from 'lucide-react';
 
 interface CommandPaletteProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
+export function CommandPalette({ isOpen: externalIsOpen, onClose: externalOnClose }: CommandPaletteProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalOpen;
+  const onClose = externalOnClose || (() => setInternalOpen(false));
+
   const [query, setQuery] = useState('');
   const router = useRouter();
   const { t } = useLanguage();
@@ -39,9 +43,12 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const currentApp = applications.find((a) => a.id === selectedAppId) || applications[0];
 
   useEffect(() => {
-    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setInternalOpen((prev) => !prev);
+      }
+      if (e.key === 'Escape' && isOpen) {
         onClose();
       }
     };
@@ -290,3 +297,5 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     </div>
   );
 }
+
+export default CommandPalette;

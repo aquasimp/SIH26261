@@ -13,10 +13,14 @@ import { computeAuditBlockHash } from './crypto-utils';
 import { toast } from 'sonner';
 
 // --- Language Context ---
+export type TranslationFunctionAndObject = typeof TRANSLATIONS['en'] & {
+  (key: string, fallback?: string): string;
+};
+
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: typeof TRANSLATIONS['en'];
+  t: TranslationFunctionAndObject;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -25,10 +29,27 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('en');
 
   const value = useMemo(() => {
+    const raw = TRANSLATIONS[language];
+    const keyMap: Record<string, string> = {
+      'nav.overview': 'navOverview',
+      'nav.applications': 'navApplications',
+      'nav.workbench': 'navWorkbench',
+      'nav.forensics': 'navForensicsStudio',
+      'nav.infrastructure': 'navInfrastructure',
+      'nav.authority': 'navAuthorityBridge',
+      'nav.deficiencies': 'navDeficiencies',
+      'nav.audit': 'navAuditTrail',
+    };
+    const tFn = (key: string, fallback?: string) => {
+      const mapped = keyMap[key] || key;
+      const val = (raw as Record<string, string>)[mapped];
+      return val || fallback || key;
+    };
+    const t = Object.assign(tFn, raw) as TranslationFunctionAndObject;
     return {
       language,
       setLanguage,
-      t: TRANSLATIONS[language],
+      t,
     };
   }, [language]);
 
@@ -76,6 +97,18 @@ export interface AppStoreContextType {
     officerNote?: string
   ) => Promise<AuditBlock | null>;
   escalateToStandingHearingCommittee: (appId: string, reason?: string) => Promise<AuditBlock | null>;
+
+  // Direct filter accessors & convenience setters
+  academicYear: string;
+  setAcademicYear: (year: string) => void;
+  region: string;
+  setRegion: (region: string) => void;
+  institutionType: string;
+  setInstitutionType: (type: string) => void;
+  category: string;
+  setCategory: (category: string) => void;
+  status: string;
+  setStatus: (status: string) => void;
 }
 
 const defaultFilters: GlobalFilters = {
@@ -476,6 +509,17 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
     approveApplicationEoA,
     issueDeficiencyNotice,
     escalateToStandingHearingCommittee,
+
+    academicYear: filters.academicYear,
+    setAcademicYear: (val: string) => setFilters((f) => ({ ...f, academicYear: val })),
+    region: filters.region,
+    setRegion: (val: string) => setFilters((f) => ({ ...f, region: val })),
+    institutionType: filters.institutionType,
+    setInstitutionType: (val: string) => setFilters((f) => ({ ...f, institutionType: val })),
+    category: filters.applicationCategory,
+    setCategory: (val: string) => setFilters((f) => ({ ...f, applicationCategory: val })),
+    status: filters.scrutinyStatus,
+    setStatus: (val: string) => setFilters((f) => ({ ...f, scrutinyStatus: val })),
   };
 
   return <AppStoreContext.Provider value={value}>{children}</AppStoreContext.Provider>;

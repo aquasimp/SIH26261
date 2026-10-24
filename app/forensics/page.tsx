@@ -388,7 +388,7 @@ export default function ForensicsStudioPage() {
       </div>
 
       {/* Top 4 Working Forensic Modules Navigation Bar */}
-      <div className="p-2.5 liquid-glass-card rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-semibold shadow-sm">
+      <div className="p-3 sm:p-4 liquid-glass-card rounded-[18px] flex flex-wrap items-center justify-between gap-3 text-xs font-semibold shadow-sm">
         <div className="glass-well inline-flex rounded-xl p-0.5">
           <button
             onClick={() => setActiveModule('ELA_SANDBOX')}
@@ -441,7 +441,7 @@ export default function ForensicsStudioPage() {
       {activeModule === 'ELA_SANDBOX' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left Canvas & Controls (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
+          <div className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
@@ -541,7 +541,7 @@ export default function ForensicsStudioPage() {
           {/* Right: 13-Scalar StatNoise Histogram & Metadata (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
             {/* 13-Scalar StatNoise Distribution Histogram */}
-            <div className="liquid-glass-card rounded-2xl p-5 space-y-3 shadow-md">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-3 shadow-md">
               <div className="flex items-center justify-between">
                 <h3 className="font-bold text-xs uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-1.5">
                   <BarChart3 className="w-4 h-4 text-sky-600" />
@@ -605,7 +605,7 @@ export default function ForensicsStudioPage() {
             </div>
 
             {/* File Byte & EXIF Metadata Inspector */}
-            <div className="liquid-glass-card rounded-2xl p-5 space-y-2.5 text-xs shadow-md">
+            <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-2.5 text-xs shadow-md">
               <div className="flex items-center gap-2 font-bold text-[var(--text-primary)]">
                 <FileText className="w-4 h-4 text-indigo-600" />
                 <span>Byte Structure &amp; Software Signature</span>
@@ -644,7 +644,7 @@ export default function ForensicsStudioPage() {
       {activeModule === 'NOISEPRINT_ABLATION' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* 7-Level Ablation Chart (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
+          <div className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div>
               <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Binary className="w-4 h-4 text-rose-600 dark:text-rose-400" />
@@ -702,7 +702,7 @@ export default function ForensicsStudioPage() {
           </div>
 
           {/* Interactive Crop Mode Comparison: Tight vs Wide ROI (5 cols) */}
-          <div className="lg:col-span-5 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
+          <div className="lg:col-span-5 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div>
               <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Crosshair className="w-4 h-4 text-sky-600 dark:text-sky-400" />
@@ -769,7 +769,7 @@ export default function ForensicsStudioPage() {
       {activeModule === 'SEAL_SIGNATURE_LAB' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left: Side-by-side Stamp & Signature Comparison (7 cols) */}
-          <div className="lg:col-span-7 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
+          <div className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div>
               <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -828,7 +828,7 @@ export default function ForensicsStudioPage() {
           </div>
 
           {/* Right: Real Polar Coordinate Unwrapping Canvas (5 cols) */}
-          <div className="lg:col-span-5 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
+          <div className="lg:col-span-5 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div>
               <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Compass className="w-4 h-4 text-sky-600 dark:text-sky-400" />
@@ -891,7 +891,7 @@ export default function ForensicsStudioPage() {
       {activeModule === 'XREF_MORPHOLOGY' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left: Raw PDF Incremental Save Trailers (6 cols) */}
-          <div className="lg:col-span-6 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
+          <div className="lg:col-span-6 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div>
               <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <FileCode className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -938,7 +938,7 @@ export default function ForensicsStudioPage() {
           </div>
 
           {/* Right: Character Morphology & Baseline Offset (6 cols) */}
-          <div className="lg:col-span-6 liquid-glass-card rounded-2xl p-5 space-y-4 shadow-md">
+          <div className="lg:col-span-6 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div>
               <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Activity className="w-4 h-4 text-sky-600 dark:text-sky-400" />

@@ -327,7 +327,7 @@ export default function ApplicationsPage() {
 
       {/* Quick Search & Compare Indicator Strip */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl liquid-glass-card flex-1 shadow-sm">
+        <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-[18px] liquid-glass-card flex-1 shadow-sm">
           <Search className="w-4 h-4 text-[var(--text-muted)] shrink-0" />
           <input
             type="text"
@@ -386,9 +386,9 @@ export default function ApplicationsPage() {
 
       {/* Table View */}
       {viewMode === 'table' ? (
-        <div className="liquid-glass-card rounded-2xl overflow-hidden shadow-md">
-          <div className="overflow-x-auto rounded-xl glass-well">
-            <table className="w-full text-left text-xs">
+        <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 overflow-hidden shadow-md">
+          <div className="w-full overflow-x-auto rounded-xl">
+            <table className="w-full min-w-[760px] text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-[var(--glass-well-border)] text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
                   <th className="py-3 px-3.5 w-10 text-center">Cmp</th>
@@ -536,7 +536,7 @@ export default function ApplicationsPage() {
             return (
               <div
                 key={app.id}
-                className={`liquid-glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3.5 transition-all shadow-md ${
+                className={`liquid-glass-card rounded-[18px] p-4 sm:p-5 flex flex-col justify-between space-y-3.5 transition-all shadow-md ${
                   isFatal
                     ? 'top-rule-fatal'
                     : isCleared
