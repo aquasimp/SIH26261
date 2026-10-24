@@ -1,32 +1,123 @@
-# AICTE Regulatory Scrutiny & Forensic Document Intelligence Workstation
+# 🏛️ AICTE Regulatory Scrutiny & Forensic Document Intelligence Workstation
 ### Smart India Hackathon — Problem Statement ID: 26261
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.2.1-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Live Platform](https://img.shields.io/badge/Production%20Live-aicte--scrutiny.vercel.app-0284c7?style=for-the-badge&logo=vercel&logoColor=white)](https://aicte-scrutiny.vercel.app)
+[![Next.js](https://img.shields.io/badge/Next.js-15.5.28-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0.9-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-An evidence-linked regulatory intelligence platform and forensic document workstation engineered for the **All India Council for Technical Education (AICTE), Ministry of Education, Government of India (Regulation Bureau)**. 
-
-Designed to automate multi-hundred-page institutional compliance dossiers under the **AICTE Approval Process Handbook (APH 2024–2027)**, coupling pixel-level neural forensics and CAD blueprint geometry with deterministic National Digital Public Infrastructure (DPI) authority verification.
+> **Official Live Production URL:**  
+> 👉 **[https://aicte-scrutiny.vercel.app](https://aicte-scrutiny.vercel.app)**
 
 ---
 
-## 🏛️ Core Product Philosophy
+## 📌 Executive Summary
 
-1. **Evidence-Linked Decision-Support, Never an Opaque Black-Box:**
-   AI never issues arbitrary approvals. Every anomaly flagged links interactively to multi-spectral canvas bounding boxes, Error Level Analysis (ELA) residuals, Noiseprint++ heatmaps, exact APH 2024–27 statutory rule citations, and cryptographic issuing authority audit records.
-2. **Strict Decoupling of Fatal Fraud from Rectifiable Deficiencies:**
-   - **Fatal Fraud (Red Veto):** Altered land deed acreage, spliced Fire NOC dates, digital stamp cloning, or biometric/EPFO Ghost Faculty across colleges immediately triggers the non-linear gate ($\Gamma_{forensic} = 0$), routing dossiers directly to the **Standing Hearing Committee (SHC)**.
-   - **Rectifiable Deficiencies:** Minor 3.8% tutorial room shortfall, pending municipal pollution board renewal, or cadre imbalances auto-generate official **15-day EVC rectification notices** without triggering fatal fraud penalties.
-3. **100% Bilingual Localization (EN | हिन्दी):**
+Every academic year, the **All India Council for Technical Education (AICTE)**, under the Ministry of Education, Government of India, scrutinizes tens of thousands of institutional compliance dossiers for Extension of Approval (EoA), new program approvals, and intake variations. Today, regulatory scrutiny officers are burdened with thousands of pages of submitted certificates, land titles, building plans, and faculty rosters.
+
+The **AICTE Regulatory Scrutiny & Forensic Document Intelligence Workstation (PS 26261)** is an evidence-linked regulatory cockpit engineered specifically for AICTE Regional Scrutiny Officers and Bureau Officials. Rather than acting as an opaque black box that auto-approves or auto-rejects, the system acts as a **forensic decision-support co-pilot**: every single anomaly, deficiency, or fraud alert is linked directly to pixel-level forensic evidence, mathematical calculations from the **Approval Process Handbook (APH 2024–2027)**, and cryptographic cross-checks with National Digital Public Infrastructure (DPI) databases.
+
+---
+
+## 🌟 What Makes This Platform Different?
+
+1. **Evidence-Linked Decision Support, Never a Black Box**  
+   Every flagged anomaly links to interactive multi-spectral canvas bounding boxes, Error Level Analysis (ELA) residuals, Noiseprint++ heatmaps, exact APH statutory rule citations, and cryptographic issuing authority audit records. Officers retain ultimate discretionary authority, backed by undeniable forensic proof.
+
+2. **Strict Decoupling of Fatal Fraud from Rectifiable Deficiencies**  
+   - **Fatal Fraud (Red Veto):** Altered land deed acreage, spliced Fire NOC issue dates, digital stamp cloning, or biometric/EPFO Ghost Faculty across colleges immediately triggers the non-linear gate ($\Gamma_{forensic} = 0$), routing dossiers directly to the **Standing Hearing Committee (SHC)**.
+   - **Rectifiable Deficiencies:** Minor 3.8% tutorial room shortfall, pending municipal pollution board renewal, or cadre imbalances auto-generate official **15-day EVC rectification notices** without unfairly penalizing the institution with fraud sanctions.
+
+3. **100% Bilingual Localization (English & हिन्दी)**  
    Full interface parity in both English and formal regulatory Hindi (`Noto Sans Devanagari` and `Khand`), allowing Regional Officers across all 8 AICTE zones to audit institutional applications in their preferred official language.
 
+4. **Cryptographic Integrity & Non-Repudiation**  
+   Every AI inference, DPI handshake, and officer decision is logged into an immutable **SHA-256 Merkle-tree chained audit ledger**, verifiable with one click and exportable as signed JSON.
+
 ---
 
-## 🔬 Multi-Modal Machine Learning Portfolio
+## 🧭 Complete Interactive Walkthrough & Module Guide
+
+Every single page and button across the platform is functional and interactive. Here is how each module works:
+
+### 1. Executive Scrutiny Overview (`/overview`)
+- **Interactive KPI Grid:** Real-time breakdown of Total Dossiers, Fatal Fraud alerts, Rectifiable Deficiencies, Approved EoAs, DPI Verified rate, and Mean Turnaround time.
+- **Priority Intervention Banner:** Pinpoints the highest-risk dossier in the nation; clicking **"Open Scrutiny Workbench"** jumps straight into the deep-dive workstation, while **"Quick-Look Evidence"** displays an instant multi-attribute inspection modal.
+- **Dynamic Scope & Regional Filtering:** Filter all dossiers and stats across Academic Years (2026–27, 2025–26, 2024–25), 8 AICTE Regions (North-West, Northern, Western, Central, Eastern, Southern, South-West, South-Central), Institution Types, and Statuses.
+- **AI Scrutiny Engine Distribution:** Frequency breakdown of anomaly detections across PaddleOCR LayoutLMv3, TruFor Splicing, CAD Shoelace Area, ArcFace Ghost Faculty, and DPI Bridge—each linking directly into its respective module.
+- **National DPI Telemetry Cards:** Live ping status of 6 national registries (DigiLocker, EPFO, State e-District, MCA21, Land Revenue, AICTE Cadastral GIS).
+- **High-Risk Intervention Queue:** Clickable table rows with instant evidence quick-looks, direct workbench routing, and 1-click deficiency notice drafts.
+
+### 2. Searchable Institutional Registry (`/applications`)
+- **Table vs. Card Layout:** Instantly toggle between dense tabular view and visual glassmorphism cards with 5-component ICI compliance spark-bars.
+- **Multi-Factor Sorting:** Sort on the fly by Risk Priority Number (RPN), Institutional Compliance Index (ICI), Submission Date, or Institution Name.
+- **Simulate SynDoc-10K Ingestion:** Click **"Simulate Ingestion"** to trigger a real-time animated batch ingestion of synthetic institutional dossiers.
+- **Batch Data Export:** Instant 1-click **Export CSV** and **Export JSON** of filtered compliance records.
+- **Side-by-Side Institution Comparison:** Select two institutions to open the comprehensive dual-column comparison modal inspecting land size, carpet area, faculty ratios, and forensic risk scores.
+
+### 3. Forensic Scrutiny Workbench (`/applications/[id]`)
+- **Dual-Pane Split-Screen Workspace:** Left pane hosts the deep forensic document canvas; right pane contains the multi-tab inspector.
+- **Multi-Document Tabs:** Switch between Document 1 (Fire Safety NOC), Document 2 (Land Revenue Jamabandi Deed), Document 3 (Architectural CAD Floor Plan), and Document 4 (Teaching Faculty & Staff Roster).
+- **Multi-Spectral Forensic Overlays:**
+  - **Original RGB:** Clean scan visualization.
+  - **LayoutLMv3 (KIE):** Visual 2D spatial bounding boxes around extracted key fields.
+  - **TruFor Heatmap:** RGB anomaly colormap revealing spliced text and re-saved regions.
+  - **Error Level Analysis (ELA):** Recompression residual view highlighting manipulated text blocks.
+  - **8×8 DCT BAG:** Discrete Cosine Transform block artifact grid alignment inspector.
+  - **Interactive 3× Loupe Magnifier:** Real-time cursor loupe zoom for examining microscopic pixel edges.
+- **Authority Reconciliation Tab:** Side-by-side comparison of applicant claims against authoritative DigiLocker / State Fire portal records with color-coded diff highlights.
+- **APH Math Verifier Tab:** Interactive sliders for student intake, land size, and faculty roster with real-time recalculation of statutory requirements under APH Chapter VII.
+- **Ghost Faculty Biometric Radar:** ArcFace 512-D cosine similarity matching and EPFO UAN deduplication across sister colleges.
+- **SLANet Table Topology Inspector:** View complex tabular data in Visual, Clean HTML DOM, or Token Graph format.
+- **Executive Action Bar:** 1-click decision dispatch to **Approve EoA**, **Issue 15-Day Deficiency Notice**, or **Escalate to Standing Hearing Committee (SHC)**.
+
+### 4. Digital Forensics Studio (`/forensics`)
+- **Local File Upload Sandbox:** Drag and drop or browse any local PDF or image scan to test live client-side forensics.
+- **Adjustable ELA Engine:** Custom sliders for JPEG recompression quality factor (50%–100%) and amplification multiplier scale ($\gamma = 5\times\text{--}50\times$) with instantaneous HTML5 canvas rendering.
+- **Noise Analysis Ablation Test:** Interactive comparison of ResAware BatchNorm2d vs. traditional InstanceNorm2d, illustrating how scalar noise statistics are preserved.
+- **Seal & Signature Verification Lab:** 360° polar unwrapping of circular stamps to linear strips for OCR reading, paired with Siamese ArcFace cosine similarity thresholds.
+- **PDF Stream & Font Forensics:** Detailed breakdown of PyMuPDF xref tables, `%%EOF` save counts, producer software tags, and embedded font subset discrepancies (e.g. injected ArialMT digits inside TimesNewRoman text).
+
+### 5. Blueprint & Campus CV Studio (`/infrastructure`)
+- **Interactive Architectural CAD Viewer:** SVG floor plan viewer with clickable room polygons, hover tooltips, and occupancy classifications.
+- **Graphic Scale Bar Calibrator:** Interactive slider adjusting pixels-to-meters calibration ($s = L_m / L_{px}$), dynamically updating Shoelace carpet areas in real time.
+- **What-If FSI / FAR & Intake Simulator:** Dynamic sliders for student intake and municipal Floor Space Index (1.5–3.5) computing built-up area sufficiency under APH norms.
+- **Multi-Plot Cadastral Contiguity Validator:** Visual verification that up to 3 campus land parcels fall within the statutory $\le 2.0\text{ km}$ Haversine radius, with instructional facilities confined to the main plot.
+
+### 6. National DPI Authority Bridge (`/authority-bridge`)
+- **Cryptographic Handshake Simulator:** Click **"Execute Cryptographic DPI Handshake"** to trigger an animated 4-stage live stepper (OAuth 2.0 PKCE, HMAC-SHA256, XML Pull URI, and Field Diff Reconciliation) with realistic millisecond latency telemetry.
+- **Deterministic Six-State Regulatory Protocol:** Interactive toggle buttons for all 6 regulatory states (`VERIFIED`, `MISMATCH_DETECTED`, `EXPIRED`, `VERIFY_PENDING`, `SOURCE_UNAVAIL`, `MANUAL_REVIEW`) with toast notifications and active state styling.
+- **Institutional Certificate Presets:** 4 pre-configured presets:
+  - *Fire NOC (HR • Tampered)*: Simulates certificate issue date mismatch against Haryana Fire Service.
+  - *Jamabandi Deed (HR • Spliced)*: Simulates land area alteration against Haryana Revenue Department.
+  - *Fire NOC (MH • Verified)*: Demonstrates a 100% verified handshake with Maharashtra Fire Directorate.
+  - *Bhulekh Grant (OD • 503 Retry)*: Demonstrates API Setu gateway failover and retry mechanisms.
+- **EPFO ECR 2.0 & 50% Basic Wage Rule:** Live interactive salary add-back calculator testing compliance with the Supreme Court 2019 ruling and Social Security Code 2020.
+- **High-Density QR Code Cryptographic Verifier:** Simulates 2D QR decoding and ECDSA/RSA-2048 public key verification against state root certificates.
+
+### 7. Statutory Deficiency & Show-Cause Generator (`/deficiencies`)
+- **Statutory Order Formats:** Toggle between **Form-A (15-Day EVC Deficiency Notice)** for rectifiable discrepancies and **Form-B (Immediate SHC Summons)** for fatal fraud alerts.
+- **Language Mode Parity:** Read notices in English, formal Rajbhasha Hindi, or side-by-side bilingual dual-column layout.
+- **15-Day Countdown Clock:** Live countdown timer down to the second tracking the institutional compliance window.
+- **Officer Class-3 DSC USB Token Signing Modal:** Click **"Sign with Officer Class-3 DSC"** to open the interactive digital signature dialog, select an e-token, compute the SHA-256 digest, and embed the cryptographic seal.
+- **Print & Dispatch:** Built-in clean print formatting (`window.print`) and simulated portal dispatch with SMS notification alerts.
+
+### 8. Immutable SHA-256 Scrutiny Ledger (`/audit-trail`)
+- **Cryptographically Chained Blocks:** Chronological Merkle chain logging AI model inference, DPI handshakes, and officer actions with parent hash validation.
+- **Verify Hash Chain Integrity:** Click **"Verify Hash Chain Integrity"** to trigger a real-time verification sequence confirming 0 collisions across all blocks.
+- **1-Click SHA-256 Hash Copying:** Click any block's hash badge to copy the full 64-character hex string to clipboard.
+- **Ledger Export:** Download the entire tamper-evident scrutiny ledger as a formatted `.json` file for statutory retention.
+
+### 9. Productivity & Shell Controls
+- **Global Command Palette (`⌘K` or `Ctrl+K`):** Accessible from anywhere in the application or by clicking the top search bar. Instant jump search across institutions, PIDs, UANs, and APH statutory clauses.
+- **Liquid Glass Civic Design System:** Ultra-crisp typography, subtle borders, high-contrast dark/light mode parity, and zero subpixel text blurring.
+- **Responsive Mobile Drawer:** Smooth slide-out navigation rail for tablet and mobile viewports with quick-close backdrop.
+
+---
+
+## 🔬 Multi-Modal Machine Learning Architecture
 
 ```
                            ┌───────────────────────────────────────────────┐
@@ -62,48 +153,29 @@ Designed to automate multi-hundred-page institutional compliance dossiers under 
                                  └───────────────────────────────────┘
 ```
 
-### 1. Intelligent Document Processing (IDP) & Layout-Aware OCR
-- **Frontline Text & Layout:** Deploys **PP-StructureV3** (`picodet_lcnet_x1_0_fgd_layout`) with Focal and Global Distillation (41ms CPU inference) to segment Text, Tables, Stamps, and Figures.
-- **Table Topology Reconstruction:** Routes complex multi-span faculty rosters and equipment schedules to **SLANet-LCNetV2** with Mish activations and dynamic EOS termination (96.67% TEDS score).
-- **Key Information Extraction (KIE):** Fine-tuned **LayoutLMv3-Large** with 2D spatial embeddings ($[x_0, y_0, x_1, y_1] \in [0, 1000]$) and CRF sequence tagging over legal deeds, affidavits, and statutory NOCs.
+1. **Intelligent Document Processing (IDP):**  
+   - **PP-StructureV3** (`picodet_lcnet_x1_0_fgd_layout`) with Focal and Global Distillation (41ms CPU inference) to segment Text, Tables, Stamps, and Figures.
+   - **SLANet-LCNetV2** with dynamic EOS termination achieving a 96.67% TEDS table reconstruction score.
+   - **LayoutLMv3-Large** with 2D spatial coordinates ($[x_0, y_0, x_1, y_1] \in [0, 1000]$) and sequence tagging over legal deeds and affidavits.
 
-### 2. Micro-Forgery, Splicing & Tampering Localization
-- **Signal-Preserving Noise Forensics:** Standard TruFor suffers from an InstanceNorm2d bottleneck that collapses scalar noise statistics (AUC collapse from 0.747 to 0.554). We enforce **Extract-Then-Crop native extraction**, replace InstanceNorm2d with **ResAware BatchNorm2d**, and run a parallel **StatNoise-Fusion bypass** (13 scalar noise statistics) paired with **NFA-ViT** (Noise-Guided Forgery Amplification Attention).
-- **Multi-Quality Error Level Analysis (ELA):** Recompresses document rasters at $Q=90\%$ to generate amplified residuals $E(x, y) = |I(x, y) - I_{Q90}(x, y)| \times \gamma$ ($\gamma=20$), revealing 8×8 DCT block artifact grid (BAG) phase misalignments.
-- **Copy-Move Forgery Detection (CMFD):** Extracts dense SIFT/ORB keypoints with RANSAC homography estimation to catch cloned signatures and digits.
-- **PDF Stream & Font Forensics:** Inspects PyMuPDF xref tables, incremental `%%EOF` save counts, producer tags (`Canva`, `PDFtk`, `Photoshop`), and embedded font subsets (detecting injected `ArialMT` digits in `TimesNewRomanPSMT` certificates).
+2. **Micro-Forgery & Splicing Localization:**  
+   - Resolves the TruFor InstanceNorm2d bottleneck using **Extract-Then-Crop** native extraction and **ResAware BatchNorm2d**, recovering AUC from 0.554 back to 0.747+.
+   - **Multi-Quality Error Level Analysis (ELA)** recompressing rasters at $Q=90\%$ to isolate amplified residuals $E(x, y) = |I(x, y) - I_{Q90}(x, y)| \times \gamma$.
+   - **Copy-Move Forgery Detection (CMFD)** using dense SIFT/ORB keypoints with RANSAC homography estimation.
 
-### 3. Biometric Seal & Signature Verification
-- **Object Detection:** Fine-tuned **YOLOv11m-Doc** operating at $1280 \times 1280$ resolution to isolate wet signatures, circular seals, and notary stamps.
-- **Polar Coordinate Seal Unwrapping:** Converts circular seals into $(r, \theta)$ polar unwrapped strips for 360° peripheral text recognition.
-- **ArcFace Metric Learning:** Siamese ResNet-50 trained with Additive Angular Margin Loss ($s=64.0, m=0.50\text{ rad}$) mapping signatures to a 512-D hypersphere. Cosine similarity $\cos(\theta) < 0.72$ flags signature mismatches, while $SSIM > 0.995$ flags digital stamp copy-paste fraud.
+3. **Biometric Stamp & Signature Verification:**  
+   - **YOLOv11m-Doc** operating at $1280 \times 1280$ isolating wet signatures and notary seals.
+   - **Polar Coordinate Seal Unwrapping** converting circular seals into $(r, \theta)$ strips for 360° text inspection.
+   - **ArcFace Metric Learning** (Siamese ResNet-50, Additive Angular Margin $s=64.0, m=0.50\text{ rad}$) mapping signatures to a 512-D hypersphere.
 
-### 4. CAD Blueprint Vectorization & Area Geometry
-- **Semantic Segmentation:** **Mask2Former** (Swin-Base backbone fine-tuned on CubiCasa5K) paired with a parallel **RMBG-1.4** structural wall boundary branch.
-- **Closed Planar Graph Vectorization:** Ramer-Douglas-Peucker (RDP, $\varepsilon=2.0\text{ px}$) polygon simplification.
-- **Graphic Scale Bar Calibration & Shoelace Carpet Area:**
-  $$\text{Scale Factor: } s = \frac{L_m}{L_{px}} \quad (\text{m/px})$$
-  $$\text{Carpet Area: } \text{Area}(P) = s^2 \cdot \frac{1}{2} \left| \sum_{i=1}^n (x_i y_{i+1} - x_{i+1} y_i) \right|$$
-  Compares true geometric area against declared blueprint text and portal claims. Any inflation $>5\%$ triggers a `BLUEPRINT_AREA_INFLATION` deficiency flag.
+4. **CAD Blueprint Vectorization & Area Geometry:**  
+   - **Mask2Former** (Swin-Base backbone) paired with **RMBG-1.4** structural wall boundary branch.
+   - **Graphic Scale Bar Calibration & Shoelace Carpet Area:**
+     $$s = \frac{L_m}{L_{px}} \quad (\text{m/px}), \qquad \text{Area}(P) = s^2 \cdot \frac{1}{2} \left| \sum_{i=1}^n (x_i y_{i+1} - x_{i+1} y_i) \right|$$
 
-### 5. Campus Scrutiny CV & Ghost Faculty Deduplication
-- **Laboratory Asset Inspection:** **RT-DETR-L** and **YOLOv8x** detect 45 statutory equipment classes (`cnc_lathe`, `universal_testing_machine`, `wheelchair_ramp`, `fire_hydrant`).
-- **Duplicate Image Detection:** 256-bit Perceptual Hash (pHash / Wavelet wHash) + **DINOv2 ViT-B/14** image embeddings prevent identical lab photos from being submitted across sister campuses.
-- **Cadastral Multi-Plot Triangulation:** Haversine distance and Shapely point-in-polygon checks verify $\le 3$ plots within a $\le 2.0\text{ km}$ radius, ensuring all instructional areas reside on the primary plot.
-- **Biometric Ghost Faculty Deduplication:** **RetinaFace** 5-point alignment feeds $112 \times 112$ crops into **ArcFace** (IResNet-100, Glint360k) generating 512-D vectors indexed in **Qdrant** via HNSW graphs ($M=32, ef=200$). Matches with $\cos(\theta) > 0.78$ or overlapping **EPFO ECR 2.0** monthly remittances flag `CONCURRENT_GHOST_FACULTY`.
-
----
-
-## 🔗 National DPI Authority Bridge Architecture
-
-The platform connects via REST and webhook APIs to authoritative issuing repositories:
-
-| Issuing Authority | Integration Protocol | Verification Handshake & Security |
-| :--- | :--- | :--- |
-| **DigiLocker / NAD / API Setu** | REST Pull URI / Pull Document API | OAuth 2.0 PKCE (`code_verifier` + `code_challenge`), `x-digilocker-hmac` (HMAC-SHA256), Base64 DataContent XML field-level diff reconciliation. |
-| **EPFO Shram Suvidha** | Aggregator API (Social Security Code 2020) | Establishment PF Code query, 12-digit UAN status, Aadhaar Face Auth (FAT) timestamp, and statutory 50% basic wage add-back rule compliance. |
-| **State e-District / Fire Directorate** | 2D QR Code Cryptographic Verifier | High-density QR matrix decoding via OpenCV WeChatQRCode CNN; ECDSA (`secp256r1`) or RSA-2048 signature verification against State CCA X.509 certificates. |
-| **MCA21 v3 & NITI Aayog NGO Darpan** | MCA Registry REST Handshake | Trust / Society / Section 8 Company Corporate Identity Number (CIN), establishment PAN, and active legal standing check. |
+5. **Campus Scrutiny & Ghost Faculty Deduplication:**  
+   - **RetinaFace** 5-point alignment feeding $112 \times 112$ crops into **ArcFace** (IResNet-100) generating 512-D vectors indexed in **Qdrant** via HNSW graphs ($M=32, ef=200$).
+   - Flags concurrent teaching appointments across disparate colleges and cross-references **EPFO ECR 2.0** monthly provident fund contributions.
 
 ---
 
@@ -131,7 +203,19 @@ $$RPN(a_i) = \text{Severity}(a_i) \times \text{Occurrence}(a_i) \times \text{For
 
 ---
 
-## 🖥️ Application Architecture & Routes
+## 💻 Tech Stack & Project Structure
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend Framework** | **Next.js 15.5.28** (App Router, Server & Client Components) |
+| **Core UI Library** | **React 19.0.0** |
+| **Styling & Theme** | **Tailwind CSS v4.0.9** + Custom Liquid Glass Civic Tokens |
+| **Type Safety** | **TypeScript 5.8.2** (Strict Mode) |
+| **Icons & Graphics** | **Lucide React**, Custom SVG Blueprint Planar Graphs |
+| **Theme Management** | **next-themes** (Smooth Light / Dark mode persistence) |
+| **Bilingual Engine** | Pure React Context with complete EN/HI localized dictionary |
+| **Hosting & CDN** | **Vercel Edge Network** ([https://aicte-scrutiny.vercel.app](https://aicte-scrutiny.vercel.app)) |
+| **Backend Microservice** | **Python 3.11+**, **FastAPI 0.110.0**, **PyMuPDF**, **OpenCV** |
 
 ```
 app/
@@ -147,6 +231,7 @@ app/
 │   └── api/                      # Next.js Route Handlers for applications, compliance calculation, and forensics
 components/
 ├── shell/                        # Persistent LeftGlassRail, FloatingTopHeader, GlobalFilterBar, CommandPalette
+├── brand/                        # Official AICTE Emblem & Regulatory Bureau SVG Vectors
 └── workbench/                    # ForensicDocumentCanvas (HTML5 Canvas ELA/TruFor), BlueprintVectorViewer (CAD SVG)
 lib/
 ├── aph-engine.ts                 # Pure mathematical formulas implementing APH Chapter VII, SFR, Cadre, and ICI
@@ -160,111 +245,45 @@ backend/
 
 ---
 
-## ⚡ Quickstart Guide
+## ⚡ Local Development Setup
 
 ### Prerequisites
 - **Node.js:** v18.18+ or v20+
 - **npm:** v9+
-- **Python:** v3.10+ (for backend microservice)
+- **Python:** v3.10+ (optional, for running the local Python microservice)
 
-### 1. Frontend Setup (Next.js 15)
+### 1. Frontend Setup
 ```bash
 # Clone the repository
 git clone https://github.com/aquasimp/SIH26261.git
 cd SIH26261
 
-# Install frontend dependencies
+# Install dependencies
 npm install
 
-# Start the Next.js development server
+# Run development server
 npm run dev
 ```
 Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
-### 2. Backend Setup (FastAPI Microservice)
-```bash
-# Navigate to the backend directory
-cd backend
-
-# Create and activate a virtual environment
-python -m venv venv
-# On Windows:
-.\venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
-
-# Install backend dependencies
-pip install -r requirements.txt
-
-# Launch the FastAPI microservice
-uvicorn main:app --reload --port 8000
-```
-FastAPI interactive Swagger documentation will be available at **[http://localhost:8000/docs](http://localhost:8000/docs)**.
-
-### 3. Verification & Build
+### 2. Production Build Verification
 ```bash
 # Verify strict TypeScript type compliance
 npx tsc --noEmit
 
-# Run production build
+# Run Next.js production build
 npm run build
 ```
 
 ---
 
-## 🧪 Verification & Acceptance Walkthrough
-
-1. **Executive Scrutiny Dashboard (`/overview`):**
-   - Inspect the **6-column unified KPI grid** with 2px severity color bars.
-   - Change dropdowns in the **Global Filter Bar** (e.g. filter by Region or Status); notice the KPIs and Regional Matrix react dynamically.
-   - Use the sun/moon button in the floating top header to toggle **Light / Dark Mode**.
-   - Use the language toggle to switch between **English and हिन्दी**.
-2. **Institutional Registry (`/applications`):**
-   - Search dossiers by PID (`1-9482710392`), institution name, city, or status.
-   - Toggle between **Table View** and **Card View**; inspect the 5-component ICI spark-bars.
-   - Click **CSV** or **JSON** to test instant batch export.
-3. **Forensic Scrutiny Workbench (`/applications/AICTE-2026-NW-0842`):**
-   - In the left pane, switch between **Document 1 (Fire NOC)** and **Document 3 (Architectural Floor Plan)**.
-   - On Document 1, toggle between **Original RGB**, **LayoutLMv3 Bounding Boxes**, **TruFor Anomaly Heatmap**, and **Error Level Analysis (ELA)**.
-   - On Document 3, interact with the **Blueprint Vector Viewer**, click room polygons, and observe scale calibration.
-   - In the right pane, review the **Side-by-Side Authority Diff Table**, verify **APH 2024–27 Norm Calculations**, and inspect **Ghost Faculty ArcFace detections**.
-4. **Digital Forensics Studio (`/forensics`):**
-   - Upload any local scan or image; test the client-side HTML5 Canvas ELA slider.
-   - Inspect the **ResAware vs. InstanceNorm2d** ablation comparison.
-   - Review the **ArcFace Seal & Signature Verification Matrix** with polar unwrapping.
-5. **Blueprint & Campus CV Studio (`/infrastructure`):**
-   - Adjust the **Scale Bar Calibrator** (pixels vs. meters) and observe real-time Shoelace room area updates.
-   - Use the **What-If FSI/FAR & Intake Simulator** sliders to calculate dynamic required built-up area.
-6. **National DPI Authority Bridge (`/authority-bridge`):**
-   - Click **"Run Live Handshake Simulation"** to watch the 4-step OAuth PKCE, HMAC-SHA256, XML Pull URI, and field reconciliation process with live latency telemetry.
-7. **Deficiency & Show-Cause Generator (`/deficiencies`):**
-   - Select an institution to generate its official bilingual legal order.
-   - Observe the **15-Day EVC Rectification Countdown Clock**.
-   - Click **"Sign with Officer DSC"** to append a cryptographically validated Class 3 certificate and dispatch to the portal.
-8. **SHA-256 Audit Ledger (`/audit-trail`):**
-   - Review cryptographically chained blocks logging AI inference, DPI handshakes, and officer actions.
-   - Click **"Verify Integrity"** to validate zero hash collisions.
-   - Copy any SHA-256 block hash with one click.
-9. **Global Keyboard Shortcut:**
-   - Press `⌘K` or `Ctrl+K` from any screen to launch the command palette and search institutions or APH statutory clauses.
-
----
-
-## 🏆 Smart India Hackathon PS 26261 Specifications Matrix
-
-| Blueprint Specification | Implementation Status | Verification Route / Module |
-| :--- | :---: | :--- |
-| **Multi-Modal Model Portfolio** | ✅ Implemented | `lib/mock-data.ts`, `components/workbench/ForensicDocumentCanvas.tsx` |
-| **ResAware vs. InstanceNorm Forensics** | ✅ Implemented | `app/forensics/page.tsx`, `app/api/forensics/analyze/route.ts` |
-| **CAD Blueprint Shoelace Area Calibrator** | ✅ Implemented | `components/workbench/BlueprintVectorViewer.tsx`, `app/infrastructure/page.tsx` |
-| **ArcFace & EPFO Ghost Faculty Deduplication**| ✅ Implemented | `app/applications/[id]/page.tsx`, `lib/mock-data.ts` |
-| **National DPI Authority Bridge** | ✅ Implemented | `app/authority-bridge/page.tsx` |
-| **APH 2024–2027 Mathematical Formulations** | ✅ Implemented | `lib/aph-engine.ts`, `app/api/compliance/calculate/route.ts` |
-| **Liquid Glass Civic UI (Light/Dark Parity)** | ✅ Implemented | `app/globals.css`, `components/shell/` |
-| **100% Bilingual Localization (EN / हिन्दी)** | ✅ Implemented | `lib/i18n.ts`, `lib/context.tsx` |
-| **SHA-256 Chained Scrutiny Ledger** | ✅ Implemented | `app/audit-trail/page.tsx` |
+## 📜 Compliance & Regulatory References
+- **AICTE Approval Process Handbook (APH 2024–2027)**, Ministry of Education, Govt. of India.
+- **National Data Empowerment and Protection Architecture (DEPA)** / API Setu.
+- **Employees' Provident Fund Organisation (EPFO)**, Ministry of Labour & Employment.
+- **National Building Code of India (NBC 2016)** for educational institutional occupancy norms.
 
 ---
 
 ## 📄 License
-This project is licensed under the **MIT License** — developed for Smart India Hackathon (SIH) 2024/2025/2026 Problem Statement ID 26261.
+This project is licensed under the **MIT License** — developed for Smart India Hackathon (SIH) Problem Statement ID 26261.

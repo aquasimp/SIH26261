@@ -639,60 +639,90 @@ export default function AuthorityBridgePage() {
           </span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs text-center font-medium">
-          <div
-            className={`p-2.5 rounded-xl border transition-all ${
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedPresetId('sahyadri-fire');
+              toast.success('Loaded State: VERIFIED (Maharashtra Fire NOC)');
+            }}
+            className={`p-2.5 rounded-xl border transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
               activePreset.state === 'VERIFIED'
                 ? 'bg-emerald-500/20 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold ring-2 ring-emerald-500/40'
-                : 'glass-well text-emerald-700 dark:text-emerald-400'
+                : 'glass-well text-emerald-700 dark:text-emerald-400 hover:border-emerald-500/40'
             }`}
           >
             {t.statusVerified}
-          </div>
-          <div
-            className={`p-2.5 rounded-xl border transition-all ${
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedPresetId('apex-fire');
+              toast.error('Loaded State: MISMATCH_DETECTED (Haryana Fire NOC Expiry Spliced)');
+            }}
+            className={`p-2.5 rounded-xl border transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
               activePreset.state === 'MISMATCH_DETECTED'
                 ? 'bg-rose-500/20 border-rose-500 text-rose-800 dark:text-rose-200 font-bold ring-2 ring-rose-500/40'
-                : 'glass-well text-rose-700 dark:text-rose-400'
+                : 'glass-well text-rose-700 dark:text-rose-400 hover:border-rose-500/40'
             }`}
           >
             {t.statusMismatchDetected}
-          </div>
-          <div
-            className={`p-2.5 rounded-xl border transition-all ${
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedPresetId('apex-fire');
+              toast.warning('Inspecting State: EXPIRED (Fire NOC Past Validity Period)');
+            }}
+            className={`p-2.5 rounded-xl border transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
               activePreset.state === 'EXPIRED'
                 ? 'bg-amber-500/20 border-amber-500 text-amber-800 dark:text-amber-200 font-bold ring-2 ring-amber-500/40'
-                : 'glass-well text-amber-700 dark:text-amber-400'
+                : 'glass-well text-amber-700 dark:text-amber-400 hover:border-amber-500/40'
             }`}
           >
             {t.statusExpired}
-          </div>
-          <div
-            className={`p-2.5 rounded-xl border transition-all ${
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedPresetId('apex-land');
+              toast.info('Simulating State: VERIFICATION_PENDING (Land Deed Pull in Progress)');
+            }}
+            className={`p-2.5 rounded-xl border transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
               activePreset.state === 'VERIFICATION_PENDING'
                 ? 'bg-sky-500/20 border-sky-500 text-sky-800 dark:text-sky-200 font-bold ring-2 ring-sky-500/40'
-                : 'glass-well text-sky-700 dark:text-sky-400'
+                : 'glass-well text-sky-700 dark:text-sky-400 hover:border-sky-500/40'
             }`}
           >
             {t.statusVerificationPending}
-          </div>
-          <div
-            className={`p-2.5 rounded-xl border transition-all ${
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedPresetId('kalinga-land');
+              toast.warning('Loaded State: SOURCE_UNAVAILABLE (Odisha Bhulekh HTTP 503 Maintenance)');
+            }}
+            className={`p-2.5 rounded-xl border transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
               activePreset.state === 'SOURCE_UNAVAILABLE'
                 ? 'bg-slate-500/20 border-slate-500 text-slate-800 dark:text-slate-200 font-bold ring-2 ring-slate-500/40'
-                : 'glass-well text-slate-700 dark:text-slate-400'
+                : 'glass-well text-slate-700 dark:text-slate-400 hover:border-slate-500/40'
             }`}
           >
             {t.statusSourceUnavailable}
-          </div>
-          <div
-            className={`p-2.5 rounded-xl border transition-all ${
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedPresetId('apex-land');
+              toast.info('Loaded State: MANUAL_REVIEW_REQUIRED (Khasra Contiguity Hearing)');
+            }}
+            className={`p-2.5 rounded-xl border transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
               activePreset.state === 'MANUAL_REVIEW_REQUIRED'
                 ? 'bg-violet-500/20 border-violet-500 text-violet-800 dark:text-violet-200 font-bold ring-2 ring-violet-500/40'
-                : 'glass-well text-violet-700 dark:text-violet-400'
+                : 'glass-well text-violet-700 dark:text-violet-400 hover:border-violet-500/40'
             }`}
           >
             {t.statusManualReviewRequired}
-          </div>
+          </button>
         </div>
       </div>
 
@@ -756,19 +786,27 @@ export default function AuthorityBridgePage() {
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">
-                {PRESET_AUTHORITY_CERTS.map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => setSelectedPresetId(p.id)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                      selectedPresetId === p.id
-                        ? 'btn-liquid-primary shadow-xs font-semibold'
-                        : 'btn-liquid-secondary text-[var(--text-secondary)]'
-                    }`}
-                  >
-                    {p.issuerId.split('.').slice(-1)[0].toUpperCase()} ({p.docType})
-                  </button>
-                ))}
+                {PRESET_AUTHORITY_CERTS.map((p) => {
+                  const labelMap: Record<string, string> = {
+                    'apex-fire': 'Fire NOC (HR • Tampered)',
+                    'apex-land': 'Jamabandi Deed (HR • Spliced)',
+                    'sahyadri-fire': 'Fire NOC (MH • Verified)',
+                    'kalinga-land': 'Bhulekh Grant (OD • 503 Retry)',
+                  };
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => setSelectedPresetId(p.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                        selectedPresetId === p.id
+                          ? 'btn-liquid-primary shadow-xs font-semibold'
+                          : 'btn-liquid-secondary text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
+                    >
+                      {labelMap[p.id] || `${p.issuerId.split('.').slice(-1)[0].toUpperCase()} (${p.docType})`}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

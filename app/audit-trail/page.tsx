@@ -22,6 +22,7 @@ import {
   Layers,
   Database,
   ExternalLink,
+  Download,
 } from 'lucide-react';
 
 export default function AuditTrailPage() {
@@ -110,6 +111,20 @@ export default function AuditTrailPage() {
     });
   }, [auditLogs, filterType, searchQuery]);
 
+  const handleExportLedgerJson = () => {
+    const jsonStr = JSON.stringify(auditLogs, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `AICTE_SHA256_Audit_Ledger_${Date.now()}.json`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success(`Exported ${auditLogs.length} cryptographic audit blocks to JSON`);
+  };
+
   return (
     <div className="space-y-6 animate-glass-in">
       {/* Title & Verify Trigger */}
@@ -131,23 +146,34 @@ export default function AuditTrailPage() {
           </p>
         </div>
 
-        <button
-          onClick={handleVerifyChain}
-          disabled={isVerifying}
-          className="btn-liquid-primary cursor-pointer px-4 py-2.5 rounded-xl text-xs font-semibold inline-flex items-center gap-2 disabled:opacity-50"
-        >
-          {isVerifying ? (
-            <>
-              <RefreshCw className="w-4 h-4 animate-spin" />
-              <span>Verifying ({verificationProgress}%)...</span>
-            </>
-          ) : (
-            <>
-              <ShieldCheck className="w-4 h-4" />
-              <span>Verify Hash Chain Integrity</span>
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button
+            onClick={handleExportLedgerJson}
+            className="btn-liquid-secondary cursor-pointer px-3.5 py-2.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs"
+            title="Download complete immutable audit trail in JSON format"
+          >
+            <Download className="w-4 h-4 text-[var(--text-muted)]" />
+            <span>Export Ledger (JSON)</span>
+          </button>
+
+          <button
+            onClick={handleVerifyChain}
+            disabled={isVerifying}
+            className="btn-liquid-primary cursor-pointer px-4 py-2.5 rounded-xl text-xs font-semibold inline-flex items-center gap-2 disabled:opacity-50 shadow-sm"
+          >
+            {isVerifying ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span>Verifying ({verificationProgress}%)...</span>
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="w-4 h-4" />
+                <span>Verify Hash Chain Integrity</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Real-time Verification Progress Bar */}

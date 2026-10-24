@@ -30,7 +30,7 @@ export function AppShellClient({ children }: { children: React.ReactNode }) {
     <div className="relative min-h-screen w-full overflow-x-hidden selection:bg-sky-500/20 selection:text-sky-700 dark:selection:text-sky-300">
       <LeftGlassRail mobileOpen={mobileMenuOpen} onCloseMobile={() => setMobileMenuOpen(false)} />
 
-      <div className="relative z-10 lg:pl-[264px] min-h-screen flex flex-col px-2.5 py-2.5 sm:px-4 sm:py-3.5 max-w-[1920px] mx-auto">
+      <div className="relative z-10 lg:pl-[276px] lg:pr-3.5 lg:py-3.5 min-h-screen flex flex-col px-2.5 py-2.5 sm:px-3 sm:py-3 w-full">
         <FloatingTopHeader onOpenMobileMenu={() => setMobileMenuOpen(true)} />
         <GlobalFilterBar />
         <main className="flex-1 w-full min-w-0 animate-glass-in">

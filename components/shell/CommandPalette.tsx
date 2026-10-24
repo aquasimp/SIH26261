@@ -43,6 +43,8 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose: externalOnClos
   const currentApp = applications.find((a) => a.id === selectedAppId) || applications[0];
 
   useEffect(() => {
+    const handleOpen = () => setInternalOpen(true);
+    window.addEventListener('open-command-palette', handleOpen);
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -53,7 +55,10 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose: externalOnClos
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('open-command-palette', handleOpen);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;

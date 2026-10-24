@@ -457,54 +457,74 @@ export default function OverviewPage() {
 
               <div className="space-y-2 text-xs">
                 {/* 1. PP-StructureV3 */}
-                <div className="p-2.5 rounded-xl border-l-3 border-l-sky-500 glass-well flex items-center justify-between">
-                  <span className="font-semibold text-[var(--text-primary)]">
+                <Link
+                  href="/applications/AICTE-2026-NW-0842"
+                  className="p-2.5 rounded-xl border-l-3 border-l-sky-500 glass-well flex items-center justify-between hover:bg-sky-500/5 transition-all group cursor-pointer block"
+                  title="Open Key Information Extraction (KIE) & SLANet Table Workbench"
+                >
+                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-sky-600 dark:group-hover:text-sky-400">
                     1. PP-StructureV3 + SLANet &amp; LayoutLMv3 KIE
                   </span>
                   <span className="text-xs font-bold text-sky-700 dark:text-sky-400 tabular-nums">
-                    142 cases (38.2%)
+                    142 cases (38.2%) →
                   </span>
-                </div>
+                </Link>
 
                 {/* 2. TruFor Noiseprint++ */}
-                <div className="p-2.5 rounded-xl border-l-3 border-l-rose-600 glass-well flex items-center justify-between">
-                  <span className="font-semibold text-[var(--text-primary)]">
+                <Link
+                  href="/forensics"
+                  className="p-2.5 rounded-xl border-l-3 border-l-rose-600 glass-well flex items-center justify-between hover:bg-rose-500/5 transition-all group cursor-pointer block"
+                  title="Open Multi-Spectral Document Forensics Studio (TruFor & ELA)"
+                >
+                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-rose-600 dark:group-hover:text-rose-400">
                     2. TruFor Noiseprint++ &amp; NFA-ViT Splicing
                   </span>
                   <span className="text-xs font-bold text-rose-600 dark:text-rose-400 tabular-nums">
-                    62 cases (16.7%)
+                    62 cases (16.7%) →
                   </span>
-                </div>
+                </Link>
 
                 {/* 3. YOLOv11-Doc */}
-                <div className="p-2.5 rounded-xl border-l-3 border-l-indigo-500 glass-well flex items-center justify-between">
-                  <span className="font-semibold text-[var(--text-primary)]">
+                <Link
+                  href="/forensics"
+                  className="p-2.5 rounded-xl border-l-3 border-l-indigo-500 glass-well flex items-center justify-between hover:bg-indigo-500/5 transition-all group cursor-pointer block"
+                  title="Open Seal & Signature Authenticity Lab"
+                >
+                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
                     3. YOLOv11-Doc + Siamese ArcFace Seal/Signature
                   </span>
                   <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 tabular-nums">
-                    28 cases (7.5%)
+                    28 cases (7.5%) →
                   </span>
-                </div>
+                </Link>
 
                 {/* 4. Mask2Former */}
-                <div className="p-2.5 rounded-xl border-l-3 border-l-amber-500 glass-well flex items-center justify-between">
-                  <span className="font-semibold text-[var(--text-primary)]">
+                <Link
+                  href="/infrastructure"
+                  className="p-2.5 rounded-xl border-l-3 border-l-amber-500 glass-well flex items-center justify-between hover:bg-amber-500/5 transition-all group cursor-pointer block"
+                  title="Open Blueprint & Campus CV (Shoelace FSI/FAR Verifier)"
+                >
+                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-amber-600 dark:group-hover:text-amber-400">
                     4. Mask2Former + RMBG-1.4 Blueprint Shoelace
                   </span>
                   <span className="text-xs font-bold text-amber-700 dark:text-amber-400 tabular-nums">
-                    41 cases (11.0%)
+                    41 cases (11.0%) →
                   </span>
-                </div>
+                </Link>
 
                 {/* 5. RetinaFace */}
-                <div className="p-2.5 rounded-xl border-l-3 border-l-rose-600 glass-well flex items-center justify-between">
-                  <span className="font-semibold text-[var(--text-primary)]">
+                <Link
+                  href="/authority-bridge"
+                  className="p-2.5 rounded-xl border-l-3 border-l-rose-600 glass-well flex items-center justify-between hover:bg-rose-500/5 transition-all group cursor-pointer block"
+                  title="Open Qdrant 512-D ArcFace Ghost Faculty Matcher"
+                >
+                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-rose-600 dark:group-hover:text-rose-400">
                     5. RetinaFace + ArcFace 512-D Qdrant Ghost Faculty
                   </span>
                   <span className="text-xs font-bold text-rose-600 dark:text-rose-400 tabular-nums">
-                    98 cases (26.6%)
+                    98 cases (26.6%) →
                   </span>
-                </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -513,34 +533,36 @@ export default function OverviewPage() {
           <div className="space-y-2 pt-3 border-t border-[var(--glass-well-border)]">
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-faint)] flex items-center justify-between">
               <span>National DPI Authority Node Telemetry</span>
-              <span className="text-emerald-600 font-bold">6/6 Authorities Online</span>
+              <Link href="/authority-bridge" className="text-emerald-600 hover:text-emerald-500 font-bold hover:underline">
+                6/6 Authorities Online →
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-              <div className="p-2 rounded-xl glass-well flex flex-col">
+              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
                 <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">DigiLocker Pull URI</span>
                 <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">138 ms (99.8%)</span>
-              </div>
-              <div className="p-2 rounded-xl glass-well flex flex-col">
+              </Link>
+              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
                 <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">EPFO ECR 2.0</span>
                 <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">164 ms (98.6%)</span>
-              </div>
-              <div className="p-2 rounded-xl glass-well flex flex-col">
+              </Link>
+              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
                 <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">MCA21 v3 Trust</span>
                 <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">112 ms (99.4%)</span>
-              </div>
-              <div className="p-2 rounded-xl glass-well flex flex-col">
+              </Link>
+              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
                 <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">State e-District QR</span>
                 <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">94 ms (99.9%)</span>
-              </div>
-              <div className="p-2 rounded-xl glass-well flex flex-col">
+              </Link>
+              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
                 <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">Jamabandi GIS</span>
                 <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">210 ms (97.8%)</span>
-              </div>
-              <div className="p-2 rounded-xl glass-well flex flex-col">
+              </Link>
+              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
                 <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">NAD Degree Registry</span>
                 <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">129 ms (99.2%)</span>
-              </div>
+              </Link>
             </div>
           </div>
         </section>
