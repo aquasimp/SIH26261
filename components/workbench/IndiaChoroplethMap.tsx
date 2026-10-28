@@ -1,95 +1,141 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { INDIA_STATES_DATA, StateData } from './indiaMapData';
 
-interface StateData {
-  id: string;
-  name: string;
-  count: number;
-  colorLevel: 1 | 2 | 3 | 4; // 1: <100, 2: 100-200, 3: 200-500, 4: >500
-  d: string;
+export interface IndiaChoroplethMapProps {
+  className?: string;
+  onSelectState?: (state: StateData | null) => void;
 }
 
-// Simplified scalable SVG paths representing Indian states for high-performance operational choropleth
-const INDIA_STATES: StateData[] = [
-  // Northern
-  { id: 'JK', name: 'Jammu & Kashmir and Ladakh', count: 94, colorLevel: 1, d: 'M115,20 L135,15 L155,25 L160,45 L145,55 L130,50 L120,40 Z' },
-  { id: 'HP', name: 'Himachal Pradesh', count: 86, colorLevel: 1, d: 'M130,50 L145,55 L148,68 L135,70 L126,60 Z' },
-  { id: 'PB', name: 'Punjab', count: 182, colorLevel: 2, d: 'M110,55 L126,60 L124,78 L108,72 Z' },
-  { id: 'HR', name: 'Haryana & Delhi NCR', count: 340, colorLevel: 3, d: 'M122,70 L136,70 L138,85 L120,86 Z' },
-  { id: 'UK', name: 'Uttarakhand', count: 110, colorLevel: 2, d: 'M145,62 L162,65 L155,80 L140,75 Z' },
-  // Western & Central
-  { id: 'RJ', name: 'Rajasthan', count: 395, colorLevel: 3, d: 'M85,75 L120,80 L122,118 L88,115 L78,95 Z' },
-  { id: 'UP', name: 'Uttar Pradesh', count: 580, colorLevel: 4, d: 'M135,80 L175,85 L185,115 L140,118 L130,95 Z' },
-  { id: 'BR', name: 'Bihar', count: 240, colorLevel: 3, d: 'M185,100 L215,105 L210,125 L180,122 Z' },
-  { id: 'GJ', name: 'Gujarat', count: 420, colorLevel: 3, d: 'M60,110 L88,115 L95,142 L65,145 L52,125 Z' },
-  { id: 'MP', name: 'Madhya Pradesh', count: 390, colorLevel: 3, d: 'M100,120 L155,120 L160,150 L115,155 L95,135 Z' },
-  { id: 'CG', name: 'Chhattisgarh', count: 165, colorLevel: 2, d: 'M155,140 L175,142 L168,178 L150,172 Z' },
-  { id: 'JH', name: 'Jharkhand', count: 175, colorLevel: 2, d: 'M180,122 L205,124 L200,145 L175,142 Z' },
-  { id: 'WB', name: 'West Bengal', count: 310, colorLevel: 3, d: 'M205,124 L220,126 L215,160 L198,150 Z' },
-  { id: 'OD', name: 'Odisha', count: 285, colorLevel: 3, d: 'M168,155 L198,155 L192,185 L165,178 Z' },
-  // Southern
-  { id: 'MH', name: 'Maharashtra', count: 640, colorLevel: 4, d: 'M85,150 L140,152 L145,188 L100,195 L80,165 Z' },
-  { id: 'TG', name: 'Telangana', count: 375, colorLevel: 3, d: 'M135,175 L162,175 L155,202 L130,198 Z' },
-  { id: 'AP', name: 'Andhra Pradesh', count: 480, colorLevel: 3, d: 'M150,195 L175,185 L162,235 L140,225 Z' },
-  { id: 'KA', name: 'Karnataka', count: 520, colorLevel: 4, d: 'M100,195 L135,198 L130,240 L105,235 L95,205 Z' },
-  { id: 'KL', name: 'Kerala', count: 245, colorLevel: 3, d: 'M108,240 L120,240 L115,275 L106,270 Z' },
-  { id: 'TN', name: 'Tamil Nadu', count: 590, colorLevel: 4, d: 'M120,235 L145,235 L138,278 L116,276 Z' },
-  // North-East
-  { id: 'AS', name: 'Assam & North East', count: 180, colorLevel: 2, d: 'M225,108 L265,105 L260,135 L225,128 Z' },
-];
-
-export function IndiaChoroplethMap() {
+export function IndiaChoroplethMap({ className, onSelectState }: IndiaChoroplethMapProps) {
   const [hoveredState, setHoveredState] = useState<StateData | null>(null);
+  const [selectedState, setSelectedState] = useState<StateData | null>(null);
 
-  const getColorClass = (level: 1 | 2 | 3 | 4) => {
+  const activeState = hoveredState || selectedState;
+
+  const getColorClass = (level: 1 | 2 | 3 | 4, isHovered: boolean, isSelected: boolean) => {
+    if (isSelected) {
+      return 'fill-sky-400 dark:fill-sky-300 stroke-white dark:stroke-sky-100 stroke-[2.5] drop-shadow-md';
+    }
+    if (isHovered) {
+      return 'fill-sky-400 dark:fill-sky-300 stroke-white dark:stroke-white stroke-[2.2] drop-shadow-md';
+    }
+
     switch (level) {
       case 4:
-        return 'fill-sky-500 hover:fill-sky-400 stroke-white/80 dark:stroke-slate-950/80';
+        return 'fill-sky-500 dark:fill-sky-500 stroke-white/90 dark:stroke-slate-900/90 stroke-[1.1] hover:fill-sky-400 dark:hover:fill-sky-400';
       case 3:
-        return 'fill-sky-600/85 hover:fill-sky-500 stroke-white/80 dark:stroke-slate-950/80';
+        return 'fill-sky-600 dark:fill-sky-600 stroke-white/90 dark:stroke-slate-900/90 stroke-[1.1] hover:fill-sky-500 dark:hover:fill-sky-500';
       case 2:
-        return 'fill-sky-700/75 hover:fill-sky-600 stroke-white/80 dark:stroke-slate-950/80';
+        return 'fill-sky-800 dark:fill-sky-800 stroke-white/90 dark:stroke-slate-900/90 stroke-[1.1] hover:fill-sky-700 dark:hover:fill-sky-700';
       case 1:
-        return 'fill-slate-300 dark:fill-slate-800/90 hover:fill-slate-400 dark:hover:fill-slate-700 stroke-white/80 dark:stroke-slate-950/80';
+      default:
+        return 'fill-slate-300 dark:fill-slate-700/80 stroke-white/90 dark:stroke-slate-900/90 stroke-[1.1] hover:fill-slate-400 dark:hover:fill-slate-600';
+    }
+  };
+
+  const getTierLabel = (level: 1 | 2 | 3 | 4) => {
+    switch (level) {
+      case 4:
+        return '> 500 Dossiers (High Density)';
+      case 3:
+        return '200 – 500 Dossiers (Medium-High)';
+      case 2:
+        return '100 – 200 Dossiers (Moderate)';
+      case 1:
+        return '< 100 Dossiers (Low Density)';
+    }
+  };
+
+  const handleStateClick = (state: StateData) => {
+    if (selectedState?.id === state.id) {
+      setSelectedState(null);
+      if (onSelectState) onSelectState(null);
+    } else {
+      setSelectedState(state);
+      if (onSelectState) onSelectState(state);
     }
   };
 
   return (
-    <div className="relative w-full flex items-center justify-center py-2 select-none">
+    <div className={`relative w-full flex items-center justify-center py-1 select-none ${className || ''}`}>
       <svg
-        viewBox="30 10 250 280"
-        className="w-full h-48 sm:h-52 drop-shadow-md transition-all"
-        style={{ maxHeight: '210px' }}
+        viewBox="70 20 860 950"
+        preserveAspectRatio="xMidYMid meet"
+        className="w-full h-52 sm:h-56 max-h-[240px] drop-shadow-md transition-all cursor-pointer"
+        aria-label="Interactive Choropleth Map of India"
       >
         <defs>
           <filter id="mapGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#0284C7" floodOpacity="0.2" />
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#0284C7" floodOpacity="0.18" />
           </filter>
         </defs>
 
         <g filter="url(#mapGlow)">
-          {INDIA_STATES.map((state) => (
-            <path
-              key={state.id}
-              d={state.d}
-              className={`transition-all duration-150 cursor-pointer stroke-[1.2] ${getColorClass(state.colorLevel)} ${
-                hoveredState?.id === state.id ? 'opacity-100 scale-[1.02] stroke-white stroke-2' : 'opacity-95'
-              }`}
-              onMouseEnter={() => setHoveredState(state)}
-              onMouseLeave={() => setHoveredState(null)}
-            />
-          ))}
+          {INDIA_STATES_DATA.map((state) => {
+            const isHovered = hoveredState?.id === state.id;
+            const isSelected = selectedState?.id === state.id;
+
+            return (
+              <path
+                key={state.id}
+                id={state.id}
+                d={state.d}
+                className={`transition-all duration-150 cursor-pointer ${getColorClass(
+                  state.colorLevel,
+                  isHovered,
+                  isSelected
+                )}`}
+                onMouseEnter={() => setHoveredState(state)}
+                onMouseLeave={() => setHoveredState(null)}
+                onClick={() => handleStateClick(state)}
+                onTouchStart={() => handleStateClick(state)}
+              >
+                <title>{`${state.name}: ${state.count} Dossiers`}</title>
+              </path>
+            );
+          })}
         </g>
       </svg>
 
-      {/* Floating State Info Tooltip on Hover */}
-      {hoveredState && (
-        <div className="absolute top-2 right-2 rounded-xl bg-white/95 dark:bg-slate-900/95 border border-sky-500/40 px-3 py-1.5 shadow-xl text-left pointer-events-none animate-glass-in z-20 backdrop-blur-xs">
-          <div className="text-xs font-bold text-slate-900 dark:text-white">{hoveredState.name}</div>
-          <div className="text-[11px] text-blue-600 dark:text-sky-400 font-bold tabular-nums mt-0.5">
-            {hoveredState.count.toLocaleString()} Dossiers
+      {/* Floating State Info Tooltip on Hover or Selection */}
+      {activeState && (
+        <div className="absolute top-1 right-1 sm:top-2 sm:right-2 rounded-xl bg-white/95 dark:bg-slate-900/95 border border-sky-500/40 px-3 py-2 shadow-2xl text-left pointer-events-auto animate-glass-in z-20 backdrop-blur-md max-w-[200px]">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+              {activeState.name}
+            </span>
+            {selectedState?.id === activeState.id && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedState(null);
+                  if (onSelectState) onSelectState(null);
+                }}
+                className="text-[10px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                title="Clear selection"
+              >
+                ✕
+              </button>
+            )}
           </div>
+
+          <div className="text-xs text-blue-600 dark:text-sky-400 font-extrabold tabular-nums mt-0.5">
+            {activeState.count.toLocaleString()} Dossiers
+          </div>
+
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+            {getTierLabel(activeState.colorLevel)}
+          </div>
+
+          <Link
+            href={`/applications?search=${encodeURIComponent(activeState.name)}`}
+            className="mt-1.5 block text-[10px] font-bold text-sky-600 dark:text-sky-400 hover:underline"
+          >
+            Filter Dossiers →
+          </Link>
         </div>
       )}
     </div>

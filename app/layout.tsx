@@ -1,4 +1,15 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F4F6FA' },
+    { media: '(prefers-color-scheme: dark)', color: '#0B0F17' },
+  ],
+};
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import 'blobatar/motion.css';

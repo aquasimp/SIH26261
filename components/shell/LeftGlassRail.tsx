@@ -128,7 +128,7 @@ export function LeftGlassRail({ mobileOpen = false, onCloseMobile }: LeftGlassRa
       {mobileOpen && (
         <div
           onClick={onCloseMobile}
-          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs lg:hidden transition-opacity cursor-pointer"
+          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs lg:hidden transition-opacity cursor-pointer touch-none"
           aria-hidden="true"
         />
       )}

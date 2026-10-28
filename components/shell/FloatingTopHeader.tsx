@@ -61,7 +61,7 @@ export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: Fl
   const isDark = mounted && (resolvedTheme === 'dark' || theme === 'dark');
 
   return (
-    <header className="liquid-glass-card rounded-[18px] px-4 py-3 sm:px-5 sm:py-3 flex items-center justify-between gap-3 shadow-sm relative z-20">
+    <header className="liquid-glass-card rounded-[18px] px-3 py-2.5 sm:px-5 sm:py-3 flex items-center justify-between gap-3 shadow-sm relative z-20">
       {/* Left: Mobile Toggle + Ashoka Emblem + AICTE Brand Title */}
       <div className="flex items-center gap-3 min-w-0">
         <button
@@ -92,7 +92,7 @@ export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: Fl
         </Link>
 
         {/* Current Active Breadcrumb for Mobile / Tablet */}
-        <div className="sm:hidden flex items-center text-xs font-semibold text-slate-800 dark:text-slate-200 truncate pl-1 border-l border-slate-200 dark:border-slate-800">
+        <div className="sm:hidden flex items-center text-xs font-semibold text-slate-800 dark:text-slate-200 truncate pl-2 max-w-[100px] border-l border-slate-200 dark:border-slate-800">
           {getRouteLabel()}
         </div>
       </div>
@@ -144,7 +144,7 @@ export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: Fl
 
           {showNotificationMenu && (
             <div
-              className="absolute right-0 mt-2 w-72 rounded-2xl liquid-glass-card border border-slate-200/90 dark:border-slate-800/90 p-3 shadow-xl z-50 text-xs animate-glass-in"
+              className="absolute right-0 mt-2 w-[calc(100vw-2.5rem)] max-w-xs sm:w-72 rounded-2xl liquid-glass-card border border-slate-200/90 dark:border-slate-800/90 p-3 shadow-xl z-50 text-xs animate-glass-in"
               onMouseLeave={() => setShowNotificationMenu(false)}
             >
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200/80 dark:border-slate-800/80">
@@ -190,7 +190,7 @@ export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: Fl
         </div>
 
         {/* Bilingual Segmented Control */}
-        <div className="glass-well rounded-xl p-0.5 inline-flex items-center">
+        <div className="glass-well rounded-xl p-0.5 hidden sm:inline-flex items-center">
           <button
             onClick={() => setLanguage('en')}
             className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
@@ -212,6 +212,15 @@ export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: Fl
             हिन्दी
           </button>
         </div>
+
+        {/* Mobile Single-Tap Language Switch */}
+        <button
+          onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+          className="sm:hidden glass-well h-9 px-2 rounded-xl flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-200 cursor-pointer"
+          title="Toggle Language"
+        >
+          {language === 'en' ? 'HI' : 'EN'}
+        </button>
 
         {/* Theme Toggle (Sun/Moon with clear feedback) */}
         <button
@@ -253,7 +262,7 @@ export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: Fl
 
           {showProfileMenu && (
             <div
-              className="absolute right-0 mt-2 w-56 rounded-2xl liquid-glass-card border border-slate-200/90 dark:border-slate-800/90 p-3 shadow-xl z-50 text-xs animate-glass-in space-y-2"
+              className="absolute right-0 mt-2 w-[calc(100vw-2.5rem)] max-w-xs sm:w-56 rounded-2xl liquid-glass-card border border-slate-200/90 dark:border-slate-800/90 p-3 shadow-xl z-50 text-xs animate-glass-in space-y-2"
               onMouseLeave={() => setShowProfileMenu(false)}
             >
               <div className="pb-2 border-b border-slate-200/80 dark:border-slate-800/80">

@@ -309,8 +309,26 @@ export default function ReportsAnalyticsPage() {
             <MapPin className="w-4.5 h-4.5 text-sky-500" />
           </div>
 
-          <div className="h-72 flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center space-y-2">
             <IndiaChoroplethMap />
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10.5px] font-semibold text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200/70 dark:border-slate-800/70 w-full">
+              <div className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-xs bg-sky-500" />
+                <span>&gt; 500</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-xs bg-sky-600" />
+                <span>200 – 500</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-xs bg-sky-800" />
+                <span>100 – 200</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-xs bg-slate-300 dark:bg-slate-700" />
+                <span>&lt; 100</span>
+              </div>
+            </div>
           </div>
         </div>
 

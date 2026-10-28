@@ -1243,7 +1243,7 @@ export default function OverviewPage() {
               <span>100 – 200</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-xs bg-slate-700" />
+              <span className="h-2.5 w-2.5 rounded-xs bg-slate-300 dark:bg-slate-700" />
               <span>&lt; 100</span>
             </div>
           </div>
