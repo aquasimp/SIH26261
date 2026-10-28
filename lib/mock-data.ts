@@ -88,6 +88,7 @@ export interface DocumentArtifact {
 export interface InstitutionalApplication {
   id: string;                // e.g., "AICTE-2026-NW-0842"
   pid: string;               // e.g., "1-9482710392"
+  aisheCode?: string;        // e.g., "C-49201"
   nameEn: string;
   nameHi: string;
   trustName: string;
@@ -149,6 +150,7 @@ export const MOCK_APPLICATIONS: InstitutionalApplication[] = [
   {
     id: "AICTE-2026-NW-0842",
     pid: "1-9482710392",
+    aisheCode: "C-49201",
     nameEn: "Apex Institute of Technology & Management",
     nameHi: "एपेक्स इंस्टीट्यूट ऑफ टेक्नोलॉजी एंड मैनेजमेंट",
     trustName: "Apex Shiskha & Research Foundation",
@@ -460,6 +462,7 @@ export const MOCK_APPLICATIONS: InstitutionalApplication[] = [
   {
     id: "AICTE-2026-SO-1104",
     pid: "1-7728192044",
+    aisheCode: "C-51204",
     nameEn: "Sri Venkateswara College of Engineering & AI",
     nameHi: "श्री वेंकटेश्वर कॉलेज ऑफ इंजीनियरिंग एंड एआई",
     trustName: "Tirupati Educational & Cultural Trust",
@@ -583,6 +586,7 @@ export const MOCK_APPLICATIONS: InstitutionalApplication[] = [
   {
     id: "AICTE-2026-WE-0319",
     pid: "1-5519284019",
+    aisheCode: "C-33819",
     nameEn: "Sahyadri Autonomous Institute of Information Technology",
     nameHi: "सह्याद्री स्वायत्त सूचना प्रौद्योगिकी संस्थान",
     trustName: "Sahyadri Advanced Education Society",
@@ -665,6 +669,7 @@ export const MOCK_APPLICATIONS: InstitutionalApplication[] = [
   {
     id: "AICTE-2026-SW-0592",
     pid: "1-6649182731",
+    aisheCode: "C-61922",
     nameEn: "Deccan Academy of Robotics & Architecture",
     nameHi: "डेक्कन एकेडमी ऑफ रोबोटिक्स एंड आर्किटेक्चर",
     trustName: "Deccan Technical Education Trust",
@@ -786,6 +791,7 @@ export const MOCK_APPLICATIONS: InstitutionalApplication[] = [
   {
     id: "AICTE-2026-EA-0715",
     pid: "1-8819203912",
+    aisheCode: "C-18492",
     nameEn: "Kalinga Regional Institute of Polytechnic & Engineering",
     nameHi: "कलिंगा क्षेत्रीय पॉलिटेक्निक एवं इंजीनियरिंग संस्थान",
     trustName: "Utkal Technical Education Mission",
@@ -887,6 +893,7 @@ export const MOCK_APPLICATIONS: InstitutionalApplication[] = [
   {
     id: "AICTE-2026-CE-0928",
     pid: "1-4491029381",
+    aisheCode: "C-27481",
     nameEn: "Vindhya Valley Technical Campus",
     nameHi: "विंध्य वैली टेक्निकल कैंपस",
     trustName: "Vindhyanchal Educational Society",

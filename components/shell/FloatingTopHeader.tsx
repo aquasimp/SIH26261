@@ -54,7 +54,7 @@ export function FloatingTopHeader({ onOpenMobileMenu, onOpenCommandPalette }: Fl
       onOpenCommandPalette();
     } else {
       window.dispatchEvent(new CustomEvent('open-command-palette'));
-      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, ctrlKey: true }));
+
     }
   };
 

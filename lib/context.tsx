@@ -483,9 +483,14 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
         const q = filters.searchQuery.toLowerCase().trim();
         const matchName = app.nameEn.toLowerCase().includes(q) || app.nameHi.includes(q);
         const matchPid = app.pid.toLowerCase().includes(q) || app.id.toLowerCase().includes(q);
+        const matchAishe = app.aisheCode ? app.aisheCode.toLowerCase().includes(q) : false;
+        const matchRegion = app.region.toLowerCase().includes(q);
+        const matchType = app.institutionType.toLowerCase().includes(q);
+        const matchCategory = app.applicationCategory.toLowerCase().includes(q);
+        const matchStatus = app.scrutinyStatus.toLowerCase().includes(q);
         const matchTrust = app.trustName.toLowerCase().includes(q);
         const matchCity = app.city.toLowerCase().includes(q) || app.state.toLowerCase().includes(q);
-        if (!matchName && !matchPid && !matchTrust && !matchCity) {
+        if (!matchName && !matchPid && !matchAishe && !matchTrust && !matchCity && !matchRegion && !matchType && !matchCategory && !matchStatus) {
           return false;
         }
       }
