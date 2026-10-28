@@ -2,7 +2,21 @@
 @import "blobatar/motion.css";
 @custom-variant dark (&:where(.dark, .dark *));
 
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-size: 0.9375rem; /* 15px base */
+  line-height: 1.5;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'tnum';
+}
+
 @theme inline {
+  --font-sans: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-mono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -16,119 +30,150 @@
 }
 
 :root {
-  --background: #F3F6FA;
+  /* =========================================================================
+     LIGHT MODE DESIGN SYSTEM (Enterprise Regulatory Precision)
+     ========================================================================= */
+  --bg-canvas: #F4F6FA;
+  --background: #F4F6FA;
   --foreground: #0F172A;
-  --card: rgba(255, 255, 255, 0.86);
+
+  --card: rgba(255, 255, 255, 0.92);
+  --card-solid: #FFFFFF;
   --card-foreground: #0F172A;
-  --border: rgba(203, 213, 225, 0.9);
+
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+
+  --primary: #0F172A;
+  --primary-foreground: #F8FAFC;
+
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+
   --muted: #F1F5F9;
   --muted-foreground: #64748B;
+
   --accent: #E2E8F0;
   --accent-foreground: #0F172A;
-  --ring: #94A3B8;
 
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --border: rgba(226, 232, 240, 0.95);
+  --border-strong: rgba(203, 213, 225, 0.95);
+  --input: rgba(226, 232, 240, 0.95);
+  --ring: rgba(37, 99, 235, 0.35);
+
+  /* Inter Font System matching Image 2 */
+  --font-sans: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-serif: 'Instrument Serif', Georgia, serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
 
-  --bg-canvas: #F3F6FA;
   --text-primary: #0F172A;
   --text-secondary: #334155;
   --text-muted: #64748B;
   --text-faint: #94A3B8;
 
-  /* Crisp 1px Structural Liquid Glass (Light Mode) */
-  --glass-bg: rgba(255, 255, 255, 0.86);
-  --glass-bg-hover: rgba(255, 255, 255, 0.96);
-  --glass-border: rgba(203, 213, 225, 0.9);
-  --glass-border-strong: rgba(148, 163, 184, 0.95);
+  /* Crisp Structural Liquid Glass (Light Mode) */
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-bg-hover: rgba(255, 255, 255, 0.98);
+  --glass-border: rgba(226, 232, 240, 0.95);
+  --glass-border-strong: rgba(203, 213, 225, 0.95);
   --glass-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 1),
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 8px 20px -6px rgba(15, 23, 42, 0.05);
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 8px 24px -6px rgba(15, 23, 42, 0.06);
   --glass-shadow-hover:
     inset 0 1px 0 0 rgba(255, 255, 255, 1),
-    0 4px 12px -2px rgba(15, 23, 42, 0.06),
-    0 14px 28px -8px rgba(15, 23, 42, 0.08);
+    0 4px 14px -2px rgba(15, 23, 42, 0.07),
+    0 16px 32px -8px rgba(15, 23, 42, 0.09);
 
-  /* Recessed Inner Well — NO backdrop-filter so nested text is 100% razor-sharp */
+  /* Inner Recessed Well (Light Mode) */
   --well-bg: #F8FAFC;
-  --well-border: rgba(203, 213, 225, 0.8);
+  --well-border: rgba(226, 232, 240, 0.9);
   --well-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.035), 0 1px 0 rgba(255, 255, 255, 0.9);
 
-  /* Fallback aliases for compatibility */
+  /* Fallback aliases */
   --glass-well-bg: var(--well-bg);
   --glass-well-border: var(--well-border);
   --glass-well-shadow: var(--well-shadow);
 
+  /* Regulatory Severity Rules (Light Mode) */
   --rule-fatal: #E11D48;
   --rule-deficiency: #D97706;
   --rule-verified: #059669;
-  --rule-registry: #4F46E5;
+  --rule-registry: #2563EB;
 }
 
 .dark {
   color-scheme: dark;
 
-  /* True OLED Pitch-Black & Carbon Hierarchy */
-  --bg-canvas: #030304;
-  --text-primary: #FAFAFC;
-  --text-secondary: #D4D4D8;
-  --text-muted: #8E8E98;
-  --text-faint: #52525B;
+  /* =========================================================================
+     DARK MODE DESIGN SYSTEM (Image 2 Deep Charcoal & Navy Elegance)
+     ========================================================================= */
+  --bg-canvas: #0B0F17;
+  --background: #0B0F17;
+  --foreground: #F8FAFC;
 
-  /* Shadcn Semantic Tokens (Obsidian Dark) */
-  --background: #030304;
-  --foreground: #FAFAFC;
-  --card: #09090B;
-  --card-foreground: #FAFAFC;
-  --popover: #09090B;
-  --popover-foreground: #FAFAFC;
-  --primary: #FAFAFC;
-  --primary-foreground: #050507;
-  --secondary: #121215;
-  --secondary-foreground: #E4E4E7;
-  --muted: #0E0E11;
-  --muted-foreground: #8E8E98;
-  --accent: #16161A;
-  --accent-foreground: #FAFAFC;
-  --border: rgba(255, 255, 255, 0.075);
+  --card: rgba(17, 24, 39, 0.85);
+  --card-solid: #111827;
+  --card-foreground: #F8FAFC;
+
+  --popover: #111827;
+  --popover-foreground: #F8FAFC;
+
+  --primary: #38BDF8;
+  --primary-foreground: #0B0F17;
+
+  --secondary: #1E293B;
+  --secondary-foreground: #F8FAFC;
+
+  --muted: #141C2E;
+  --muted-foreground: #94A3B8;
+
+  --accent: #1E293B;
+  --accent-foreground: #F8FAFC;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
   --input: rgba(255, 255, 255, 0.08);
-  --ring: rgba(255, 255, 255, 0.22);
+  --ring: rgba(56, 189, 248, 0.35);
 
-  /* Smoked Obsidian Liquid Glass Surface (Zero Navy Tint) */
-  --glass-bg: linear-gradient(180deg, rgba(17, 17, 20, 0.88) 0%, rgba(10, 10, 12, 0.94) 100%);
-  --glass-bg-hover: linear-gradient(180deg, rgba(24, 24, 28, 0.92) 0%, rgba(14, 14, 17, 0.96) 100%);
-  --glass-border: rgba(255, 255, 255, 0.075);
-  --glass-border-strong: rgba(255, 255, 255, 0.15);
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-faint: #64748B;
+
+  /* Smoked Obsidian & Navy Liquid Glass Surface */
+  --glass-bg: linear-gradient(180deg, rgba(19, 27, 44, 0.82) 0%, rgba(13, 19, 32, 0.92) 100%);
+  --glass-bg-hover: linear-gradient(180deg, rgba(26, 37, 60, 0.88) 0%, rgba(18, 25, 42, 0.95) 100%);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-strong: rgba(255, 255, 255, 0.16);
   --glass-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.09),
     inset 0 0 0 1px rgba(255, 255, 255, 0.02),
-    0 4px 12px rgba(0, 0, 0, 0.65),
-    0 20px 44px -10px rgba(0, 0, 0, 0.88);
+    0 4px 14px rgba(0, 0, 0, 0.5),
+    0 18px 40px -8px rgba(0, 0, 0, 0.75);
   --glass-shadow-hover:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 8px 20px rgba(0, 0, 0, 0.75),
-    0 24px 52px -8px rgba(0, 0, 0, 0.95);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 6px 20px rgba(0, 0, 0, 0.6),
+    0 24px 50px -8px rgba(0, 0, 0, 0.85);
 
-  /* Recessed Carbon Well — Deep Pitch Black Inner Surface */
-  --well-bg: #050507;
+  /* Recessed Carbon & Navy Well */
+  --well-bg: #0D131F;
   --well-border: rgba(255, 255, 255, 0.065);
   --well-shadow:
-    inset 0 2px 5px rgba(0, 0, 0, 0.9),
-    0 1px 0 rgba(255, 255, 255, 0.045);
+    inset 0 2px 4px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.03);
 
-  /* Fallback aliases for compatibility */
+  /* Fallback aliases */
   --glass-well-bg: var(--well-bg);
   --glass-well-border: var(--well-border);
   --glass-well-shadow: var(--well-shadow);
 
-  /* Luminous Jewel-Tone Regulatory Accents on Black */
-  --rule-fatal: #FB7185;
-  --rule-deficiency: #FBBF24;
-  --rule-verified: #34D399;
-  --rule-registry: #818CF8;
+  /* Jewel-Tone Regulatory Accents on Dark (Image 2 style) */
+  --rule-fatal: #F43F5E;
+  --rule-deficiency: #F59E0B;
+  --rule-verified: #10B981;
+  --rule-registry: #3B82F6;
 }
 
 *, *::before, *::after {
@@ -138,52 +183,65 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  font-family: var(--font-sans) !important;
 }
 
 body {
   background-color: var(--bg-canvas);
   color: var(--text-primary);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: var(--font-sans) !important;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+  letter-spacing: -0.012em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
   background-image:
-    radial-gradient(ellipse 75% 35% at 50% 0%, rgba(14, 165, 233, 0.06), transparent 70%),
-    radial-gradient(rgba(148, 163, 184, 0.2) 1px, transparent 1px);
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(37, 99, 235, 0.05), transparent 70%),
+    radial-gradient(rgba(148, 163, 184, 0.18) 1px, transparent 1px);
   background-size: 100% 100%, 24px 24px;
   background-attachment: fixed;
 }
 
+button, input, select, textarea, optgroup {
+  font-family: inherit;
+}
+
 .dark body {
-  background-color: #030304;
+  background-color: #0B0F17;
   background-image:
-    radial-gradient(ellipse 75% 32% at 50% -5%, rgba(255, 255, 255, 0.045), transparent 70%),
-    radial-gradient(ellipse 50% 25% at 80% 0%, rgba(14, 165, 233, 0.035), transparent 65%),
-    radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    radial-gradient(ellipse 80% 35% at 50% -5%, rgba(56, 189, 248, 0.04), transparent 70%),
+    radial-gradient(ellipse 50% 25% at 85% 0%, rgba(99, 102, 241, 0.035), transparent 65%),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 24px 24px;
 }
 
-/* Primary Structural Glass Card — Crisp 12px Blur + 1px Solid Border + Specular Top Hairline */
+/* =========================================================================
+   LIQUID GLASS SYSTEM UTILITIES
+   ========================================================================= */
+
+/* Primary Structural Glass Card */
 .liquid-glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px) saturate(135%);
-  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
+/* Interactive Glass Card with Subtle Elevation */
 .glass-interactive {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px) saturate(135%);
-  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   transition:
-    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 180ms ease,
-    background-color 180ms ease;
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 160ms ease,
+    background-color 160ms ease;
 }
 
 .glass-interactive:hover {
@@ -193,85 +251,82 @@ body {
   transform: translateY(-1px);
 }
 
-/* Inner Recessed Well — Zero blur so text, tables, and controls inside cards stay 100% sharp */
+/* Inner Recessed Well — Zero blur for crisp regulatory text */
 .glass-well {
   background: var(--well-bg);
   border: 1px solid var(--well-border);
   box-shadow: var(--well-shadow);
 }
 
-/* Ensure .liquid-glass-card and .glass-interactive support gradient backgrounds cleanly */
-.dark .liquid-glass-card,
-.dark .glass-interactive {
-  background: var(--glass-bg);
-  border-color: var(--glass-border);
-  box-shadow: var(--glass-shadow);
-}
-
-.dark .glass-interactive:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--glass-border-strong);
-  box-shadow: var(--glass-shadow-hover);
-}
-
-.dark .glass-well {
-  background: var(--well-bg);
-  border-color: var(--well-border);
-  box-shadow: var(--well-shadow);
-}
-
+/* Primary Action Button */
 .btn-liquid-primary {
   background: #0F172A;
-  color: #F8FAFC;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 1px 3px rgba(15, 23, 42, 0.15);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.18), 0 1px 3px rgba(15, 23, 42, 0.12);
   transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* High-Contrast Titanium White Primary Button in Dark Mode */
-.dark .btn-liquid-primary {
-  background: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 100%);
-  color: #050507;
-  border: 1px solid #FFFFFF;
-  box-shadow:
-    inset 0 1px 0 0 #FFFFFF,
-    0 2px 12px rgba(255, 255, 255, 0.14),
-    0 8px 20px -4px rgba(0, 0, 0, 0.8);
 }
 
 .btn-liquid-primary:hover {
   transform: translateY(-1px);
-  opacity: 0.93;
+  background: #1E293B;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 3px 8px rgba(15, 23, 42, 0.18);
 }
 
+.dark .btn-liquid-primary {
+  background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
+    0 2px 8px rgba(37, 99, 235, 0.3),
+    0 6px 16px -2px rgba(0, 0, 0, 0.5);
+}
+
+.dark .btn-liquid-primary:hover {
+  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+    0 4px 12px rgba(37, 99, 235, 0.4),
+    0 8px 20px -2px rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Secondary Button */
 .btn-liquid-secondary {
-  background: var(--glass-bg);
+  background: var(--well-bg);
   color: var(--text-primary);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--border);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.8), 0 1px 2px rgba(15, 23, 42, 0.04);
   transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.btn-liquid-secondary:hover {
+  background: var(--card-solid);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
 .dark .btn-liquid-secondary {
-  background: linear-gradient(180deg, #141418 0%, #0B0B0E 100%);
-  color: #F4F4F5;
+  background: #141C2E;
+  color: #F8FAFC;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.65);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .dark .btn-liquid-secondary:hover {
-  background: linear-gradient(180deg, #1C1C22 0%, #111115 100%);
+  background: #1B253D;
   border-color: rgba(255, 255, 255, 0.18);
   transform: translateY(-1px);
 }
 
 .title-serif-italic {
-  font-family: var(--font-serif), Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans), Inter, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .metric-value {
@@ -292,7 +347,7 @@ body {
 }
 
 .animate-glass-in {
-  animation: glassFadeUp 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: glassFadeUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* 2px Severity Top Rules */
@@ -315,61 +370,61 @@ body {
   border-top: 2px solid var(--rule-registry) !important;
 }
 
-/* Semantic Regulatory Badges & Status Pills */
+/* Semantic Regulatory Badges & Status Pills (High contrast in both themes) */
 .badge-fraud,
 .pill-fatal {
-  background-color: rgba(225, 29, 72, 0.08);
+  background-color: rgba(225, 29, 72, 0.1);
   color: #BE123C;
-  border: 1px solid rgba(225, 29, 72, 0.24);
+  border: 1px solid rgba(225, 29, 72, 0.28);
 }
 
 .dark .badge-fraud,
 .dark .pill-fatal {
-  background-color: rgba(251, 113, 133, 0.14);
+  background-color: rgba(244, 63, 94, 0.18);
   color: #FDA4AF;
-  border-color: rgba(251, 113, 133, 0.35);
+  border-color: rgba(244, 63, 94, 0.38);
 }
 
 .badge-deficiency,
 .pill-deficiency {
-  background-color: rgba(217, 119, 6, 0.08);
+  background-color: rgba(217, 119, 6, 0.1);
   color: #B45309;
-  border: 1px solid rgba(217, 119, 6, 0.22);
+  border: 1px solid rgba(217, 119, 6, 0.25);
 }
 
 .dark .badge-deficiency,
 .dark .pill-deficiency {
-  background-color: rgba(251, 191, 36, 0.14);
+  background-color: rgba(245, 158, 11, 0.18);
   color: #FDE68A;
-  border-color: rgba(251, 191, 36, 0.35);
+  border-color: rgba(245, 158, 11, 0.38);
 }
 
 .badge-compliant,
 .pill-verified {
-  background-color: rgba(5, 150, 105, 0.08);
+  background-color: rgba(5, 150, 105, 0.1);
   color: #047857;
-  border: 1px solid rgba(5, 150, 105, 0.22);
+  border: 1px solid rgba(5, 150, 105, 0.25);
 }
 
 .dark .badge-compliant,
 .dark .pill-verified {
-  background-color: rgba(52, 211, 153, 0.14);
+  background-color: rgba(16, 185, 129, 0.18);
   color: #A7F3D0;
-  border-color: rgba(52, 211, 153, 0.35);
+  border-color: rgba(16, 185, 129, 0.38);
 }
 
 .badge-info,
 .pill-registry {
-  background-color: rgba(79, 70, 229, 0.08);
-  color: #4338CA;
-  border: 1px solid rgba(79, 70, 229, 0.22);
+  background-color: rgba(37, 99, 235, 0.1);
+  color: #1D4ED8;
+  border: 1px solid rgba(37, 99, 235, 0.25);
 }
 
 .dark .badge-info,
 .dark .pill-registry {
-  background-color: rgba(129, 140, 248, 0.14);
-  color: #C7D2FE;
-  border-color: rgba(129, 140, 248, 0.35);
+  background-color: rgba(59, 130, 246, 0.18);
+  color: #93C5FD;
+  border-color: rgba(59, 130, 246, 0.38);
 }
 
 select option {
@@ -377,35 +432,36 @@ select option {
   color: #0f172a;
 }
 
-/* Native <select> options in Dark Mode must be pitch-black, never browser-gray */
 .dark select option,
 html.dark select option {
-  background-color: #09090B;
-  color: #FAFAFC;
+  background-color: #111827;
+  color: #F8FAFC;
 }
 
-/* Neutralize any hardcoded dark:*-slate-* classes across all pages into Pure Carbon/Obsidian */
-.dark .dark\:bg-slate-950 { background-color: #030304 !important; }
-.dark .dark\:bg-slate-950\/70 { background-color: rgba(3, 3, 4, 0.72) !important; }
-.dark .dark\:bg-slate-900 { background-color: #09090B !important; }
-.dark .dark\:bg-slate-900\/90 { background-color: rgba(9, 9, 11, 0.92) !important; }
-.dark .dark\:bg-slate-900\/80 { background-color: rgba(9, 9, 11, 0.84) !important; }
-.dark .dark\:bg-slate-900\/60 { background-color: rgba(9, 9, 11, 0.65) !important; }
-.dark .dark\:bg-slate-900\/50 { background-color: rgba(9, 9, 11, 0.55) !important; }
-.dark .dark\:bg-slate-900\/40 { background-color: rgba(9, 9, 11, 0.45) !important; }
-.dark .dark\:bg-slate-800 { background-color: #141418 !important; }
-.dark .dark\:bg-slate-800\/80 { background-color: rgba(20, 20, 24, 0.82) !important; }
-.dark .dark\:bg-slate-800\/60 { background-color: rgba(20, 20, 24, 0.62) !important; }
-.dark .dark\:bg-slate-800\/50 { background-color: rgba(20, 20, 24, 0.52) !important; }
-.dark .dark\:bg-slate-800\/40 { background-color: rgba(20, 20, 24, 0.42) !important; }
-.dark .dark\:bg-slate-700 { background-color: #1a1a20 !important; }
-.dark .dark\:bg-slate-700\/40 { background-color: rgba(26, 26, 32, 0.42) !important; }
+/* =========================================================================
+   SYNCHRONIZE HARDCODED DARK:SLATE UTILITIES WITH IMAGE 2 ENTERPRISE PALETTE
+   ========================================================================= */
+.dark .dark\:bg-slate-950 { background-color: #0B0F17 !important; }
+.dark .dark\:bg-slate-950\/70 { background-color: rgba(11, 15, 23, 0.75) !important; }
+.dark .dark\:bg-slate-900 { background-color: #111827 !important; }
+.dark .dark\:bg-slate-900\/90 { background-color: rgba(17, 24, 39, 0.92) !important; }
+.dark .dark\:bg-slate-900\/80 { background-color: rgba(17, 24, 39, 0.85) !important; }
+.dark .dark\:bg-slate-900\/60 { background-color: rgba(17, 24, 39, 0.65) !important; }
+.dark .dark\:bg-slate-900\/50 { background-color: rgba(17, 24, 39, 0.55) !important; }
+.dark .dark\:bg-slate-900\/40 { background-color: rgba(17, 24, 39, 0.45) !important; }
+.dark .dark\:bg-slate-800 { background-color: #1A2338 !important; }
+.dark .dark\:bg-slate-800\/80 { background-color: rgba(26, 35, 56, 0.85) !important; }
+.dark .dark\:bg-slate-800\/60 { background-color: rgba(26, 35, 56, 0.65) !important; }
+.dark .dark\:bg-slate-800\/50 { background-color: rgba(26, 35, 56, 0.55) !important; }
+.dark .dark\:bg-slate-800\/40 { background-color: rgba(26, 35, 56, 0.45) !important; }
+.dark .dark\:bg-slate-700 { background-color: #24304D !important; }
+.dark .dark\:bg-slate-700\/40 { background-color: rgba(36, 48, 77, 0.45) !important; }
 
 .dark .dark\:border-slate-800,
 .dark .dark\:border-slate-800\/80,
 .dark .dark\:border-slate-800\/60,
 .dark .dark\:border-slate-700 {
-  border-color: rgba(255, 255, 255, 0.075) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 .dark .dark\:divide-slate-800 > :not([hidden]) ~ :not([hidden]),
@@ -413,9 +469,9 @@ html.dark select option {
   border-color: rgba(255, 255, 255, 0.07) !important;
 }
 
-.dark .dark\:text-slate-400 { color: #9E9EA8 !important; }
-.dark .dark\:text-slate-500 { color: #71717A !important; }
-.dark .dark\:text-slate-300 { color: #D4D4D8 !important; }
-.dark .dark\:text-slate-200 { color: #E4E4E7 !important; }
+.dark .dark\:text-slate-400 { color: #94A3B8 !important; }
+.dark .dark\:text-slate-500 { color: #64748B !important; }
+.dark .dark\:text-slate-300 { color: #CBD5E1 !important; }
+.dark .dark\:text-slate-200 { color: #E2E8F0 !important; }
 
 nextjs-portal { display: none !important; }

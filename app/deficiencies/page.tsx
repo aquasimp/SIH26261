@@ -8,6 +8,7 @@ import { computeSha256 } from '@/lib/crypto-utils';
 import GroupChat, { ChatMessage } from '@/components/ui/group-chat';
 import { toast } from 'sonner';
 import { AICTELogo } from '@/components/brand/AICTELogo';
+import AshokaEmblem from '@/components/brand/AshokaEmblem';
 import {
   FileWarning,
   Printer,
@@ -71,9 +72,9 @@ function DeficienciesContent() {
     return [
       {
         name: 'trufor-sentinel',
-        title: 'TruFor AI Sentinel',
+        title: 'Forensic Tamper Sentinel',
         text: topAnom
-          ? `[FORENSIC EVIDENCE] Tamper localization confirmed on ${topAnom.documentTitle} with ${(topAnom.tamperProbability * 100).toFixed(1)}% confidence. ${topAnom.modelUsed} identified adversarial splice window altering dates.`
+          ? `[FORENSIC EVIDENCE] Tamper localization confirmed on ${topAnom.documentTitle} with ${(topAnom.tamperProbability * 100).toFixed(1)}% confidence. Multi-spectral analysis identified adversarial splice window altering dates.`
           : `[FORENSIC EVIDENCE] Multi-spectral validation complete: Zero tampering detected. All uploaded credentials match issuing repository hash.`,
         time: '09:42 AM',
       },
@@ -89,7 +90,7 @@ function DeficienciesContent() {
         name: 'evc-sharma',
         title: 'Dr. A. Sharma (EVC)',
         text: isFatal
-          ? `Physical inspection concurs with TruFor Sentinel. Institutional trust has failed to produce original non-expired NOC. Immediate SHC summons is mandatory.`
+          ? `Physical inspection concurs with forensic findings. Institutional trust has failed to produce original non-expired NOC. Immediate SHC summons is mandatory.`
           : `15-day rectification window is sufficient for institution to rectify CAD instructional area shortfalls and file verified faculty affidavit under APH Chapter VII.`,
         time: '09:55 AM',
       },
@@ -229,7 +230,7 @@ function DeficienciesContent() {
   return (
     <div className="space-y-6 animate-glass-in">
       {/* Top Header & Application Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-1 px-1">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
@@ -238,7 +239,7 @@ function DeficienciesContent() {
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             Statutory Notice &amp;{' '}
-            <span className="title-serif-italic text-sky-600 dark:text-sky-400">
+            <span className="font-extrabold text-sky-600 dark:text-sky-400">
               Deficiency Generator
             </span>
           </h1>
@@ -481,8 +482,10 @@ function DeficienciesContent() {
           <div className="rounded-[18px] p-5 sm:p-10 space-y-6 liquid-glass-card shadow-2xl print:border-none print:shadow-none">
         {/* National Emblem & AICTE Official Header */}
         <div className="text-center pb-6 border-b border-[var(--glass-border)] space-y-1.5">
-          {/* Official AICTE Emblem Insignia */}
-          <div className="flex justify-center mb-3">
+          {/* Official State & AICTE Emblem Insignia */}
+          <div className="flex justify-center items-center gap-4 mb-3">
+            <AshokaEmblem size={36} />
+            <div className="h-8 w-px bg-slate-300 dark:bg-slate-700" />
             <AICTELogo variant="badge" size="xl" showStatusDot={false} interactive={false} />
           </div>
 

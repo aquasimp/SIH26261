@@ -192,21 +192,21 @@ export default function ApplicationsPage() {
             ? 'अग्नि शमन एनओसी समाप्ति वर्ष में कृत्रिम हेरफेर'
             : 'कंप्यूटर लैब क्षेत्रफल में लेबल मुद्रास्फीति',
           descriptionEn: isFatalAnomaly
-            ? 'TruFor Noiseprint++ and DCT BAG analysis localized an adversarial spliced patch altering validity date with 97.4% tamper confidence.'
-            : 'Mask2Former Swin-Base Shoelace integration revealed lab carpet area of 48.0 m² against printed label of 66.0 m².',
+            ? 'Multi-spectral forensic analysis localized an adversarial spliced patch altering validity date with 97.4% confidence.'
+            : 'Architectural blueprint calculation revealed lab carpet area of 48.0 m² against printed label of 66.0 m².',
           descriptionHi: isFatalAnomaly
             ? 'ट्रू-फॉर नॉयसप्रिंट++ विश्लेषण ने 97.4% विश्वास के साथ हेरफेर की पुष्टि की।'
             : 'मास्क2फॉर्मर शूलेस गणना ने क्षेत्रफल में कमी पाई।',
           aphClause: isFatalAnomaly
             ? 'APH 2024-27 Chapter VII & Annexure 16, Clause 2.1'
             : 'APH 2024-27 Chapter VII Clause 7.1',
-          modelUsed: isFatalAnomaly ? 'TruFor (CVPR 2023) + NFA-ViT' : 'Mask2Former Swin-Base + Shoelace',
+          modelUsed: isFatalAnomaly ? 'Multi-Spectral Tamper Analysis' : 'Architectural Vector Calculation',
           tamperProbability: isFatalAnomaly ? 0.974 : 0.892,
           confidenceScore: 0.952,
           rpnScore: rpn,
           boundingBox: [60, 40, 85, 48],
           extractedValue: isFatalAnomaly ? 'Valid Until: 30-06-2027' : 'Lab Area: 66.0 m²',
-          authorityValue: isFatalAnomaly ? 'State Fire Portal: Expired 30-06-2024' : 'Computed Shoelace: 48.0 m²',
+          authorityValue: isFatalAnomaly ? 'State Fire Portal: Expired 30-06-2024' : 'Computed Blueprint: 48.0 m²',
           verificationState: 'MISMATCH_DETECTED',
         },
       ],
@@ -217,7 +217,7 @@ export default function ApplicationsPage() {
 
     setApplications((prev) => [newApp, ...prev]);
     toast.success(`AICTE-SynDoc-10K: Ingested synthetic adversarial filing ${newId}!`, {
-      description: `Generated ${college.en} with ${isFatalAnomaly ? 'Fatal TruFor Splicing' : 'Blueprint Area Deficiency'}.`,
+      description: `Generated ${college.en} with ${isFatalAnomaly ? 'Fatal Document Alteration' : 'Blueprint Area Deficiency'}.`,
     });
   };
 
@@ -265,18 +265,16 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <div className="space-y-4 animate-glass-in">
+    <div className="space-y-6 animate-glass-in">
       {/* Top Header & Workstation Action Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-              National Institutional Dossier Registry
-            </span>
-          </div>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 py-1 px-1">
+        <div className="space-y-1.5">
+          <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider block">
+            National Institutional Dossier Registry
+          </span>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)]">
             Institutional Scrutiny{' '}
-            <span className="title-serif-italic text-sky-700 dark:text-sky-400">
+            <span className="font-bold text-sky-700 dark:text-sky-400">
               Registry
             </span>
           </h1>
@@ -364,8 +362,8 @@ export default function ApplicationsPage() {
       </div>
 
       {/* Quick Search & Compare Indicator Strip */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-[18px] liquid-glass-card flex-1 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3 px-4 py-3 sm:px-5 sm:py-3.5 rounded-[18px] liquid-glass-card flex-1 shadow-sm">
           <Search className="w-4 h-4 text-[var(--text-muted)] shrink-0" />
           <input
             type="text"
@@ -704,7 +702,7 @@ export default function ApplicationsPage() {
               const institutionalAnnexures: FolderFile[] = [
                 {
                   name: `${app.id.slice(-7)} Fire NOC.pdf`,
-                  meta: app.fatalGateTriggered ? 'RPN 912 · TruFor Tampered' : 'Verified · e-District QR',
+                  meta: app.fatalGateTriggered ? 'RPN 912 · Document Tampered' : 'Verified · e-District QR',
                   art: isFatal ? 'ember' : 'glacier',
                   href: `/applications/${app.id}`,
                 },
@@ -716,7 +714,7 @@ export default function ApplicationsPage() {
                 },
                 {
                   name: 'CAD Floor Plan.dwg',
-                  meta: `${app.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()} m² · Shoelace CV`,
+                  meta: `${app.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()} m² · Geometric CAD Area`,
                   art: 'dusk',
                   href: `/applications/${app.id}`,
                 },

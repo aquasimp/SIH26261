@@ -171,13 +171,13 @@ export default function ForensicsStudioPage() {
     ctx.fillRect(10, 10, w - 20, h - 20);
 
     ctx.fillStyle = '#1E3A8A';
-    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 12px Inter, -apple-system, sans-serif';
     ctx.textAlign = 'center';
 
     if (exhibit === 'fire-noc') {
       ctx.fillText('DIRECTORATE OF FIRE SERVICES • GOVT OF HARYANA', w / 2, 45);
       ctx.fillStyle = '#374151';
-      ctx.font = '10px "Plus Jakarta Sans", sans-serif';
+      ctx.font = '10px Inter, -apple-system, sans-serif';
       ctx.fillText('Ref No: FS/2021/8841-EXT • Issue Date: 28-06-2021', w / 2, 65);
 
       ctx.fillStyle = '#EFF6FF';
@@ -316,7 +316,7 @@ export default function ForensicsStudioPage() {
     srcCtx.stroke();
 
     srcCtx.fillStyle = '#1D4ED8';
-    srcCtx.font = 'bold 8.5px "Plus Jakarta Sans", sans-serif';
+    srcCtx.font = 'bold 8.5px Inter, -apple-system, sans-serif';
     srcCtx.textAlign = 'center';
     srcCtx.fillText('GOVT. OF HARYANA', S / 2, 40);
     srcCtx.fillText('GURUGRAM CIRCLE', S / 2, S / 2 + 3);
@@ -373,18 +373,23 @@ export default function ForensicsStudioPage() {
   }, [activeModule, polarRadiusMin, polarRadiusMax]);
 
   return (
-    <div className="space-y-5 animate-glass-in">
-      {/* Page Title */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
-          Multi-Spectral Document{' '}
-          <span className="title-serif-italic text-sky-700 dark:text-sky-400">
+    <div className="space-y-6 animate-glass-in">
+      {/* Symmetrical Page Title & Context Header */}
+      <div className="px-1 py-1">
+        <div className="space-y-1.5">
+          <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider block">
+            AICTE Forensic Document Examination & Tamper Detection
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
+            Multi-Spectral Document{' '}
+          <span className="font-extrabold text-sky-700 dark:text-sky-400">
             Forensics Studio
           </span>
         </h1>
         <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
-          Pixel-level tampering localization, Noiseprint++ ablation matrix, Siamese ArcFace seal lab, and fitz PDF XRef inspection
+          Independent statutory verification: pixel alteration analysis, sensor consistency, seal authentication, and container stream inspection.
         </p>
+      </div>
       </div>
 
       {/* Top 4 Working Forensic Modules Navigation Bar */}
@@ -399,7 +404,7 @@ export default function ForensicsStudioPage() {
             }`}
           >
             <ScanEye className="w-4 h-4" />
-            <span>1. Live File Upload &amp; ELA Sandbox</span>
+            <span>Document Alteration Sandbox</span>
           </button>
           <button
             onClick={() => setActiveModule('NOISEPRINT_ABLATION')}
@@ -410,7 +415,7 @@ export default function ForensicsStudioPage() {
             }`}
           >
             <Binary className="w-4 h-4" />
-            <span>2. Noiseprint++ Ablation Inspector</span>
+            <span>Sensor Residual Inspector</span>
           </button>
           <button
             onClick={() => setActiveModule('SEAL_SIGNATURE_LAB')}
@@ -421,7 +426,7 @@ export default function ForensicsStudioPage() {
             }`}
           >
             <ShieldAlert className="w-4 h-4" />
-            <span>3. Siamese ArcFace &amp; Polar Seal Lab</span>
+            <span>Seal &amp; Signature Authenticator</span>
           </button>
           <button
             onClick={() => setActiveModule('XREF_MORPHOLOGY')}
@@ -432,21 +437,21 @@ export default function ForensicsStudioPage() {
             }`}
           >
             <FileCode className="w-4 h-4" />
-            <span>4. PyMuPDF XRef &amp; Morphology</span>
+            <span>PDF Stream &amp; Metadata Audit</span>
           </button>
         </div>
       </div>
 
       {/* MODULE 1: Live Local File Upload & Client-Side ELA / DCT Sandbox */}
       {activeModule === 'ELA_SANDBOX' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
           {/* Left Canvas & Controls (7 cols) */}
           <div className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                   <ScanEye className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-                  <span>Real Pixel ELA &amp; 8×8 DCT BAG Engine</span>
+                  <span>Pixel Alteration &amp; Compression Analysis</span>
                 </h2>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5">
                   Computes quantization residual |I - I_Q| × γ and 8×8 lattice phase shifts
@@ -594,7 +599,7 @@ export default function ForensicsStudioPage() {
                   <div className="font-bold text-[var(--text-primary)]">{statNoise.dVariance}</div>
                 </div>
                 <div className="p-2.5 rounded-xl glass-well">
-                  <div className="text-[10px] text-[var(--text-faint)]">11. Peak PRNU Pattern</div>
+                  <div className="text-[10px] text-[var(--text-faint)]">11. Sensor Noise Pattern</div>
                   <div className="font-bold text-rose-600">{statNoise.prnuPeak}</div>
                 </div>
                 <div className="p-2.5 rounded-xl glass-well">
@@ -648,10 +653,10 @@ export default function ForensicsStudioPage() {
             <div>
               <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <Binary className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                <span>Noiseprint++ 7-Level Architectural Ablation Ladder</span>
+                <span>Multi-Resolution Tamper Sensitivity Ladder</span>
               </h2>
               <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                Demonstrating why InstanceNorm2d standardizes out sensor noise and how ResAware restores diagnostic AUC
+                Demonstrating why standard spatial normalization reduces subtle sensor noise and how calibrated analysis preserves diagnostic accuracy
               </p>
             </div>
 
@@ -660,8 +665,8 @@ export default function ForensicsStudioPage() {
               {[
                 { lvl: 1, name: 'L1: Raw RGB Baseline', auc: 0.492, note: 'Blind to forensic sensor noise' },
                 { lvl: 2, name: 'L2: Sobel Edge Gradient Filter', auc: 0.581, note: 'Confuses document ink borders with tampering' },
-                { lvl: 3, name: 'L3: Scalar Noise Feature Ceiling', auc: 0.747, note: 'Upper bound on theoretical PRNU extraction' },
-                { lvl: 4, name: 'L4: Vanilla TruFor (InstanceNorm2d)', auc: 0.554, note: 'SIGNAL COLLAPSE: Spatial norm erases localized contrast', fatal: true },
+                { lvl: 3, name: 'L3: Scalar Noise Feature Ceiling', auc: 0.747, note: 'Upper bound on theoretical sensor noise extraction' },
+                { lvl: 4, name: 'L4: Standard Baseline (Spatial Norm)', auc: 0.554, note: 'SENSITIVITY LOSS: Standard normalisation reduces subtle contrast', fatal: true },
                 { lvl: 5, name: 'L5: ResNet-50 + Spatial Pyramid Pooling', auc: 0.689, note: 'Partially recovers multi-scale texture' },
                 { lvl: 6, name: 'L6: ResAware BatchNorm (Channel Preserving)', auc: 0.728, note: 'Preserves global batch statistics across patches' },
                 { lvl: 7, name: 'L7: Full-Frame Extract-Then-Crop + StatNoise 13-MLP', auc: 0.747, note: 'SOTA: Full ceiling restoration without signal destruction', sota: true },
@@ -709,7 +714,7 @@ export default function ForensicsStudioPage() {
                 <span>Crop-Then-Extract vs. Extract-Then-Crop SNR</span>
               </h3>
               <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                Interactive demonstration of PRNU signal destruction when cropping tight ROI patches
+                Interactive demonstration of sensor signal loss when cropping tight ROI patches
               </p>
             </div>
 
@@ -773,7 +778,7 @@ export default function ForensicsStudioPage() {
             <div>
               <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                <span>Siamese ArcFace (s=64.0, m=0.50 rad) Seal &amp; Signature Lab</span>
+                <span>Official Seal &amp; Signature Authentication Lab</span>
               </h2>
               <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Additive Angular Margin embedding on 512-D hypersphere with clone detection

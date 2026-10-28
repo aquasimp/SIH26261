@@ -128,7 +128,7 @@ export default function AuditTrailPage() {
   return (
     <div className="space-y-6 animate-glass-in">
       {/* Title & Verify Trigger */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-1 px-1">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
@@ -137,7 +137,7 @@ export default function AuditTrailPage() {
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             Immutable Scrutiny{' '}
-            <span className="title-serif-italic text-sky-600 dark:text-sky-400">
+            <span className="font-extrabold text-sky-600 dark:text-sky-400">
               Audit Ledger
             </span>
           </h1>
@@ -229,7 +229,7 @@ export default function AuditTrailPage() {
       {/* Filter Tabs & Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Event Type Filter Tabs */}
-        <div className="inline-flex rounded-xl p-1 glass-well text-xs font-medium overflow-x-auto">
+        <div className="inline-flex rounded-xl p-1 glass-well text-xs font-medium overflow-x-auto no-scrollbar">
           {['ALL', 'AI_INFERENCE', 'DPI_HANDSHAKE', 'OFFICER_SIGN_OFF', 'DEFICIENCY_DISPATCH'].map(
             (f) => (
               <button
@@ -325,7 +325,7 @@ export default function AuditTrailPage() {
 
                   <div className="p-3.5 rounded-xl glass-well">
                     <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-semibold block">
-                      Actor / Neural Model Engine
+                      Authorized Officer / Verification Engine
                     </span>
                     <span className="font-semibold text-[var(--text-primary)] block mt-0.5">
                       {block.actorOrModel}

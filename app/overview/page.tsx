@@ -7,24 +7,34 @@ import { useTheme } from 'next-themes';
 import { useLanguage, useFilters } from '@/lib/context';
 import { REGIONAL_STATS, MOCK_APPLICATIONS, InstitutionalApplication } from '@/lib/mock-data';
 import GlassFolder, { FolderFile, FolderMenuItem } from '@/components/ui/glass-folder-cards';
+import IndiaChoroplethMap from '@/components/workbench/IndiaChoroplethMap';
 import { toast } from 'sonner';
 import {
   ArrowUpRight,
   ArrowDownRight,
-  ExternalLink,
-  ChevronRight,
-  RotateCcw,
-  FileText,
+  Folder,
   CheckCircle2,
-  X,
+  AlertTriangle,
+  AlertOctagon,
+  Building2,
   Eye,
-  Sparkles,
+  MoreHorizontal,
+  ChevronRight,
   FolderArchive,
   ShieldAlert,
   Clock,
-  CheckCircle,
+  Sparkles,
+  FileText,
+  ScanText,
+  Fingerprint,
+  Compass,
+  Users,
   ChevronDown,
   ChevronUp,
+  X,
+  ExternalLink,
+  ShieldCheck,
+  RotateCcw,
 } from 'lucide-react';
 
 export default function OverviewPage() {
@@ -32,16 +42,21 @@ export default function OverviewPage() {
   const { resolvedTheme } = useTheme();
   const { t, language } = useLanguage();
   const { filters, filteredApplications, setFilters, applications } = useFilters();
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
-  // Responsive GlassFolder width for Statutory Evidence Vaults
+  // Responsive folder width for Statutory Evidence Vaults (protected 21st.dev component)
   const [vaultFolderWidth, setVaultFolderWidth] = useState<number>(330);
   const [isVaultSectionOpen, setIsVaultSectionOpen] = useState<boolean>(true);
+  const [chartTimespan, setChartTimespan] = useState<string>('Last 7 Days');
 
   useEffect(() => {
     const handleResize = () => {
       if (typeof window !== 'undefined') {
-        setVaultFolderWidth(window.innerWidth < 420 ? 285 : 330);
+        const w = window.innerWidth;
+        if (w < 440) setVaultFolderWidth(285);
+        else if (w < 768) setVaultFolderWidth(310);
+        else if (w < 1280) setVaultFolderWidth(295);
+        else if (w < 1536) setVaultFolderWidth(325);
+        else setVaultFolderWidth(345);
       }
     };
     handleResize();
@@ -58,7 +73,6 @@ export default function OverviewPage() {
   const activeRegionStat = REGIONAL_STATS.find((r) => r.region === filters.region);
 
   const dynamicKpis = useMemo(() => {
-    // Calculate live mutation deltas against initial mock database
     const initialApproved = MOCK_APPLICATIONS.filter((a) => a.scrutinyStatus === 'Auto-Pre-Cleared').length;
     const currentApproved = applications.filter((a) => a.scrutinyStatus === 'Auto-Pre-Cleared').length;
     const approvedDelta = currentApproved - initialApproved;
@@ -72,95 +86,54 @@ export default function OverviewPage() {
     const fatalDelta = currentFatal - initialFatal;
 
     if (activeRegionStat) {
-      const regionInitialApproved = MOCK_APPLICATIONS.filter(
-        (a) => a.region === filters.region && a.scrutinyStatus === 'Auto-Pre-Cleared'
-      ).length;
-      const regionCurrentApproved = applications.filter(
-        (a) => a.region === filters.region && a.scrutinyStatus === 'Auto-Pre-Cleared'
-      ).length;
-      const rApprovedDelta = regionCurrentApproved - regionInitialApproved;
-
-      const regionInitialDef = MOCK_APPLICATIONS.filter(
-        (a) => a.region === filters.region && a.scrutinyStatus === 'Deficiency Issued'
-      ).length;
-      const regionCurrentDef = applications.filter(
-        (a) => a.region === filters.region && a.scrutinyStatus === 'Deficiency Issued'
-      ).length;
-      const rDefDelta = regionCurrentDef - regionInitialDef;
-
-      const regionInitialFatal = MOCK_APPLICATIONS.filter(
-        (a) => a.region === filters.region && a.scrutinyStatus === 'Fatal Fraud Alert'
-      ).length;
-      const regionCurrentFatal = applications.filter(
-        (a) => a.region === filters.region && a.scrutinyStatus === 'Fatal Fraud Alert'
-      ).length;
-      const rFatalDelta = regionCurrentFatal - regionInitialFatal;
-
       const total = activeRegionStat.applications;
-      const preCleared = Math.max(0, activeRegionStat.compliantCount + rApprovedDelta);
+      const preCleared = Math.max(0, activeRegionStat.compliantCount + approvedDelta);
       const preClearedPct = ((preCleared / total) * 100).toFixed(1);
-      const def = Math.max(0, activeRegionStat.rectifiableCount + rDefDelta);
-      const fatal = Math.max(0, activeRegionStat.fatalFraudCount + rFatalDelta);
+      const def = Math.max(0, activeRegionStat.rectifiableCount + defDelta);
+      const fatal = Math.max(0, activeRegionStat.fatalFraudCount + fatalDelta);
       const ghost = activeRegionStat.ghostFacultyCount;
       return {
         totalIngested: total.toLocaleString(),
-        totalIngestedTrend: '+8.4%',
+        totalIngestedTrend: '+12%',
         preCleared: preCleared.toLocaleString(),
         preClearedPct: `${preClearedPct}%`,
         deficienciesIssued: def.toLocaleString(),
-        deficienciesTrend: '-3.2%',
+        deficienciesTrend: '24.5%',
         fatalFraud: fatal.toLocaleString(),
-        fatalFraudTrend: '+14.2%',
+        fatalFraudTrend: '3.1%',
         ghostFaculty: ghost.toLocaleString(),
-        ghostColleges: `${Math.round(ghost * 0.32)} Institutions`,
-        authorityRate: '98.2%',
-        authorityLatency: '148ms avg',
+        ghostFacultyPct: '6.1%',
       };
     }
 
-    const totalApps = REGIONAL_STATS.reduce((acc, r) => acc + r.applications, 0); // 4,820
-    const compliant = Math.max(0, REGIONAL_STATS.reduce((acc, r) => acc + r.compliantCount, 0) + approvedDelta);
-    const def = Math.max(0, REGIONAL_STATS.reduce((acc, r) => acc + r.rectifiableCount, 0) + defDelta);
-    const fatal = Math.max(0, REGIONAL_STATS.reduce((acc, r) => acc + r.fatalFraudCount, 0) + fatalDelta);
-    const ghost = REGIONAL_STATS.reduce((acc, r) => acc + r.ghostFacultyCount, 0); // 296
+    const totalApps = 4820;
+    const compliant = 3194 + approvedDelta;
+    const def = 1182 + defDelta;
+    const fatal = 148 + fatalDelta;
+    const ghost = 296;
 
     return {
       totalIngested: totalApps.toLocaleString(),
-      totalIngestedTrend: '+12.4%',
+      totalIngestedTrend: '+12%',
       preCleared: compliant.toLocaleString(),
       preClearedPct: `${((compliant / totalApps) * 100).toFixed(1)}%`,
       deficienciesIssued: def.toLocaleString(),
-      deficienciesTrend: '-4.1%',
+      deficienciesTrend: `${((def / totalApps) * 100).toFixed(1)}%`,
       fatalFraud: fatal.toLocaleString(),
-      fatalFraudTrend: '+18.9%',
+      fatalFraudTrend: `${((fatal / totalApps) * 100).toFixed(1)}%`,
       ghostFaculty: ghost.toLocaleString(),
-      ghostColleges: '94 Institutions',
-      authorityRate: '98.4%',
-      authorityLatency: '142ms avg',
+      ghostFacultyPct: `${((ghost / totalApps) * 100).toFixed(1)}%`,
     };
-  }, [activeRegionStat, applications, filters.region]);
+  }, [activeRegionStat, applications]);
 
   // High risk applications sorted by RPN
   const highRiskQueue = useMemo(() => {
     return [...filteredApplications].sort((a, b) => b.maxRpn - a.maxRpn);
   }, [filteredApplications]);
 
-  // Highest RPN dossier bound dynamically for Priority Alert banner
   const highestRpnDossier = useMemo(() => {
     return highRiskQueue[0] || applications[0] || MOCK_APPLICATIONS[0];
   }, [highRiskQueue, applications]);
-
-  const handleRegionClick = (regionName: string) => {
-    if (filters.region === regionName) {
-      setFilters((prev) => ({ ...prev, region: 'All Regions (8)' }));
-      setSelectedRegion(null);
-      toast.info('Cleared region filter — Showing All 8 Regions');
-    } else {
-      setSelectedRegion(regionName);
-      setFilters((prev) => ({ ...prev, region: regionName }));
-      toast.info(`Filtered view by AICTE Region: ${regionName}`);
-    }
-  };
 
   const handleGenerateNoticeToast = (appId?: string) => {
     const id = typeof appId === 'string' && appId ? appId : highestRpnDossier.id;
@@ -173,226 +146,549 @@ export default function OverviewPage() {
     }, 400);
   };
 
+  // Recent Dossiers matching Image 2 table with live data linkage
+  const recentDossiersList = useMemo(() => {
+    return [
+      {
+        id: 'AICTE-2026-0142',
+        name: 'Apex Institute of Technology',
+        state: 'UP',
+        type: 'New',
+        received: '15 Jan 2026',
+        status: 'Fatal Fraud Alert',
+        statusClass: 'pill-fatal',
+        statusLabel: 'Forgery Alert',
+        targetAppId: 'AICTE-2026-NW-0842',
+      },
+      {
+        id: 'AICTE-2026-0141',
+        name: 'Shivam College of Engineering',
+        state: 'MH',
+        type: 'Renewal',
+        received: '15 Jan 2026',
+        status: 'Under Scrutiny',
+        statusClass: 'pill-registry',
+        statusLabel: 'Under Scrutiny',
+        targetAppId: 'AICTE-2026-SO-0914',
+      },
+      {
+        id: 'AICTE-2026-0140',
+        name: 'Bharat Technical Campus',
+        state: 'RJ',
+        type: 'New',
+        received: '14 Jan 2026',
+        status: 'Deficiency Issued',
+        statusClass: 'pill-deficiency',
+        statusLabel: 'Deficiency',
+        targetAppId: 'AICTE-2026-WE-0721',
+      },
+      {
+        id: 'AICTE-2026-0139',
+        name: 'Saraswati Group of Institutions',
+        state: 'KA',
+        type: 'Extension',
+        received: '14 Jan 2026',
+        status: 'Auto-Pre-Cleared',
+        statusClass: 'pill-verified',
+        statusLabel: 'Cleared',
+        targetAppId: 'AICTE-2026-SW-0312',
+      },
+      {
+        id: 'AICTE-2026-0138',
+        name: 'Janta College of Engineering',
+        state: 'BR',
+        type: 'New',
+        received: '13 Jan 2026',
+        status: 'Under Scrutiny',
+        statusClass: 'pill-registry',
+        statusLabel: 'Under Scrutiny',
+        targetAppId: 'AICTE-2026-EA-0519',
+      },
+    ];
+  }, []);
+
   return (
-    <div className="space-y-4 animate-glass-in">
-      {/* Editorial Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+    <div className="space-y-6 animate-glass-in">
+      {/* =========================================================================
+          SECTION 1: GREETING & SCOPE HEADER (Matching Image 2)
+          ========================================================================= */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-1 px-1">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-              AICTE Regulatory Scrutiny Workstation
-            </span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)]">
-            Institutional Regulatory Scrutiny{' '}
-            <span className="title-serif-italic text-sky-700 dark:text-sky-400">
-              Intelligence
-            </span>
+          <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+            {language === 'hi' ? 'शुभ प्रभात, श्री आर.के. वर्मा' : 'Good Morning, Shri R.K. Verma'}
           </h1>
-          <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
-            Evidence-Linked Document Authentication, Forensic Tampering Localization &amp; Infrastructure Verification (APH 2024–27)
+          <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 mt-0.5">
+            AICTE Regulatory Scrutiny Workstation | Evidence-Linked Scrutiny for APH 2024–27
           </p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <Link
-            href="/applications"
-            className="btn-liquid-secondary inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-2xs"
-          >
-            <span>All Dossiers</span>
-            <span className="text-[11px] font-semibold text-[var(--text-muted)] tabular-nums">4,820</span>
-            <ChevronRight className="w-3.5 h-3.5 text-[var(--text-faint)]" />
-          </Link>
+
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-mono hidden sm:block">
+            15 Jan 2026, 10:24 AM
+          </div>
+          <div className="glass-well rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200 inline-flex items-center gap-2 shadow-2xs">
+            <span>AY 2026–27 (Current)</span>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+          </div>
         </div>
       </div>
 
       {/* =========================================================================
-          ROW 1: UNIFIED 6-COLUMN METRIC GRID
-          (2px Top Severity Rules, Monochrome High-Contrast Display Numerals, No Truncation)
+          SECTION 2: 5 HERO METRIC CARDS (Exact match to Image 2)
           ========================================================================= */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/80 dark:divide-slate-800/80 liquid-glass-card rounded-[18px] overflow-hidden mb-4">
-        {/* Metric 1: Ingested */}
-        <div className="top-rule-registry p-4 flex flex-col justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            {t.kpiTotalIngested}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
+        {/* Card 1: Total Dossiers */}
+        <div className="liquid-glass-card rounded-[18px] p-4 flex items-center gap-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="h-12 w-12 rounded-xl bg-blue-500/15 text-blue-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+            <Folder className="h-6 w-6" />
           </div>
-          <div className="flex items-baseline justify-between gap-2 my-2">
-            <span className="metric-value">{dynamicKpis.totalIngested}</span>
-            <span className="px-2 py-0.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-semibold inline-flex items-center gap-0.5">
-              <ArrowUpRight className="w-3 h-3" />
-              {dynamicKpis.totalIngestedTrend}
-            </span>
-          </div>
-          <div className="text-xs text-[var(--text-secondary)] font-medium">
-            {filters.region !== 'All Regions (8)' ? `Scope: ${filters.region}` : t.kpiTotalIngestedSub}
-          </div>
-        </div>
-
-        {/* Metric 2: Pre-Cleared */}
-        <div className="top-rule-verified p-4 flex flex-col justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            {t.kpiPreCleared}
-          </div>
-          <div className="flex items-baseline justify-between gap-2 my-2">
-            <span className="metric-value">{dynamicKpis.preCleared}</span>
-            <span className="px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-semibold inline-flex items-center gap-0.5">
-              {dynamicKpis.preClearedPct}
-            </span>
-          </div>
-          <div className="text-xs text-[var(--text-secondary)] font-medium">
-            {t.kpiPreClearedSub}
-          </div>
-        </div>
-
-        {/* Metric 3: Deficiencies Issued */}
-        <div className="top-rule-deficiency p-4 flex flex-col justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            {t.kpiDeficienciesIssued}
-          </div>
-          <div className="flex items-baseline justify-between gap-2 my-2">
-            <span className="metric-value">{dynamicKpis.deficienciesIssued}</span>
-            <span className="px-2 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300 text-xs font-semibold inline-flex items-center gap-0.5">
-              <ArrowDownRight className="w-3 h-3" />
-              {dynamicKpis.deficienciesTrend}
-            </span>
-          </div>
-          <div className="text-xs text-[var(--text-secondary)] font-medium">
-            {t.kpiDeficienciesIssuedSub}
-          </div>
-        </div>
-
-        {/* Metric 4: Fatal Forgery */}
-        <div className="top-rule-fatal p-4 flex flex-col justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            {t.kpiFatalFraud}
-          </div>
-          <div className="flex items-baseline justify-between gap-2 my-2">
-            <span className="metric-value">{dynamicKpis.fatalFraud}</span>
-            <span className="px-2 py-0.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300 text-xs font-semibold inline-flex items-center gap-0.5">
-              <ArrowUpRight className="w-3 h-3" />
-              {dynamicKpis.fatalFraudTrend}
-            </span>
-          </div>
-          <div className="text-xs text-[var(--text-secondary)] font-medium">
-            {t.kpiFatalFraudSub}
-          </div>
-        </div>
-
-        {/* Metric 5: Ghost Faculty */}
-        <div className="top-rule-fatal p-4 flex flex-col justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            {t.kpiGhostFaculty}
-          </div>
-          <div className="flex items-baseline justify-between gap-2 my-2">
-            <span className="metric-value">{dynamicKpis.ghostFaculty}</span>
-            <span className="px-2 py-0.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300 text-xs font-semibold inline-flex items-center gap-0.5">
-              {dynamicKpis.ghostColleges}
-            </span>
-          </div>
-          <div className="text-xs text-[var(--text-secondary)] font-medium">
-            {t.kpiGhostFacultySub}
-          </div>
-        </div>
-
-        {/* Metric 6: Authority Live */}
-        <div className="top-rule-verified p-4 flex flex-col justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            {t.kpiAuthorityLive}
-          </div>
-          <div className="flex items-baseline justify-between gap-2 my-2">
-            <span className="metric-value">{dynamicKpis.authorityRate}</span>
-            <span className="px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-semibold inline-flex items-center gap-0.5 whitespace-nowrap">
-              {dynamicKpis.authorityLatency}
-            </span>
-          </div>
-          <div className="text-xs text-[var(--text-secondary)] font-medium">
-            {t.kpiAuthorityLiveSub}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          ROW 2: PRIORITY INTERVENTION / HIGH-RISK ALERT BANNER
-          (Dual Pulsing Radar Dot, Dynamic Highest-RPN Dossier Binding, Forensic Modal)
-          ========================================================================= */}
-      <section className="glass-interactive border border-rose-500/35 bg-rose-500/8 dark:bg-rose-950/25 rounded-[18px] p-4 sm:p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 shadow-sm">
-        <div className="flex items-start gap-3.5 min-w-0">
-          {/* Dual Pulsing Radar Dot */}
-          <div className="relative flex h-3.5 w-3.5 mt-1 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-            <span className="animate-pulse absolute inline-flex h-2.5 w-2.5 rounded-full bg-rose-500 opacity-90"></span>
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-rose-600"></span>
-          </div>
-
-          <div className="space-y-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-full bg-rose-600 text-white shadow-2xs">
-                CRITICAL RPN {highestRpnDossier.maxRpn} • APH CH-VII VIOLATION
-              </span>
-              <span className="text-xs font-semibold text-rose-700 dark:text-rose-300">
-                Fatal Forgery Detected
-              </span>
+          <div className="min-w-0 flex-1">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
+              {dynamicKpis.totalIngested}
             </div>
-            <p className="text-xs sm:text-sm font-medium text-[var(--text-primary)] leading-normal">
-              {highestRpnDossier.anomalies[0]?.titleEn || 'Campus Land Deed Survey Alteration & Fire NOC Date Splicing Detected'} —{' '}
-              <span className="font-bold">{highestRpnDossier.nameEn}</span> (PID: <span className="font-mono text-xs">{highestRpnDossier.pid}</span>) —{' '}
-              <span className="text-rose-600 dark:text-rose-400 font-bold">
-                {Math.round((highestRpnDossier.anomalies[0]?.tamperProbability || 0.984) * 100)}% TruFor Confidence
-              </span> — Standing Hearing Committee &amp; Physical EVC Recommended
-            </p>
+            <div className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              {language === 'hi' ? 'कुल डोजियर' : 'Total Dossiers'}
+            </div>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 inline-flex items-center">
+                ↑ +12%
+              </span>
+              <div className="flex items-end gap-0.5 h-3">
+                <span className="w-1 h-1.5 bg-blue-500/40 rounded-xs" />
+                <span className="w-1 h-2 bg-blue-500/50 rounded-xs" />
+                <span className="w-1 h-1 bg-blue-500/40 rounded-xs" />
+                <span className="w-1 h-2.5 bg-blue-500/70 rounded-xs" />
+                <span className="w-1 h-2 bg-blue-500/60 rounded-xs" />
+                <span className="w-1 h-3 bg-blue-500 rounded-xs" />
+                <span className="w-1 h-3.5 bg-blue-500 rounded-xs" />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto">
-          {/* View Forensic Evidence Quick-Look Modal Button */}
-          <button
-            onClick={() => setQuickLookApp(highestRpnDossier)}
-            className="btn-liquid-primary flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shadow-sm cursor-pointer"
-          >
-            <Eye className="w-3.5 h-3.5" />
-            <span>{t.btnViewEvidence}</span>
-          </button>
-          {/* Generate Show-Cause Notice Button */}
-          <button
-            onClick={() => handleGenerateNoticeToast(highestRpnDossier.id)}
-            className="btn-liquid-secondary flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold shadow-2xs cursor-pointer"
-          >
-            <FileText className="w-3.5 h-3.5 text-amber-600" />
-            <span>{t.btnGenerateNotice}</span>
-          </button>
+        {/* Card 2: Cleared (Pre-Scrutiny) */}
+        <div className="liquid-glass-card rounded-[18px] p-4 flex items-center gap-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="h-12 w-12 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="h-6 w-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
+              {dynamicKpis.preCleared}
+            </div>
+            <div className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              {language === 'hi' ? 'स्वीकृत (पूर्व-जांच)' : 'Cleared (Pre-Scrutiny)'}
+            </div>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                {dynamicKpis.preClearedPct}
+              </span>
+              <div className="h-1.5 flex-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '66.3%' }} />
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+
+        {/* Card 3: Rectifiable Deficiencies */}
+        <div className="liquid-glass-card rounded-[18px] p-4 flex items-center gap-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="h-12 w-12 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+            <AlertTriangle className="h-6 w-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
+              {dynamicKpis.deficienciesIssued}
+            </div>
+            <div className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              {language === 'hi' ? 'सुधार योग्य कमियां' : 'Rectifiable Deficiencies'}
+            </div>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 tabular-nums">
+                {dynamicKpis.deficienciesTrend}
+              </span>
+              <div className="h-1.5 flex-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-amber-500 rounded-full" style={{ width: '24.5%' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4: Fatal Forgery Alerts */}
+        <div className="liquid-glass-card rounded-[18px] p-4 flex items-center gap-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="h-12 w-12 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+            <AlertOctagon className="h-6 w-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
+              {dynamicKpis.fatalFraud}
+            </div>
+            <div className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              {language === 'hi' ? 'गंभीर जालसाजी अलर्ट' : 'Fatal Forgery Alerts'}
+            </div>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-[11px] font-semibold text-rose-600 dark:text-rose-400 tabular-nums">
+                {dynamicKpis.fatalFraudTrend}
+              </span>
+              <div className="h-1.5 flex-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-rose-500 rounded-full" style={{ width: '3.1%' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 5: Cross-Campus Matches */}
+        <div className="liquid-glass-card rounded-[18px] p-4 flex items-center gap-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="h-12 w-12 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+            <Building2 className="h-6 w-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
+              {dynamicKpis.ghostFaculty}
+            </div>
+            <div className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              {language === 'hi' ? 'क्रॉस-कैंपस मिलान' : 'Cross-Campus Matches'}
+            </div>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 tabular-nums">
+                {dynamicKpis.ghostFacultyPct}
+              </span>
+              <div className="h-1.5 flex-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-purple-500 rounded-full" style={{ width: '6.1%' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       {/* =========================================================================
-          ACTIVE STATUTORY EVIDENCE VAULTS (3D GLASS FOLDERS)
-          (Interactive 3D Evidence Pockets with Action='more' Context Menus)
+          SECTION 3: RECENT DOSSIERS TABLE (LEFT) + ACTION REQUIRED PANEL (RIGHT)
+          (Matching Image 2 Middle Section with Pixel Precision)
           ========================================================================= */}
-      <section className="liquid-glass-card rounded-[22px] p-4 sm:p-6 space-y-4 shadow-lg border border-[var(--glass-border)]">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--glass-well-border)] pb-3.5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
+        {/* Left: Recent Dossiers Table (8 Cols) */}
+        <div className="lg:col-span-8 liquid-glass-card rounded-[20px] p-4 sm:p-5 space-y-3.5 shadow-sm">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200/70 dark:border-slate-800/70">
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">
+              {language === 'hi' ? 'हाल के डोजियर' : 'Recent Dossiers'}
+            </h2>
+            <Link
+              href="/applications"
+              className="text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline"
+            >
+              {language === 'hi' ? 'सभी देखें' : 'View All'}
+            </Link>
+          </div>
+
+          <div className="w-full overflow-x-auto rounded-xl">
+            <table className="w-full min-w-[620px] text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  <th className="py-2.5 px-3">#</th>
+                  <th className="py-2.5 px-3">Institution Name</th>
+                  <th className="py-2.5 px-3">State</th>
+                  <th className="py-2.5 px-3">Type</th>
+                  <th className="py-2.5 px-3">Received</th>
+                  <th className="py-2.5 px-3">Status</th>
+                  <th className="py-2.5 px-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+                {recentDossiersList.map((dossier) => (
+                  <tr
+                    key={dossier.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors group"
+                  >
+                    <td className="py-3 px-3 font-mono font-medium text-slate-500 dark:text-slate-400">
+                      {dossier.id}
+                    </td>
+                    <td className="py-3 px-3">
+                      <Link
+                        href={`/applications/${dossier.targetAppId}`}
+                        className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 transition-colors"
+                      >
+                        {dossier.name}
+                      </Link>
+                    </td>
+                    <td className="py-3 px-3 font-medium text-slate-600 dark:text-slate-300">
+                      {dossier.state}
+                    </td>
+                    <td className="py-3 px-3 text-slate-600 dark:text-slate-300">
+                      {dossier.type}
+                    </td>
+                    <td className="py-3 px-3 text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                      {dossier.received}
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold ${dossier.statusClass}`}>
+                        {dossier.statusLabel}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-right">
+                      <div className="inline-flex items-center gap-1.5">
+                        <Link
+                          href={`/applications/${dossier.targetAppId}`}
+                          className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
+                          title="Open Workbench"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Link>
+                        <button
+                          onClick={() => handleGenerateNoticeToast(dossier.targetAppId)}
+                          className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors cursor-pointer"
+                          title="Options"
+                        >
+                          <MoreHorizontal className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Right: Action Required Panel (4 Cols) */}
+        <div className="lg:col-span-4 liquid-glass-card rounded-[20px] p-4 sm:p-5 space-y-3.5 shadow-sm">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200/70 dark:border-slate-800/70">
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">
+              {language === 'hi' ? 'कार्रवाई आवश्यक' : 'Action Required'}
+            </h2>
+            <Link
+              href="/deficiencies"
+              className="text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline"
+            >
+              {language === 'hi' ? 'सभी देखें' : 'View All'}
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            {/* Action Item 1 */}
+            <Link
+              href="/applications/AICTE-2026-NW-0842"
+              className="p-3 rounded-2xl glass-well hover:border-rose-500/40 flex items-start gap-3 transition-all group block shadow-2xs"
+            >
+              {/* Document Thumbnail with simulated page lines */}
+              <div className="w-11 h-14 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex flex-col justify-between p-1.5 shrink-0 shadow-xs">
+                <div className="space-y-1">
+                  <div className="h-1 w-full bg-rose-500/70 rounded-full" />
+                  <div className="h-1 w-3/4 bg-slate-300 dark:bg-slate-600 rounded-full" />
+                  <div className="h-1 w-5/6 bg-slate-300 dark:bg-slate-600 rounded-full" />
+                </div>
+                <div className="h-2 w-2 rounded-full bg-rose-500 self-end animate-pulse" />
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="px-1.5 py-0.2 rounded-md bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px] font-bold">
+                    Forgery Alert
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-medium">
+                    Fire NOC
+                  </span>
+                  <span className="ml-auto text-[10.5px] text-slate-400 font-mono">2 hrs ago</span>
+                </div>
+                <div className="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                  Apex Institute of Technology
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                  Expiry year altered (2027 over 2024)
+                </div>
+              </div>
+            </Link>
+
+            {/* Action Item 2 */}
+            <Link
+              href="/infrastructure"
+              className="p-3 rounded-2xl glass-well hover:border-amber-500/40 flex items-start gap-3 transition-all group block shadow-2xs"
+            >
+              {/* Blueprint Thumbnail */}
+              <div className="w-11 h-14 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex flex-col justify-between p-1.5 shrink-0 shadow-xs">
+                <div className="h-full w-full border border-dashed border-amber-500/60 rounded flex items-center justify-center">
+                  <div className="h-3 w-4 bg-amber-500/20" />
+                </div>
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="px-1.5 py-0.2 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-400 text-[10px] font-bold">
+                    Area Mismatch
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-medium">
+                    Floor Plan
+                  </span>
+                  <span className="ml-auto text-[10.5px] text-slate-400 font-mono">4 hrs ago</span>
+                </div>
+                <div className="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                  Shivam College of Engineering
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                  Lab area 47.8 m² (claimed 66 m²)
+                </div>
+              </div>
+            </Link>
+
+            {/* Action Item 3 */}
+            <Link
+              href="/authority-bridge#faculty"
+              className="p-3 rounded-2xl glass-well hover:border-purple-500/40 flex items-start gap-3 transition-all group block shadow-2xs"
+            >
+              {/* Faculty Roster Thumbnail */}
+              <div className="w-11 h-14 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex flex-col justify-between p-1.5 shrink-0 shadow-xs">
+                <div className="space-y-1">
+                  <div className="h-1 w-full bg-purple-500/70 rounded-full" />
+                  <div className="h-1 w-2/3 bg-slate-300 dark:bg-slate-600 rounded-full" />
+                </div>
+                <Users className="h-3.5 w-3.5 text-purple-500 self-end" />
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="px-1.5 py-0.2 rounded-md bg-purple-500/15 text-purple-700 dark:text-purple-400 text-[10px] font-bold">
+                    Ghost Faculty
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-medium">
+                    Faculty Roster
+                  </span>
+                  <span className="ml-auto text-[10.5px] text-slate-400 font-mono">6 hrs ago</span>
+                </div>
+                <div className="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  Cross-institution match found
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                  Same faculty PAN in 3 institutions
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          SECTION 4: 4 ACTION LAUNCHPAD CARDS (Exact match to Image 2)
+          ========================================================================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        {/* Launchpad 1: Document Intelligence */}
+        <div className="liquid-glass-card rounded-[20px] p-4 flex flex-col justify-between space-y-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
-              <FolderArchive className="w-5 h-5" />
+            <div className="h-10 w-10 rounded-xl bg-blue-500/15 text-blue-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+              <ScanText className="h-5 w-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
-                  Active Statutory Evidence Vaults (3D Glass Folders)
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[10px] font-bold">
-                  Live 3D Forensic Pockets
-                </span>
-              </div>
-              <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-0.5">
-                Statutory Physical &amp; Digital Document Repositories
-              </h2>
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                Hover to tilt and click to expand 3D glass dossier folders • Use &apos;•••&apos; menu to open workbench, verify DPI, or escalate summons
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Document Intelligence
+              </h3>
+              <p className="text-[11.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                OCR, layout &amp; table analysis with regulatory field extraction
               </p>
+            </div>
+          </div>
+          <Link
+            href="/applications/AICTE-2026-NW-0842"
+            className="btn-liquid-primary w-full py-2 px-3 rounded-xl text-xs font-bold text-center inline-flex items-center justify-center gap-1.5 shadow-xs"
+          >
+            <span>Analyze Documents</span>
+            <span>→</span>
+          </Link>
+        </div>
+
+        {/* Launchpad 2: Forensic Analysis */}
+        <div className="liquid-glass-card rounded-[20px] p-4 flex flex-col justify-between space-y-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="flex items-start gap-3">
+            <div className="h-10 w-10 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+              <Fingerprint className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Forensic Analysis
+              </h3>
+              <p className="text-[11.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                Detect tampering with ELA, DCT, metadata &amp; copy-move
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/forensics"
+            className="btn-liquid-primary w-full py-2 px-3 rounded-xl text-xs font-bold text-center inline-flex items-center justify-center gap-1.5 shadow-xs"
+          >
+            <span>Run Forensic Scan</span>
+            <span>→</span>
+          </Link>
+        </div>
+
+        {/* Launchpad 3: Blueprint Analysis */}
+        <div className="liquid-glass-card rounded-[20px] p-4 flex flex-col justify-between space-y-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="flex items-start gap-3">
+            <div className="h-10 w-10 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+              <Compass className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Blueprint Analysis
+              </h3>
+              <p className="text-[11.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                Room segmentation, scale calibration &amp; area calculation
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/infrastructure"
+            className="btn-liquid-primary w-full py-2 px-3 rounded-xl text-xs font-bold text-center inline-flex items-center justify-center gap-1.5 shadow-xs"
+          >
+            <span>Analyze Floor Plans</span>
+            <span>→</span>
+          </Link>
+        </div>
+
+        {/* Launchpad 4: Faculty Verification */}
+        <div className="liquid-glass-card rounded-[20px] p-4 flex flex-col justify-between space-y-3.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+          <div className="flex items-start gap-3">
+            <div className="h-10 w-10 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+              <Users className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Faculty Verification
+              </h3>
+              <p className="text-[11.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                Cross-check with DigiLocker, EPFO &amp; state records
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/faculty"
+            className="btn-liquid-primary w-full py-2 px-3 rounded-xl text-xs font-bold text-center inline-flex items-center justify-center gap-1.5 shadow-xs"
+          >
+            <span>Verify Faculty</span>
+            <span>→</span>
+          </Link>
+        </div>
+      </div>
+
+
+      {/* =========================================================================
+          SECTION 5: STATUTORY EVIDENCE VAULT (Streamlined & Clean) (PROTECTED 21ST.DEV 3D GLASS FOLDERS)
+          (Seamlessly integrated into both light and dark themes)
+          ========================================================================= */}
+      <section className="liquid-glass-card rounded-[20px] p-4 sm:p-5 space-y-3.5 shadow-sm border border-slate-200/90 dark:border-slate-800/90 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/70 dark:border-slate-800/70 pb-3">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-sky-400 shrink-0">
+              <FolderArchive className="w-5 h-5" />
+            </div>
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                {language === 'hi' ? 'सांविधिक साक्ष्य वॉल्ट' : 'Statutory Evidence Vault'}
+              </h2>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold border border-emerald-500/20">
+                Interactive 3D
+              </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2 self-end sm:self-center">
             <button
-              onClick={() => setIsVaultSectionOpen((prev) => !prev)}
+              onClick={() => setIsVaultSectionOpen((p) => !p)}
               className="btn-liquid-secondary px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
               <span>{isVaultSectionOpen ? 'Collapse Vaults' : 'Expand Vaults'}</span>
@@ -409,27 +705,25 @@ export default function OverviewPage() {
         </div>
 
         {isVaultSectionOpen && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-2 items-start">
             {/* Vault 1: Fatal Forgery Dossiers */}
-            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-4 top-rule-fatal shadow-md">
+            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-3.5 border-t-2 border-t-rose-500 shadow-xs">
               <div className="w-full space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="pill-fatal text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <span className="pill-fatal text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
                     <ShieldAlert className="w-3 h-3 text-rose-600 animate-pulse" />
                     RPN ≥ 850 Gate Veto
                   </span>
                   <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">
-                    18.9% Spike
+                    148 Alerts
                   </span>
                 </div>
-                <h3 className="font-bold text-sm text-[var(--text-primary)] pt-1">
-                  1. Fatal Forgery Dossiers Vault
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white pt-0.5">
+                  Fatal Forgery Dossiers
                 </h3>
-                <p className="text-[11px] text-[var(--text-muted)]">
-                  Adversarially spliced Fire NOCs, synthetic seals, and dual-employment manifests
-                </p>
               </div>
 
+              {/* 3D GlassFolder Ember (Protected Component) */}
               <div className="py-2 flex justify-center w-full overflow-visible">
                 <GlassFolder
                   width={vaultFolderWidth}
@@ -440,7 +734,7 @@ export default function OverviewPage() {
                   files={[
                     {
                       name: 'NW-0842 Fire NOC (Spliced 2027).pdf',
-                      meta: 'RPN 912 · TruFor 97.4%',
+                      meta: 'RPN 912 · 97.4% Tamper Risk',
                       art: 'ember',
                       href: '/applications/AICTE-2026-NW-0842',
                     },
@@ -475,20 +769,18 @@ export default function OverviewPage() {
                   ]}
                   onFileSelect={(file) => {
                     toast.info(`Opening Fatal Anomaly: ${file.name}`, {
-                      description: 'Loading multi-spectral TruFor canvas in Scrutiny Workbench...',
+                      description: 'Opening forensic inspection canvas in Scrutiny Workbench...',
                     });
                     router.push('/applications/AICTE-2026-NW-0842');
                   }}
                 />
               </div>
 
-              <div className="w-full pt-2.5 border-t border-[var(--glass-well-border)] flex items-center justify-between text-xs">
-                <span className="text-[11px] text-[var(--text-muted)] font-mono">
-                  3 Inactive / Quarantined
-                </span>
+              <div className="w-full pt-2.5 border-t border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between text-xs">
+                <span className="text-[11px] text-slate-500 font-mono">3 Inactive / Quarantined</span>
                 <Link
                   href="/deficiencies?appId=AICTE-2026-NW-0842"
-                  className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1"
+                  className="font-bold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1"
                 >
                   <span>Draft Form-B Order</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -496,11 +788,11 @@ export default function OverviewPage() {
               </div>
             </div>
 
-            {/* Vault 2: EVC 15-Day Rectification Queue */}
-            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-4 top-rule-deficiency shadow-md">
+            {/* Vault 2: EVC Rectification Queue */}
+            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-3.5 border-t-2 border-t-amber-500 shadow-xs">
               <div className="w-full space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="pill-deficiency text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <span className="pill-deficiency text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
                     <Clock className="w-3 h-3 text-amber-600" />
                     15-Day Clock Active
                   </span>
@@ -508,14 +800,12 @@ export default function OverviewPage() {
                     42 In Rectification
                   </span>
                 </div>
-                <h3 className="font-bold text-sm text-[var(--text-primary)] pt-1">
-                  2. EVC Rectification Queue Vault
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white pt-0.5">
+                  EVC Rectification Queue
                 </h3>
-                <p className="text-[11px] text-[var(--text-muted)]">
-                  Architectural Shoelace shortfall, cadre imbalance, and e-District verification gaps
-                </p>
               </div>
 
+              {/* 3D GlassFolder Dusk (Protected Component) */}
               <div className="py-2 flex justify-center w-full overflow-visible">
                 <GlassFolder
                   width={vaultFolderWidth}
@@ -567,13 +857,11 @@ export default function OverviewPage() {
                 />
               </div>
 
-              <div className="w-full pt-2.5 border-t border-[var(--glass-well-border)] flex items-center justify-between text-xs">
-                <span className="text-[11px] text-[var(--text-muted)] font-mono">
-                  14d 23h Remaining
-                </span>
+              <div className="w-full pt-2.5 border-t border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between text-xs">
+                <span className="text-[11px] text-slate-500 font-mono">14d 23h Remaining</span>
                 <Link
                   href="/deficiencies?appId=AICTE-2026-SO-0914"
-                  className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1"
+                  className="font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1"
                 >
                   <span>Form-A Notice</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -582,25 +870,23 @@ export default function OverviewPage() {
             </div>
 
             {/* Vault 3: Auto-Cleared 3-Year EoA Vault */}
-            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-4 top-rule-verified shadow-md">
+            <div className="p-4 rounded-2xl glass-well flex flex-col items-center justify-between space-y-3.5 border-t-2 border-t-emerald-500 shadow-xs">
               <div className="w-full space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="pill-verified text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3 text-emerald-600" />
+                  <span className="pill-verified text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                     Zero Shortfall Verified
                   </span>
                   <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
                     68.4% Auto-Cleared
                   </span>
                 </div>
-                <h3 className="font-bold text-sm text-[var(--text-primary)] pt-1">
-                  3. Auto-Cleared 3-Year EoA Vault
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white pt-0.5">
+                  Auto-Cleared 3-Year EoA
                 </h3>
-                <p className="text-[11px] text-[var(--text-muted)]">
-                  100% DPI cross-verified with DigiLocker pull URI, EPFO clean payroll, and CAD FSI
-                </p>
               </div>
 
+              {/* 3D GlassFolder Verdant (Protected Component) */}
               <div className="py-2 flex justify-center w-full overflow-visible">
                 <GlassFolder
                   width={vaultFolderWidth}
@@ -655,13 +941,11 @@ export default function OverviewPage() {
                 />
               </div>
 
-              <div className="w-full pt-2.5 border-t border-[var(--glass-well-border)] flex items-center justify-between text-xs">
-                <span className="text-[11px] text-[var(--text-muted)] font-mono">
-                  Valid 2024–2027
-                </span>
+              <div className="w-full pt-2.5 border-t border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between text-xs">
+                <span className="text-[11px] text-slate-500 font-mono">Valid 2024–2027</span>
                 <Link
                   href="/authority-bridge"
-                  className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                  className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
                 >
                   <span>DPI Proofs</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -673,496 +957,351 @@ export default function OverviewPage() {
       </section>
 
       {/* =========================================================================
-          ROW 3: ASYMMETRIC 12-COLUMN GRID
-          (Left 7 Cols: 8-Region Scrutiny Matrix • Right 5 Cols: Subsystems & DPI Latency)
+          SECTION 6: BOTTOM ROW (SCRUTINY OVERVIEW LINE CHART + DONUT + INDIA MAP)
+          (Exact Match to Image 2 Bottom Layout)
           ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Left: All-India 8-Region AICTE Scrutiny Matrix (7 cols) */}
-        <section className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
-          <div className="flex items-center justify-between border-b border-[var(--glass-well-border)] pb-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-                  Regional Scrutiny &amp; Anomaly Density Matrix
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
+        {/* Left: Scrutiny Overview Multi-Line Trend Chart (5 Cols) */}
+        <div className="lg:col-span-5 liquid-glass-card rounded-[20px] p-4 sm:p-5 space-y-3 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              {language === 'hi' ? 'जांच अवलोकन' : 'Scrutiny Overview'}
+            </h3>
+            <select
+              value={chartTimespan}
+              onChange={(e) => setChartTimespan(e.target.value)}
+              className="glass-well rounded-lg px-2 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
+            >
+              <option value="Last 7 Days">Last 7 Days</option>
+              <option value="Last 14 Days">Last 14 Days</option>
+              <option value="Last 30 Days">Last 30 Days</option>
+            </select>
+          </div>
+
+          {/* SVG Multi-Line Chart with High-Definition Coordinate Geometry */}
+          <div className="w-full pt-1">
+            <svg viewBox="0 0 420 180" className="w-full h-44 select-none overflow-visible">
+              <defs>
+                <linearGradient id="chartBlueGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              {/* Grid Lines */}
+              <line x1="30" y1="20" x2="400" y2="20" stroke="currentColor" strokeOpacity="0.08" />
+              <line x1="30" y1="60" x2="400" y2="60" stroke="currentColor" strokeOpacity="0.08" />
+              <line x1="30" y1="100" x2="400" y2="100" stroke="currentColor" strokeOpacity="0.08" />
+              <line x1="30" y1="140" x2="400" y2="140" stroke="currentColor" strokeOpacity="0.08" />
+
+              {/* Y Axis Numbers */}
+              <text x="24" y="24" textAnchor="end" fontSize="9.5" className="fill-slate-400">150</text>
+              <text x="24" y="64" textAnchor="end" fontSize="9.5" className="fill-slate-400">100</text>
+              <text x="24" y="104" textAnchor="end" fontSize="9.5" className="fill-slate-400">50</text>
+              <text x="24" y="144" textAnchor="end" fontSize="9.5" className="fill-slate-400">0</text>
+
+              {/* 1. Dossiers Curve (Blue) */}
+              <path
+                d="M50 78 Q110 55 170 65 T290 48 T390 35"
+                fill="none"
+                stroke="#38BDF8"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+              <circle cx="50" cy="78" r="3.5" fill="#38BDF8" />
+              <circle cx="120" cy="62" r="3.5" fill="#38BDF8" />
+              <circle cx="190" cy="65" r="3.5" fill="#38BDF8" />
+              <circle cx="260" cy="55" r="3.5" fill="#38BDF8" />
+              <circle cx="330" cy="48" r="3.5" fill="#38BDF8" />
+              <circle cx="390" cy="35" r="4" fill="#38BDF8" className="animate-pulse" />
+
+              {/* 2. Cleared Curve (Green) */}
+              <path
+                d="M50 115 Q110 110 170 102 T290 88 T390 82"
+                fill="none"
+                stroke="#34D399"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+              />
+              <circle cx="50" cy="115" r="3" fill="#34D399" />
+              <circle cx="120" cy="110" r="3" fill="#34D399" />
+              <circle cx="190" cy="102" r="3" fill="#34D399" />
+              <circle cx="260" cy="94" r="3" fill="#34D399" />
+              <circle cx="330" cy="88" r="3" fill="#34D399" />
+              <circle cx="390" cy="82" r="3.5" fill="#34D399" />
+
+              {/* 3. Deficiencies Curve (Amber) */}
+              <path
+                d="M50 128 Q110 125 170 120 T290 114 T390 108"
+                fill="none"
+                stroke="#FBBF24"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <circle cx="50" cy="128" r="2.5" fill="#FBBF24" />
+              <circle cx="120" cy="125" r="2.5" fill="#FBBF24" />
+              <circle cx="190" cy="120" r="2.5" fill="#FBBF24" />
+              <circle cx="260" cy="117" r="2.5" fill="#FBBF24" />
+              <circle cx="330" cy="114" r="2.5" fill="#FBBF24" />
+              <circle cx="390" cy="108" r="3" fill="#FBBF24" />
+
+              {/* 4. Forgery Alerts Curve (Red) */}
+              <path
+                d="M50 134 Q110 133 170 134 T290 131 T390 130"
+                fill="none"
+                stroke="#F87171"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <circle cx="50" cy="134" r="2.5" fill="#F87171" />
+              <circle cx="120" cy="133" r="2.5" fill="#F87171" />
+              <circle cx="190" cy="134" r="2.5" fill="#F87171" />
+              <circle cx="260" cy="132" r="2.5" fill="#F87171" />
+              <circle cx="330" cy="131" r="2.5" fill="#F87171" />
+              <circle cx="390" cy="130" r="3" fill="#F87171" />
+
+              {/* X Axis Labels */}
+              <text x="50" y="160" textAnchor="middle" fontSize="9" className="fill-slate-400">10 Jan</text>
+              <text x="120" y="160" textAnchor="middle" fontSize="9" className="fill-slate-400">11 Jan</text>
+              <text x="190" y="160" textAnchor="middle" fontSize="9" className="fill-slate-400">12 Jan</text>
+              <text x="260" y="160" textAnchor="middle" fontSize="9" className="fill-slate-400">13 Jan</text>
+              <text x="330" y="160" textAnchor="middle" fontSize="9" className="fill-slate-400">14 Jan</text>
+              <text x="390" y="160" textAnchor="middle" fontSize="9" className="fill-slate-400">15 Jan</text>
+            </svg>
+
+            {/* Legend matching Image 2 */}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[10.5px] font-semibold text-slate-600 dark:text-slate-400">
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-sky-400" />
+                <span>Dossiers</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                <span>Cleared</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-amber-400" />
+                <span>Deficiencies</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-rose-400" />
+                <span>Forgery Alerts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Center: Dossier Category Distribution Donut Chart (4 Cols) */}
+        <div className="lg:col-span-4 liquid-glass-card rounded-[20px] p-4 sm:p-5 space-y-3 shadow-sm">
+          <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            {language === 'hi' ? 'डोजियर श्रेणी वितरण' : 'Dossier Category Distribution'}
+          </h3>
+
+          <div className="flex items-center justify-between gap-3 pt-2">
+            {/* SVG Donut */}
+            <div className="relative w-36 h-36 shrink-0 flex items-center justify-center">
+              <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                {/* Background Ring */}
+                <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" strokeOpacity="0.08" strokeWidth="14" />
+                {/* Slice 1: New Approval (38%) -> strokeDasharray="90.7 238.7" */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke="#38BDF8"
+                  strokeWidth="14"
+                  strokeDasharray="90.7 238.7"
+                  strokeDashoffset="0"
+                />
+                {/* Slice 2: Renewal (27%) -> 64.4 */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke="#34D399"
+                  strokeWidth="14"
+                  strokeDasharray="64.4 238.7"
+                  strokeDashoffset="-90.7"
+                />
+                {/* Slice 3: Extension (18%) -> 43.0 */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke="#F59E0B"
+                  strokeWidth="14"
+                  strokeDasharray="43.0 238.7"
+                  strokeDashoffset="-155.1"
+                />
+                {/* Slice 4: Increase in Intake (11%) -> 26.3 */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke="#A855F7"
+                  strokeWidth="14"
+                  strokeDasharray="26.3 238.7"
+                  strokeDashoffset="-198.1"
+                />
+                {/* Slice 5: Others (6%) -> 14.3 */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke="#64748B"
+                  strokeWidth="14"
+                  strokeDasharray="14.3 238.7"
+                  strokeDashoffset="-224.4"
+                />
+              </svg>
+              {/* Central Donut Hole Metric */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span className="text-base font-black text-slate-900 dark:text-white tabular-nums leading-none">
+                  4,820
+                </span>
+                <span className="text-[10px] text-slate-400 font-semibold mt-0.5">
+                  Total
                 </span>
               </div>
-              <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)] mt-0.5">
-                {t.regionalMatrixTitle}
-              </h2>
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                {t.regionalMatrixSub} • Select any regional committee to filter the global view
-              </p>
             </div>
-            <span className="text-xs px-2.5 py-1 rounded-full glass-well text-[var(--text-secondary)] font-semibold shadow-2xs">
-              {filters.region !== 'All Regions (8)' ? `Filtered: ${filters.region}` : 'All 8 Regions'}
-            </span>
-          </div>
 
-          <div className="space-y-2.5">
-            {REGIONAL_STATS.map((reg) => {
-              const totalApps = reg.applications;
-              const compliantPct = Math.round((reg.compliantCount / totalApps) * 100);
-              const rectifiablePct = Math.round((reg.rectifiableCount / totalApps) * 100);
-              const fraudPct = Math.round((reg.fatalFraudCount / totalApps) * 100);
-              const isSelected = filters.region === reg.region || selectedRegion === reg.region;
-
-              return (
-                <div
-                  key={reg.region}
-                  onClick={() => handleRegionClick(reg.region)}
-                  className={`p-3 rounded-xl transition-all cursor-pointer group ${
-                    isSelected
-                      ? 'glass-well border-sky-500/60 shadow-md ring-1 ring-sky-500/40'
-                      : 'glass-interactive'
-                  }`}
-                >
-                  <div className="flex items-center justify-between text-xs mb-2">
-                    <div className="font-semibold text-[var(--text-primary)] group-hover:text-sky-700 dark:group-hover:text-sky-400 flex items-center gap-2.5">
-                      <span className={isSelected ? 'text-sky-700 dark:text-sky-400 font-bold' : ''}>
-                        {reg.region}
-                      </span>
-                      <span className="text-[11px] px-2 py-0.5 rounded-full glass-well text-[var(--text-muted)] tabular-nums font-medium">
-                        {reg.applications} dossiers
-                      </span>
-                      <span className="text-[11px] text-[var(--text-secondary)]">
-                        Mean ICI: <strong className="tabular-nums">{reg.avgIci.toFixed(1)}</strong>
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 text-xs font-semibold tabular-nums">
-                      <span className="text-emerald-700 dark:text-emerald-400">
-                        {compliantPct}% Cleared
-                      </span>
-                      <span className="text-amber-700 dark:text-amber-400">
-                        {reg.rectifiableCount} Def.
-                      </span>
-                      <span className="text-rose-600 dark:text-rose-400">
-                        {reg.fatalFraudCount} Fatal
-                      </span>
-                      <span className="text-rose-600 dark:text-rose-400 hidden sm:inline">
-                        {reg.ghostFacultyCount} Ghost
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Tri-color Horizontal Stacked Bar */}
-                  <div className="h-2 w-full rounded-full glass-well overflow-hidden flex">
-                    <div
-                      style={{ width: `${compliantPct}%` }}
-                      className="bg-emerald-500 h-full"
-                      title={`Compliant: ${compliantPct}%`}
-                    />
-                    <div
-                      style={{ width: `${rectifiablePct}%` }}
-                      className="bg-amber-500 h-full"
-                      title={`Rectifiable: ${rectifiablePct}%`}
-                    />
-                    <div
-                      style={{ width: `${fraudPct}%` }}
-                      className="bg-rose-500 h-full"
-                      title={`Fatal Fraud: ${fraudPct}%`}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Right: Subsystem Anomaly Telemetry & National DPI Bridge Health (5 cols) */}
-        <section className="lg:col-span-5 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 flex flex-col justify-between shadow-md">
-          <div>
-            <div className="border-b border-[var(--glass-well-border)] pb-3">
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-                  Subsystem Telemetry &amp; DPI Health
+            {/* Slices Legend matching Image 2 */}
+            <div className="space-y-1.5 text-xs flex-1">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-medium">
+                  <span className="h-2 w-2 rounded-full bg-sky-400" />
+                  <span>New Approval</span>
                 </span>
+                <span className="font-bold text-slate-900 dark:text-white tabular-nums">38%</span>
               </div>
-              <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)] mt-0.5">
-                {t.telemetryTitle}
-              </h2>
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                Distribution of 5 neural scrutiny engines &amp; live DPI node latencies
-              </p>
-            </div>
-
-            {/* Top Subsystem Frequency Distribution */}
-            <div className="space-y-2 mt-3">
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-faint)]">
-                Frequency Distribution Across 5 AI Scrutiny Engines
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-medium">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  <span>Renewal</span>
+                </span>
+                <span className="font-bold text-slate-900 dark:text-white tabular-nums">27%</span>
               </div>
-
-              <div className="space-y-2 text-xs">
-                {/* 1. PP-StructureV3 */}
-                <Link
-                  href="/applications/AICTE-2026-NW-0842"
-                  className="p-2.5 rounded-xl border-l-3 border-l-sky-500 glass-well flex items-center justify-between hover:bg-sky-500/5 transition-all group cursor-pointer block"
-                  title="Open Key Information Extraction (KIE) & SLANet Table Workbench"
-                >
-                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-sky-600 dark:group-hover:text-sky-400">
-                    1. PP-StructureV3 + SLANet &amp; LayoutLMv3 KIE
-                  </span>
-                  <span className="text-xs font-bold text-sky-700 dark:text-sky-400 tabular-nums">
-                    142 cases (38.2%) →
-                  </span>
-                </Link>
-
-                {/* 2. TruFor Noiseprint++ */}
-                <Link
-                  href="/forensics"
-                  className="p-2.5 rounded-xl border-l-3 border-l-rose-600 glass-well flex items-center justify-between hover:bg-rose-500/5 transition-all group cursor-pointer block"
-                  title="Open Multi-Spectral Document Forensics Studio (TruFor & ELA)"
-                >
-                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-rose-600 dark:group-hover:text-rose-400">
-                    2. TruFor Noiseprint++ &amp; NFA-ViT Splicing
-                  </span>
-                  <span className="text-xs font-bold text-rose-600 dark:text-rose-400 tabular-nums">
-                    62 cases (16.7%) →
-                  </span>
-                </Link>
-
-                {/* 3. YOLOv11-Doc */}
-                <Link
-                  href="/forensics"
-                  className="p-2.5 rounded-xl border-l-3 border-l-indigo-500 glass-well flex items-center justify-between hover:bg-indigo-500/5 transition-all group cursor-pointer block"
-                  title="Open Seal & Signature Authenticity Lab"
-                >
-                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
-                    3. YOLOv11-Doc + Siamese ArcFace Seal/Signature
-                  </span>
-                  <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 tabular-nums">
-                    28 cases (7.5%) →
-                  </span>
-                </Link>
-
-                {/* 4. Mask2Former */}
-                <Link
-                  href="/infrastructure"
-                  className="p-2.5 rounded-xl border-l-3 border-l-amber-500 glass-well flex items-center justify-between hover:bg-amber-500/5 transition-all group cursor-pointer block"
-                  title="Open Blueprint & Campus CV (Shoelace FSI/FAR Verifier)"
-                >
-                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-amber-600 dark:group-hover:text-amber-400">
-                    4. Mask2Former + RMBG-1.4 Blueprint Shoelace
-                  </span>
-                  <span className="text-xs font-bold text-amber-700 dark:text-amber-400 tabular-nums">
-                    41 cases (11.0%) →
-                  </span>
-                </Link>
-
-                {/* 5. RetinaFace */}
-                <Link
-                  href="/authority-bridge"
-                  className="p-2.5 rounded-xl border-l-3 border-l-rose-600 glass-well flex items-center justify-between hover:bg-rose-500/5 transition-all group cursor-pointer block"
-                  title="Open Qdrant 512-D ArcFace Ghost Faculty Matcher"
-                >
-                  <span className="font-semibold text-[var(--text-primary)] group-hover:text-rose-600 dark:group-hover:text-rose-400">
-                    5. RetinaFace + ArcFace 512-D Qdrant Ghost Faculty
-                  </span>
-                  <span className="text-xs font-bold text-rose-600 dark:text-rose-400 tabular-nums">
-                    98 cases (26.6%) →
-                  </span>
-                </Link>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-medium">
+                  <span className="h-2 w-2 rounded-full bg-amber-500" />
+                  <span>Extension</span>
+                </span>
+                <span className="font-bold text-slate-900 dark:text-white tabular-nums">18%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-medium">
+                  <span className="h-2 w-2 rounded-full bg-purple-500" />
+                  <span>Increase in Intake</span>
+                </span>
+                <span className="font-bold text-slate-900 dark:text-white tabular-nums">11%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-medium">
+                  <span className="h-2 w-2 rounded-full bg-slate-500" />
+                  <span>Others</span>
+                </span>
+                <span className="font-bold text-slate-900 dark:text-white tabular-nums">6%</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* National DPI Bridge Live Latency & Uptime Telemetry (All 6 Nodes) */}
-          <div className="space-y-2 pt-3 border-t border-[var(--glass-well-border)]">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-faint)] flex items-center justify-between">
-              <span>National DPI Authority Node Telemetry</span>
-              <Link href="/authority-bridge" className="text-emerald-600 hover:text-emerald-500 font-bold hover:underline">
-                6/6 Authorities Online →
-              </Link>
+        {/* Right: State-wise Dossiers India Map Card (3 Cols) */}
+        <div className="lg:col-span-3 liquid-glass-card rounded-[20px] p-4 sm:p-5 space-y-2.5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              {language === 'hi' ? 'राज्यवार डोजियर' : 'State-wise Dossiers'}
+            </h3>
+            <Link
+              href="/applications"
+              className="text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1"
+            >
+              View Map
+            </Link>
+          </div>
+
+          {/* India Vector Choropleth Map */}
+          <IndiaChoroplethMap />
+
+          {/* Choropleth Legend matching Image 2 */}
+          <div className="grid grid-cols-2 gap-1.5 text-[10.5px] font-semibold text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-200/70 dark:border-slate-800/70">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-xs bg-sky-500" />
+              <span>&gt; 500</span>
             </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
-                <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">DigiLocker Pull URI</span>
-                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">138 ms (99.8%)</span>
-              </Link>
-              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
-                <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">EPFO ECR 2.0</span>
-                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">164 ms (98.6%)</span>
-              </Link>
-              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
-                <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">MCA21 v3 Trust</span>
-                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">112 ms (99.4%)</span>
-              </Link>
-              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
-                <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">State e-District QR</span>
-                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">94 ms (99.9%)</span>
-              </Link>
-              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
-                <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">Jamabandi GIS</span>
-                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">210 ms (97.8%)</span>
-              </Link>
-              <Link href="/authority-bridge" className="p-2 rounded-xl glass-well flex flex-col hover:border-emerald-500/40 hover:scale-[1.02] transition-all cursor-pointer">
-                <span className="text-[10px] text-[var(--text-faint)] uppercase font-semibold">NAD Degree Registry</span>
-                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs tabular-nums mt-0.5">129 ms (99.2%)</span>
-              </Link>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-xs bg-sky-600" />
+              <span>200 – 500</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-xs bg-sky-800" />
+              <span>100 – 200</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-xs bg-slate-700" />
+              <span>&lt; 100</span>
             </div>
           </div>
-        </section>
+        </div>
       </div>
 
       {/* =========================================================================
-          ROW 4: HIGH-RISK INSTITUTIONAL DOSSIER QUEUE
-          (Sorted by RPN, Live Mutated Status, 5-Domain Spark-Bars, Top Forensic Badges)
-          ========================================================================= */}
-      <section className="liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4 shadow-md">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--glass-well-border)] pb-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
-                Dossier Scrutiny Queue (Ordered by RPN Risk)
-              </span>
-            </div>
-            <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)] mt-0.5">
-              {t.highRiskQueueTitle}
-            </h2>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">
-              {t.highRiskQueueSub} • Live closed-loop status synchronized with officer workbench determinations
-            </p>
-          </div>
-          <Link
-            href="/applications"
-            className="text-xs font-semibold text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1.5"
-          >
-            <span>Complete Registry Table ({filteredApplications.length})</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        {/* Dense Workstation Table */}
-        <div className="w-full overflow-x-auto rounded-xl">
-          <table className="w-full min-w-[760px] text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-[var(--glass-well-border)] text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-                <th className="py-3 px-3.5">{t.colInstitution}</th>
-                <th className="py-3 px-3.5">{t.colRegion}</th>
-                <th className="py-3 px-3.5">ICI &amp; 5-Domain Breakdown</th>
-                <th className="py-3 px-3.5">{t.colTopAnomaly}</th>
-                <th className="py-3 px-3.5">Scrutiny Status</th>
-                <th className="py-3 px-3.5 text-right">{t.colAction}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--glass-well-border)]">
-              {highRiskQueue.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-10 text-center text-[var(--text-muted)]">
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <div className="text-xs font-semibold text-[var(--text-primary)]">
-                        No institutional dossiers match the selected criteria
-                      </div>
-                      <button
-                        onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            region: 'All Regions (8)',
-                            scrutinyStatus: 'All Statuses',
-                          }))
-                        }
-                        className="btn-liquid-secondary mt-1 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                      >
-                        <RotateCcw className="w-3.5 h-3.5" />
-                        <span>Reset Filters</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                highRiskQueue.map((app) => {
-                  const topAnom = app.anomalies[0];
-                  const isFatal = app.scrutinyStatus === 'Fatal Fraud Alert';
-                  const isCleared = app.scrutinyStatus === 'Auto-Pre-Cleared';
-                  const isDeficiency = app.scrutinyStatus === 'Deficiency Issued';
-
-                  return (
-                    <tr
-                      key={app.id}
-                      className="hover:bg-white/40 dark:hover:bg-white/5 transition-colors group"
-                    >
-                      <td className="py-3 px-3.5">
-                        <div className="font-semibold text-xs text-[var(--text-primary)] group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
-                          {language === 'hi' ? app.nameHi : app.nameEn}
-                        </div>
-                        <div className="text-[11px] text-[var(--text-muted)] flex items-center gap-2 mt-0.5">
-                          <span className="font-mono font-semibold text-[var(--text-secondary)]">{app.id}</span>
-                          <span>•</span>
-                          <span>PID: <span className="font-mono">{app.pid}</span></span>
-                        </div>
-                      </td>
-
-                      <td className="py-3 px-3.5">
-                        <div className="text-[var(--text-primary)] font-medium">
-                          {app.region}
-                        </div>
-                        <div className="text-[11px] text-[var(--text-muted)]">
-                          {app.city}, {app.state}
-                        </div>
-                      </td>
-
-                      <td className="py-3 px-3.5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs tabular-nums text-[var(--text-primary)]">
-                            {app.iciScore.toFixed(1)}
-                          </span>
-                          {app.fatalGateTriggered && (
-                            <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded-full bg-rose-600 text-white">
-                              VETO
-                            </span>
-                          )}
-                          <span className="text-[11px] text-[var(--text-muted)] font-medium">
-                            RPN <span className="tabular-nums font-semibold">{app.maxRpn}</span>
-                          </span>
-                        </div>
-
-                        {/* 5-Domain Mini Spark Bars */}
-                        <div
-                          className="flex items-center gap-1 mt-1.5 w-28"
-                          title="Infra, Faculty, Legal, Authority, Financial"
-                        >
-                          <div
-                            className="h-1.5 rounded-full bg-sky-500"
-                            style={{ width: `${app.subScores.infra}%` }}
-                            title={`Infra: ${app.subScores.infra}`}
-                          />
-                          <div
-                            className="h-1.5 rounded-full bg-indigo-500"
-                            style={{ width: `${app.subScores.faculty}%` }}
-                            title={`Faculty: ${app.subScores.faculty}`}
-                          />
-                          <div
-                            className="h-1.5 rounded-full bg-violet-500"
-                            style={{ width: `${app.subScores.legal}%` }}
-                            title={`Legal: ${app.subScores.legal}`}
-                          />
-                          <div
-                            className="h-1.5 rounded-full bg-emerald-500"
-                            style={{ width: `${app.subScores.authority}%` }}
-                            title={`Authority: ${app.subScores.authority}`}
-                          />
-                          <div
-                            className="h-1.5 rounded-full bg-amber-500"
-                            style={{ width: `${app.subScores.financial}%` }}
-                            title={`Financial: ${app.subScores.financial}`}
-                          />
-                        </div>
-                      </td>
-
-                      <td className="py-3 px-3.5 max-w-xs">
-                        {topAnom ? (
-                          <div>
-                            <div className="text-xs font-semibold text-[var(--text-primary)] line-clamp-1">
-                              {language === 'hi' ? topAnom.titleHi : topAnom.titleEn}
-                            </div>
-                            <div className="text-[11px] text-rose-600 dark:text-rose-400 font-medium mt-0.5">
-                              {topAnom.modelUsed.split('+')[0]} • {Math.round(topAnom.tamperProbability * 100)}% Conf
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="text-emerald-600 dark:text-emerald-400 text-xs font-medium">
-                            Zero Deficiencies (APH Compliant)
-                          </div>
-                        )}
-                      </td>
-
-                      <td className="py-3 px-3.5">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
-                            isFatal
-                              ? 'pill-fatal'
-                              : isCleared
-                              ? 'pill-verified'
-                              : isDeficiency
-                              ? 'pill-deficiency'
-                              : 'bg-slate-500/10 text-slate-600'
-                          }`}
-                        >
-                          {isFatal && <span className="h-1.5 w-1.5 rounded-full bg-rose-600 animate-pulse" />}
-                          {app.scrutinyStatus}
-                        </span>
-                      </td>
-
-                      <td className="py-3 px-3.5 text-right space-x-2">
-                        <Link
-                          href={`/applications/${app.id}`}
-                          className="btn-liquid-primary inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-2xs"
-                        >
-                          <span>Workbench</span>
-                          <ArrowUpRight className="w-3.5 h-3.5" />
-                        </Link>
-                        <button
-                          onClick={() => handleGenerateNoticeToast(app.id)}
-                          className="btn-liquid-secondary inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer shadow-2xs"
-                          title="Generate Official Statutory Notice"
-                        >
-                          <span>Notice</span>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* =========================================================================
           INLINE MODAL: SPLIT-PANE FORENSIC EVIDENCE QUICK-LOOK MODAL
-          (TruFor Noiseprint++ Heatmap vs. DigiLocker XML Handshake Diff)
           ========================================================================= */}
       {quickLookApp && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 animate-glass-in">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-glass-in">
           <div className="liquid-glass-card rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl">
             {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-[var(--glass-well-border)] pb-3.5">
+            <div className="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-3.5">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold uppercase tracking-wider">
                     Forensic Evidence Quick-Look
                   </span>
-                  <span className="text-xs text-rose-600 font-bold">
+                  <span className="text-xs text-rose-600 dark:text-rose-400 font-bold">
                     RPN {quickLookApp.maxRpn}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-[var(--text-primary)] mt-1">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
                   {quickLookApp.nameEn} ({quickLookApp.id})
                 </h3>
-                <p className="text-xs text-[var(--text-muted)]">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   {quickLookApp.city}, {quickLookApp.state} • {quickLookApp.trustName}
                 </p>
               </div>
 
               <button
                 onClick={() => setQuickLookApp(null)}
-                className="btn-liquid-secondary p-1.5 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                className="btn-liquid-secondary p-1.5 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Split-Pane Evidence Grid (Left: TruFor Splicing Heatmap • Right: DigiLocker Diff) */}
+            {/* Split-Pane Evidence Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Left Pane: TruFor Noiseprint++ Splicing Localization */}
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-700/80 text-white space-y-3 text-xs shadow-inner">
+              {/* Left Pane: TruFor Noiseprint++ */}
+              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-700 text-white space-y-3 text-xs shadow-inner">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <span className="font-bold text-sky-400 flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-sky-400" />
-                    <span>TruFor Noiseprint++ &amp; NFA-ViT</span>
+                    <span>Forensic Alteration Heatmap</span>
                   </span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30">
                     SPLICED PATCH LOCALIZED
                   </span>
                 </div>
 
-                {/* Simulated Certificate Heatmap Visual */}
                 <div className="relative h-44 rounded-xl bg-slate-950 border border-slate-800 p-3 overflow-hidden flex flex-col justify-between">
                   <div className="text-[11px] text-slate-400">
                     Document Artifact: {quickLookApp.anomalies[0]?.documentTitle || 'Fire Safety NOC'}
                   </div>
 
-                  {/* Spliced Text & BBox Simulation */}
                   <div className="p-2.5 rounded-xl bg-rose-950/40 border border-rose-500/60 relative">
                     <div className="text-[10px] uppercase tracking-wider text-rose-400 font-bold mb-0.5">
                       Localized Tamper Bounding Box [64%, 42%, 88%, 48%]
@@ -1182,15 +1321,15 @@ export default function OverviewPage() {
                 </div>
 
                 <div className="text-xs text-slate-300 leading-relaxed">
-                  <strong>Neural Diagnostic:</strong> 128×32 pixel patch inserted over authentic certificate body. Steganographic noise residual exhibits severe variance discontinuity against authentic document substrate.
+                  <strong>Neural Diagnostic:</strong> 128×32 pixel patch inserted over authentic certificate body. Steganographic noise residual exhibits severe variance discontinuity against authentic substrate.
                 </div>
               </div>
 
-              {/* Right Pane: DigiLocker API Setu Canonical XML Diff */}
+              {/* Right Pane: DigiLocker API Setu Diff */}
               <div className="p-4 rounded-2xl glass-well space-y-3 text-xs shadow-inner">
-                <div className="flex items-center justify-between border-b border-[var(--glass-well-border)] pb-2">
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                     <span>DigiLocker Pull URI Handshake Diff</span>
                   </span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold border border-amber-500/20">
@@ -1218,7 +1357,7 @@ export default function OverviewPage() {
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl glass-well text-[11px] text-[var(--text-muted)] space-y-1">
+                <div className="p-2.5 rounded-xl glass-well text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
                   <div>URI: in.gov.har.fire-NOC-2021-8841</div>
                   <div>Handshake Latency: 138 ms • Status: MISMATCH_DETECTED</div>
                   <div>PKI Signature: RSA-2048 Hash Invalid</div>
@@ -1227,8 +1366,8 @@ export default function OverviewPage() {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-[var(--glass-well-border)]">
-              <div className="text-xs text-[var(--text-muted)] font-medium">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 Recommended Action: Standing Hearing Committee Referral + 15-Day Statutory Notice
               </div>
 

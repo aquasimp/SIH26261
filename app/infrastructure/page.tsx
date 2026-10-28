@@ -555,21 +555,21 @@ export default function InfrastructureStudioPage() {
       {/* =========================================================================
           TOP INSTITUTION SELECTOR & SPATIAL SUMMARY STRIP
           ========================================================================= */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-1">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 py-1 px-1">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-              AICTE Spatial Compliance &amp; Computer Vision Studio
+              AICTE Spatial Compliance &amp; Campus Verification
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)]">
             Architectural Blueprint &amp;{' '}
-            <span className="title-serif-italic text-sky-700 dark:text-sky-400">
+            <span className="font-extrabold text-sky-700 dark:text-sky-400">
               Campus Telemetry Studio
             </span>
           </h1>
           <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
-            CubiCasa5K Mask2Former CAD vectorizer, RT-DETR-L laboratory asset audit, DINOv2 duplicate detector, and Cadastral GIS Haversine checks
+            Automated architectural space audit, room boundary extraction, and cadastral land contiguity compliance under APH 2024–27.
           </p>
         </div>
 
@@ -596,7 +596,7 @@ export default function InfrastructureStudioPage() {
       </div>
 
       {/* 4-Cell Liquid Glass Metric Strip with 2px Top Severity Rules */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {/* Cell 1: Total Built-up Area */}
         <div
           className={`p-4 rounded-[18px] liquid-glass-card flex flex-col justify-between shadow-md ${
@@ -677,25 +677,25 @@ export default function InfrastructureStudioPage() {
           </div>
         </div>
 
-        {/* Cell 3: CubiCasa5K Wall Continuity */}
+        {/* Cell 3: Architectural Boundary Precision */}
         <div className="p-4 rounded-[18px] liquid-glass-card flex flex-col justify-between top-rule-registry shadow-md">
           <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            CubiCasa5K Wall Continuity
+            Architectural Wall Continuity
           </div>
           <div className="my-2">
             <div className="flex items-baseline gap-2">
               <span className="metric-value">98.4%</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold">
-                AP@50: 0.620
+                Vector Accuracy
               </span>
             </div>
             <div className="text-xs mt-1 flex items-center justify-between">
-              <span className="text-[var(--text-muted)]">RDP Poly Simplify</span>
-              <span className="font-semibold text-[var(--text-primary)]">ε = 2.0 px</span>
+              <span className="text-[var(--text-muted)]">Clean Wall Segments</span>
+              <span className="font-semibold text-[var(--text-primary)]">Precision Calibrated</span>
             </div>
           </div>
           <div className="text-[11px] text-[var(--text-muted)]">
-            Mask2Former Swin-Base + RMBG-1.4
+            Automated Room Segmentation
           </div>
         </div>
 
@@ -706,7 +706,7 @@ export default function InfrastructureStudioPage() {
           }`}
         >
           <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            Multi-Plot Contiguity (Haversine)
+            Multi-Plot Land Contiguity
           </div>
           <div className="my-2">
             <div className="flex items-baseline gap-2">
@@ -741,18 +741,18 @@ export default function InfrastructureStudioPage() {
         <div className="flex items-center justify-between border-b border-[var(--glass-well-border)] pb-2.5">
           <div>
             <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
-              Architectural Vectorization &amp; Deterministic Math
+              Architectural Vectorization &amp; Spatial Compliance
             </span>
             <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mt-0.5">
-              Interactive Blueprint Vectorizer &amp; APH Chapter VII What-If Simulator
+              Interactive Blueprint Vectorizer &amp; Space Simulator
             </h2>
           </div>
           <span className="text-xs px-2.5 py-1 rounded-full glass-well text-[var(--text-muted)]">
-            Shoelace Formula: Area = s² × 0.5 × |∑(x_i y_i+1 - x_i+1 y_i)|
+            APH Chapter VII Verified Geometry
           </span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
           {/* Left: BlueprintVectorViewer (7 cols) */}
           <div className="lg:col-span-7 h-[650px] liquid-glass-card rounded-[18px] overflow-hidden shadow-sm">
             <BlueprintVectorViewer
@@ -946,10 +946,10 @@ export default function InfrastructureStudioPage() {
                 <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-1.5 mb-2">
                   <h3 className="font-bold text-[var(--text-primary)] text-xs uppercase tracking-wider flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                    <span>CubiCasa5K Benchmark &amp; Neural Telemetry</span>
+                    <span>Architectural Vectorization &amp; Geometric Integrity</span>
                   </h3>
                   <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold border border-indigo-500/20">
-                    PCP-Net SGP Conv
+                    Vector Wall Alignment
                   </span>
                 </div>
 
@@ -976,7 +976,7 @@ export default function InfrastructureStudioPage() {
               </div>
 
               <div className="p-2.5 rounded-lg bg-indigo-500/5 border border-indigo-500/20 text-[10px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                <strong>Topological Closure Guarantee:</strong> Mask2Former Swin-Base + RMBG-1.4 Binary Wall Branch with SGP grouped convolution recalibration suppresses class imbalance degradation, guaranteeing gap-free closed manifolds for exact Shoelace integration.
+                <strong>Topological Verification:</strong> Multi-layer vector boundary extraction ensures closed polygon loops for exact statutory room area measurement under APH norms.
               </div>
             </div>
           </div>
@@ -985,7 +985,7 @@ export default function InfrastructureStudioPage() {
 
       {/* =========================================================================
           SECTION 2: GEOTAGGED LABORATORY & BARRIER-FREE PWD COMPUTER VISION AUDIT
-          (RT-DETR-L + YOLOv8x + pHash / DINOv2 Deduplication)
+          (Automated Campus Asset & Equipment Verification)
           ========================================================================= */}
       <section className="space-y-3 pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--glass-well-border)] pb-2.5">
@@ -1006,7 +1006,7 @@ export default function InfrastructureStudioPage() {
               <span>{showBoundingBoxes ? 'Hide CV BBoxes' : 'Show CV BBoxes'}</span>
             </button>
             <span className="text-xs px-2.5 py-1 rounded-full glass-well text-[var(--text-muted)] font-semibold">
-              RT-DETR-L + YOLOv8x Ensemble
+              Automated Equipment Inspection
             </span>
           </div>
         </div>
@@ -1289,7 +1289,7 @@ export default function InfrastructureStudioPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
           {/* Left: Interactive SVG Cadastral GIS Survey Map (7 cols) */}
           <div className="lg:col-span-7 liquid-glass-card rounded-[18px] p-4 sm:p-5 space-y-4">
             <div className="flex items-center justify-between">

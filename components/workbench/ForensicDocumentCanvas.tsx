@@ -111,14 +111,14 @@ export function ForensicDocumentCanvas({
   const renderFireNoc = (ctx: CanvasRenderingContext2D) => {
     // Emblem & Header
     ctx.fillStyle = '#0F294A';
-    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 15px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('DIRECTORATE OF FIRE SERVICES • GOVERNMENT OF HARYANA', 400, 60);
 
     ctx.fillStyle = '#374151';
-    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 12px Inter, sans-serif';
     ctx.fillText('OFFICE OF THE CHIEF FIRE OFFICER, CIRCLE GURUGRAM', 400, 80);
-    ctx.font = 'normal 10px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'normal 10px Inter, sans-serif';
     ctx.fillText('Sector 29, Gurugram, Haryana - 122002 • Telephone: 0124-2384102', 400, 96);
 
     // Tri-color thin bar
@@ -145,14 +145,14 @@ export function ForensicDocumentCanvas({
     ctx.strokeRect(120, 155, 560, 40);
 
     ctx.fillStyle = '#0F172A';
-    ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 13px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('FIRE SAFETY CERTIFICATE / NO OBJECTION CERTIFICATE', 400, 180);
 
     // Clauses
     ctx.textAlign = 'left';
     ctx.fillStyle = '#334155';
-    ctx.font = '11.5px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '11.5px Inter, sans-serif';
     const clauses = [
       'Certified that the educational technical premises occupied by APEX INSTITUTE OF TECHNOLOGY & MANAGEMENT',
       'situated at Khasra No. 114/2 & 115/1, Sector 84, Gurugram, Haryana, comprised of Ground Floor + 3 Upper Floors,',
@@ -180,11 +180,11 @@ export function ForensicDocumentCanvas({
     ctx.strokeRect(45, 450, 710, 105);
 
     ctx.fillStyle = '#0369A1';
-    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 12px Inter, sans-serif';
     ctx.fillText('STATUTORY CONDITIONS & PERIOD OF VALIDITY:', 65, 478);
 
     ctx.fillStyle = '#1E293B';
-    ctx.font = '11.5px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '11.5px Inter, sans-serif';
     ctx.fillText('This No Objection Certificate is valid for institutional operations from 01-07-2021', 65, 502);
     ctx.fillText('UPTO AND INCLUSIVE OF: ', 65, 530);
 
@@ -194,7 +194,7 @@ export function ForensicDocumentCanvas({
     ctx.fillText('30-06-2027', 235, 530);
 
     ctx.fillStyle = '#64748B';
-    ctx.font = 'normal 9.5px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'normal 9.5px Inter, sans-serif';
     ctx.fillText('(Subject to bi-annual fire pump maintenance and operational pressure tests)', 350, 530);
 
     // Municipal Stamp (Circular seal)
@@ -211,7 +211,7 @@ export function ForensicDocumentCanvas({
     ctx.stroke();
 
     ctx.fillStyle = '#1D4ED8';
-    ctx.font = 'bold 8.5px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 8.5px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('DIRECTORATE OF FIRE SERVICES', 190, 728);
     ctx.fillText('GURUGRAM CIRCLE', 190, 764);
@@ -230,9 +230,9 @@ export function ForensicDocumentCanvas({
 
     ctx.fillStyle = '#0F172A';
     ctx.textAlign = 'center';
-    ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 11px Inter, sans-serif';
     ctx.fillText('Chief Fire Officer', 630, 775);
-    ctx.font = 'normal 9.5px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'normal 9.5px Inter, sans-serif';
     ctx.fillText('Circle Gurugram, Haryana', 630, 790);
     ctx.restore();
 
@@ -263,21 +263,21 @@ export function ForensicDocumentCanvas({
     ctx.fillRect(40, 40, 720, 115);
 
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 15px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('GOVERNMENT OF HARYANA • NON-JUDICIAL e-STAMP', 400, 75);
     ctx.font = 'bold 12px "JetBrains Mono", monospace';
     ctx.fillText('Certificate No: IN-HR88419201948210P • Stamp Value: ₹ 100', 400, 100);
-    ctx.font = 'normal 10px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'normal 10px Inter, sans-serif';
     ctx.fillText('ISSUED UNDER THE INDIAN STAMP ACT, 1899 • TREASURY GURUGRAM', 400, 122);
 
     // Title
     ctx.fillStyle = '#0F172A';
     ctx.textAlign = 'left';
-    ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 13px Inter, sans-serif';
     ctx.fillText('REGISTERED LAND DEED & JAMABANDI MUTATION SCHEDULE', 45, 190);
 
-    ctx.font = '11.5px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '11.5px Inter, sans-serif';
     ctx.fillStyle = '#334155';
     ctx.fillText('This Deed of Transfer executed on 14-04-2018 at Gurugram, Haryana between the Vendors and', 45, 220);
     ctx.fillText('Apex Shiksha & Research Foundation for Technical Institution Campus Establishment.', 45, 242);
@@ -290,11 +290,11 @@ export function ForensicDocumentCanvas({
     ctx.strokeRect(45, 300, 710, 95);
 
     ctx.fillStyle = '#991B1B';
-    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 12px Inter, sans-serif';
     ctx.fillText('SCHEDULE OF LAND PROPERTY (DISPUTED SURVEY CLAIMS):', 65, 330);
 
     ctx.fillStyle = '#1E293B';
-    ctx.font = '11.5px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '11.5px Inter, sans-serif';
     ctx.fillText('Total Land Parcel Acreage Declared in Deed: ', 65, 360);
 
     ctx.fillStyle = '#DC2626';
@@ -303,7 +303,7 @@ export function ForensicDocumentCanvas({
 
     // Khasra details
     ctx.fillStyle = '#334155';
-    ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '11px Inter, sans-serif';
     ctx.fillText('Khasra No. 114/2 (0.95 Acres) & Khasra No. 115/1 (1.20 Acres). Authoritative Jamabandi = 2.15 Acres.', 65, 430);
 
     // Sub-Registrar Seal
@@ -311,7 +311,7 @@ export function ForensicDocumentCanvas({
     ctx.lineWidth = 2;
     ctx.strokeRect(80, 650, 180, 75);
     ctx.fillStyle = '#831843';
-    ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 10px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('SUB-REGISTRAR GURUGRAM', 170, 680);
     ctx.fillText('MUTATION RECORD #4819', 170, 700);
@@ -320,10 +320,10 @@ export function ForensicDocumentCanvas({
   // 3. Faculty Roster Document
   const renderFacultyRoster = (ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = '#0F172A';
-    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 15px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('AICTE FACULTY ROSTER & STATUTORY ACQUITTANCE SCHEDULE', 400, 65);
-    ctx.font = 'normal 11px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'normal 11px Inter, sans-serif';
     ctx.fillStyle = '#475569';
     ctx.fillText('Institution: Apex Institute of Technology & Management (PID: 1-9482710392)', 400, 88);
 
@@ -374,7 +374,7 @@ export function ForensicDocumentCanvas({
   // 4. Balance Sheet Document
   const renderBalanceSheet = (ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = '#0F172A';
-    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 15px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('AUDITED FINANCIAL BALANCE SHEET & CA ATTESTATION', 400, 65);
     ctx.font = 'bold 11px "JetBrains Mono", monospace';
@@ -383,16 +383,16 @@ export function ForensicDocumentCanvas({
 
     ctx.fillStyle = '#334155';
     ctx.textAlign = 'left';
-    ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '11px Inter, sans-serif';
     ctx.fillText('Schedule of Fixed Assets, Endowment Funds and Liquid Bank Balances as of March 31, 2026', 45, 130);
   };
 
   const renderGenericDocument = (ctx: CanvasRenderingContext2D, doc: DocumentArtifact) => {
     ctx.fillStyle = '#0F172A';
-    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 15px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(doc.titleEn.toUpperCase(), 400, 80);
-    ctx.font = 'normal 11px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'normal 11px Inter, sans-serif';
     ctx.fillStyle = '#64748B';
     ctx.fillText(`Issuing Authority: ${doc.issuingAuthority}`, 400, 105);
   };
@@ -521,7 +521,7 @@ export function ForensicDocumentCanvas({
 
         ctx.fillStyle = '#FFFFFF';
         ctx.font = 'bold 11px "JetBrains Mono", monospace';
-        ctx.fillText('TruFor (A ⊙ C): P_tamper = 0.984 | C_conf = 0.942', 210, 495);
+        ctx.fillText('Alteration Heatmap: Tamper Probability = 0.984 | Confidence = 0.942', 210, 495);
       }
     }
 
@@ -830,7 +830,7 @@ export function ForensicDocumentCanvas({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            1. RGB Original
+            {t.canvasLayerRGB}
           </button>
           <button
             onClick={() => setInspectionMode('LAYOUTLMV3_PP_STRUCTURE')}
@@ -840,7 +840,7 @@ export function ForensicDocumentCanvas({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            2. LayoutLMv3 BIO
+            {t.canvasLayerBBox}
           </button>
           <button
             onClick={() => setInspectionMode('TRUFOR_NOISEPRINT_PLUS')}
@@ -860,7 +860,7 @@ export function ForensicDocumentCanvas({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            {t.forensicLayerDctGrid}
+            {t.canvasLayerELA}
           </button>
         </div>
 
@@ -915,7 +915,7 @@ export function ForensicDocumentCanvas({
                 onChange={() => setTruForMapType('WEIGHTED')}
                 className="accent-red-600"
               />
-              <span className="font-bold text-red-600">A ⊙ C (Confidence Weighted)</span>
+              <span className="font-bold text-red-600">High-Confidence Focus</span>
             </label>
             <label className="flex items-center gap-1.5 cursor-pointer">
               <input
@@ -925,7 +925,7 @@ export function ForensicDocumentCanvas({
                 onChange={() => setTruForMapType('RAW')}
                 className="accent-amber-600"
               />
-              <span className="text-amber-600">Raw Anomaly Map A</span>
+              <span className="text-amber-600">Full Anomaly Scan</span>
             </label>
           </div>
 
@@ -941,8 +941,8 @@ export function ForensicDocumentCanvas({
               }`}
             >
               {normAblation === 'RESAWARE'
-                ? (language === 'hi' ? 'ResAware बैचनॉर्म (AUC 0.747)' : 'ResAware BatchNorm (AUC 0.747)')
-                : (language === 'hi' ? 'InstanceNorm2d पतन (AUC 0.554)' : 'InstanceNorm2d Collapse (AUC 0.554)')}
+                ? (language === 'hi' ? 'सक्रिय (कैलिब्रेटेड)' : 'Active (Calibrated)')
+                : (language === 'hi' ? 'अनकैलिब्रेटेड' : 'Uncalibrated')}
             </button>
           </div>
         </div>

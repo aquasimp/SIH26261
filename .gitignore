@@ -48,6 +48,9 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# Scratch directory
+scratch/
 *.swo
 
 .vercel

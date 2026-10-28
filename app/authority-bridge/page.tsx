@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLanguage, useFilters } from '@/lib/context';
 import { VerificationState, InstitutionalApplication } from '@/lib/mock-data';
@@ -82,7 +84,7 @@ const PRESET_AUTHORITY_CERTS: AuthorityPreset[] = [
   "status": "VALID_ACTIVE",
   "tamperConfidence": 0.984
 }`,
-    mismatchSummary: 'Expiry Date altered from 30-06-2024 to 30-06-2027 (3-Year Forgery via TruFor/Noiseprint++ splicing).',
+    mismatchSummary: 'Expiry Date altered from 30-06-2024 to 30-06-2027 (3-Year date manipulation detected).',
     evidenceDiff: [
       {
         attribute: 'Valid Until Expiry Date',
@@ -374,6 +376,8 @@ export default function AuthorityBridgePage() {
   const [computedHmac, setComputedHmac] = useState<string>('');
   const [timestamp, setTimestamp] = useState<string>('2026-10-23T14:30:00.000Z');
   const [isComputingCrypto, setIsComputingCrypto] = useState<boolean>(false);
+  const [showAdvancedDetails, setShowAdvancedDetails] = useState<boolean>(false);
+  const [showRawJws, setShowRawJws] = useState<boolean>(false);
 
   const pullUri = useMemo(() => `${issuerId}-${docType}-${docId}`, [issuerId, docType, docId]);
 
@@ -526,7 +530,7 @@ export default function AuthorityBridgePage() {
   return (
     <div className="space-y-6 animate-glass-in">
       {/* Page Title & Handshake Trigger */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-1 px-1">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
@@ -535,12 +539,12 @@ export default function AuthorityBridgePage() {
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
             National DPI{' '}
-            <span className="title-serif-italic text-sky-600 dark:text-sky-400">
+            <span className="font-extrabold text-sky-600 dark:text-sky-400">
               Authority Bridge
             </span>
           </h1>
           <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 max-w-3xl leading-relaxed">
-            Real-time mutual TLS 1.3, Web Crypto HMAC-SHA256 &amp; PKCE handshakes with DigiLocker, EPFO Shram Suvidha, and State Registries.
+            Direct statutory verification with DigiLocker, EPFO, MCA21, and State Registries.
           </p>
         </div>
 
@@ -553,12 +557,12 @@ export default function AuthorityBridgePage() {
             {isSimulating ? (
               <>
                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                <span>Simulating Mutual TLS &amp; Handshake...</span>
+                <span>Verifying with Issuing Registries...</span>
               </>
             ) : (
               <>
                 <Play className="w-3.5 h-3.5" />
-                <span>Execute Cryptographic DPI Handshake</span>
+                <span>Run Authority Verification</span>
               </>
             )}
           </button>
@@ -571,10 +575,10 @@ export default function AuthorityBridgePage() {
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
               <RefreshCw className={`w-3.5 h-3.5 text-sky-600 dark:text-sky-400 ${isSimulating ? 'animate-spin' : ''}`} />
-              <span>DPI Handshake Protocol Execution Pipeline</span>
+              <span>Authority Verification Pipeline</span>
             </span>
             <span className="text-xs font-semibold text-sky-600 dark:text-sky-400">
-              {simulationStep === 4 ? 'Handshake Finalized (118ms latency)' : `Phase ${simulationStep} of 4 Active`}
+              {simulationStep === 4 ? 'Verification Complete (118ms)' : `Phase ${simulationStep} of 4 Active`}
             </span>
           </div>
 
@@ -621,7 +625,7 @@ export default function AuthorityBridgePage() {
                   : 'glass-well text-[var(--text-muted)]'
               }`}
             >
-              <div className="text-[10px] text-[var(--text-muted)] font-mono">Step 4 • LayoutLMv3</div>
+              <div className="text-[10px] text-[var(--text-muted)] font-mono">Step 4 • Extracted Data</div>
               <div className="mt-0.5">{activePreset.state}</div>
             </div>
           </div>
@@ -638,7 +642,7 @@ export default function AuthorityBridgePage() {
             Current Active State: <strong className="text-[var(--text-primary)] font-semibold">{activePreset.state}</strong>
           </span>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs text-center font-medium">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3 text-xs text-center font-medium">
           <button
             type="button"
             onClick={() => {
@@ -810,133 +814,82 @@ export default function AuthorityBridgePage() {
               </div>
             </div>
 
-            {/* Interactive Handshake Parameters Form */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
-              <div>
-                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
-                  Issuer ID
-                </label>
-                <input
-                  type="text"
-                  value={issuerId}
-                  onChange={(e) => setIssuerId(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
-                />
+            {/* Officer Verification Outcome & Action Recommendation Card */}
+            <div className={`p-5 rounded-2xl border transition-all shadow-sm space-y-4 ${
+              activePreset.state === 'MISMATCH_DETECTED'
+                ? 'bg-rose-500/10 border-rose-500/30 text-rose-950 dark:text-rose-100'
+                : activePreset.state === 'VERIFIED'
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-950 dark:text-emerald-100'
+                : 'bg-amber-500/10 border-amber-500/30 text-amber-950 dark:text-amber-100'
+            }`}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/10 dark:border-white/10 pb-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full glass-well">
+                      Issuing Registry: {activePreset.issuingAuthorityName}
+                    </span>
+                    <span className="text-xs font-mono text-[var(--text-muted)]">
+                      URI: {pullUri}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-[var(--text-primary)]">
+                    {activePreset.documentTitle}
+                  </h3>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-3 py-1.5 rounded-xl font-bold text-xs inline-flex items-center gap-1.5 ${
+                    activePreset.state === 'MISMATCH_DETECTED'
+                      ? 'bg-rose-600 text-white shadow-xs'
+                      : activePreset.state === 'VERIFIED'
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-amber-600 text-white shadow-xs'
+                  }`}>
+                    {activePreset.state === 'MISMATCH_DETECTED' ? (
+                      <AlertOctagon className="w-4 h-4" />
+                    ) : (
+                      <CheckCircle2 className="w-4 h-4" />
+                    )}
+                    <span>{activePreset.state}</span>
+                  </span>
+
+                  <Link
+                    href={`/deficiencies?appId=${activePreset.institutionId}&form=${activePreset.state === 'MISMATCH_DETECTED' ? 'B' : 'A'}`}
+                    className="btn-liquid-primary px-3.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1 shadow-xs cursor-pointer"
+                  >
+                    <span>Draft Regulatory Notice</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
 
-              <div>
-                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
-                  Doc Type
-                </label>
-                <input
-                  type="text"
-                  value={docType}
-                  onChange={(e) => setDocType(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
-                />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
-                  Doc ID / Cert No
-                </label>
-                <input
-                  type="text"
-                  value={docId}
-                  onChange={(e) => setDocId(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
-                />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
-                  Client Secret (HMAC Key)
-                </label>
-                <input
-                  type="password"
-                  value={clientSecret}
-                  onChange={(e) => setClientSecret(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl glass-well font-mono text-xs text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-sky-500"
-                />
+              {/* Finding Summary */}
+              <div className="text-xs sm:text-sm font-medium leading-relaxed flex items-start gap-2.5">
+                <span className="font-bold shrink-0">Finding:</span>
+                <span>{activePreset.mismatchSummary}</span>
               </div>
             </div>
 
-            {/* Real Web Crypto Security Credentials Card */}
-            <div className="p-5 rounded-2xl bg-slate-950 text-slate-200 text-xs border border-white/10 space-y-3.5 shadow-xl">
-              <div className="flex items-center justify-between text-slate-400 border-b border-white/10 pb-2.5">
-                <span className="flex items-center gap-2 text-sky-400 font-semibold">
+            {/* Primary Statutory Attribute Reconciliation Table */}
+            <div className="liquid-glass-card rounded-[22px] p-5 overflow-hidden shadow-sm space-y-3">
+              <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-3">
+                <div>
+                  <h3 className="text-base font-bold text-[var(--text-primary)]">
+                    Statutory Attribute Reconciliation
+                  </h3>
+                  <p className="text-xs text-[var(--text-muted)]">
+                    Direct comparison of applicant submission claims against authoritative state registry records
+                  </p>
+                </div>
+                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4" />
-                  <span>Real Web Crypto Engine (window.crypto.subtle)</span>
-                </span>
-                <span className="text-[11px] font-mono text-slate-400">
-                  {isComputingCrypto ? 'Recomputing Digest...' : 'SHA-256 / HMAC-SHA256 Active'}
+                  <span>mTLS 1.3 State PKI Connected</span>
                 </span>
               </div>
 
-              <div className="space-y-2 font-mono">
-                <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300 font-sans">Generated Pull URI:</strong>{' '}
-                  <span className="text-amber-300 font-bold select-all">{pullUri}</span>
-                </div>
-
-                <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300 font-sans">PKCE Code Verifier:</strong>{' '}
-                  <span className="text-slate-300 select-all">{customVerifier}</span>
-                </div>
-
-                <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300 font-sans">PKCE S256 Code Challenge:</strong>{' '}
-                  <span className="text-emerald-400 font-bold select-all">{pkceChallenge}</span>
-                </div>
-
-                <div className="text-[11px] text-slate-400">
-                  <strong className="text-slate-300 font-sans">Computed x-digilocker-hmac:</strong>{' '}
-                  <span className="text-sky-300 font-bold select-all break-all">{computedHmac}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Side-by-Side Reconciliation Diff */}
-            <div className="space-y-3.5">
-              <div className="flex items-center justify-between text-xs">
-                <h3 className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
-                  <FileCode className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-                  <span>Authoritative XML vs. Extracted Document JSON Diff</span>
-                </h3>
-                <span className="text-xs text-[var(--text-muted)]">
-                  Issuing Authority: {activePreset.issuingAuthorityName}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {/* Authoritative XML */}
-                <div className="liquid-glass-card rounded-[18px] overflow-hidden shadow-sm">
-                  <div className="px-4 py-2.5 border-b border-[var(--glass-border)] glass-well text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
-                    <span>1. Authoritative DPI DataContent (Decoded XML)</span>
-                    <span className="text-[10px] text-[var(--text-muted)]">State Gateway Master</span>
-                  </div>
-                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto break-all sm:break-normal whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
-                    {activePreset.authoritativeXml}
-                  </pre>
-                </div>
-
-                {/* Uploaded Document JSON */}
-                <div className="liquid-glass-card rounded-[18px] overflow-hidden shadow-sm">
-                  <div className="px-4 py-2.5 border-b border-[var(--glass-border)] glass-well text-xs font-semibold text-sky-600 dark:text-sky-400 flex items-center justify-between">
-                    <span>2. Uploaded Institutional PDF (LayoutLMv3 OCR JSON)</span>
-                    <span className="text-[10px] text-[var(--text-muted)]">Applicant Submission</span>
-                  </div>
-                  <pre className="p-4 text-[var(--text-primary)] font-mono text-[11px] overflow-x-auto break-all sm:break-normal whitespace-pre leading-relaxed bg-black/5 dark:bg-black/25">
-                    {activePreset.uploadedJson}
-                  </pre>
-                </div>
-              </div>
-
-              {/* Exact Attribute Reconciliation Table */}
-              <div className="liquid-glass-card rounded-[18px] p-4 sm:p-5 overflow-hidden mt-4">
-                <div className="w-full overflow-x-auto rounded-xl">
-                  <table className="w-full min-w-[760px] text-left border-collapse text-xs">
-                  <thead className="glass-well text-[10.5px] uppercase tracking-wider text-[var(--text-muted)] font-semibold border-b border-[var(--glass-border)]">
+              <div className="w-full overflow-x-auto rounded-xl">
+                <table className="w-full min-w-[760px] text-left border-collapse text-xs">
+                  <thead className="glass-well text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-semibold border-b border-[var(--glass-border)]">
                     <tr>
                       <th className="py-3 px-4">Statutory Attribute</th>
                       <th className="py-3 px-4">Uploaded Claim (Applicant)</th>
@@ -950,25 +903,25 @@ export default function AuthorityBridgePage() {
                         key={idx}
                         className={
                           diff.isMismatch
-                            ? 'bg-rose-500/10'
-                            : 'hover:bg-black/5 dark:hover:bg-white/5 transition-colors'
+                            ? 'bg-rose-500/10 hover:bg-rose-500/15'
+                            : 'hover:bg-slate-900/[0.03] dark:hover:bg-white/[0.03] transition-colors'
                         }
                       >
-                        <td className="py-3 px-4 font-semibold text-[var(--text-primary)]">
+                        <td className="py-3.5 px-4 font-semibold text-[var(--text-primary)] text-sm">
                           {diff.attribute}
-                          <span className="block text-[11px] font-normal text-[var(--text-muted)] mt-0.5">
+                          <span className="block text-xs font-normal text-[var(--text-muted)] mt-0.5">
                             {diff.note}
                           </span>
                         </td>
                         <td
-                          className={`py-3 px-4 font-mono text-xs ${
+                          className={`py-3.5 px-4 font-mono text-xs sm:text-sm ${
                             diff.isMismatch ? 'text-rose-700 dark:text-rose-400 font-bold' : 'text-[var(--text-secondary)]'
                           }`}
                         >
                           {diff.uploadedValue}
                         </td>
                         <td
-                          className={`py-3 px-4 font-mono text-xs ${
+                          className={`py-3.5 px-4 font-mono text-xs sm:text-sm ${
                             diff.isMismatch
                               ? 'text-emerald-700 dark:text-emerald-400 font-bold'
                               : 'text-[var(--text-secondary)]'
@@ -976,15 +929,15 @@ export default function AuthorityBridgePage() {
                         >
                           {diff.authoritativeValue}
                         </td>
-                        <td className="py-3 px-4">
+                        <td className="py-3.5 px-4">
                           {diff.isMismatch ? (
-                            <span className="pill-fatal inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                              <AlertOctagon className="w-3 h-3" />
+                            <span className="pill-fatal inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                              <AlertOctagon className="w-3.5 h-3.5" />
                               <span>MISMATCH</span>
                             </span>
                           ) : (
-                            <span className="pill-verified inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                              <CheckCircle2 className="w-3 h-3" />
+                            <span className="pill-verified inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>ALIGNED</span>
                             </span>
                           )}
@@ -995,8 +948,70 @@ export default function AuthorityBridgePage() {
                 </table>
               </div>
             </div>
+
+            {/* Progressive Disclosure: Collapsible Technical Diagnostics */}
+            <div className="liquid-glass-card rounded-[18px] p-4 space-y-3">
+              <button
+                onClick={() => setShowAdvancedDetails(!showAdvancedDetails)}
+                className="w-full flex items-center justify-between text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <FileCode className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                  <span>Advanced Cryptographic Verification &amp; Schema Diff</span>
+                </span>
+                <span className="px-2.5 py-1 rounded-lg glass-well text-[11px]">
+                  {showAdvancedDetails ? 'Hide Diagnostics ▲' : 'Inspect Raw Payloads ▼'}
+                </span>
+              </button>
+
+              {showAdvancedDetails && (
+                <div className="pt-3 border-t border-[var(--glass-border)] space-y-4 animate-glass-in">
+                  {/* Security Credentials Card */}
+                  <div className="p-4 rounded-xl bg-slate-950 text-slate-200 text-xs font-mono space-y-2 border border-white/10">
+                    <div className="flex items-center justify-between text-slate-400 border-b border-white/10 pb-2">
+                      <span className="text-sky-400 font-bold flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>Sovereign Hardware Keystore (mTLS PKI)</span>
+                      </span>
+                      <span className="text-[10.5px]">SHA-256 / HMAC-SHA256 Validated</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      <strong>Generated Pull URI:</strong> <span className="text-amber-300 font-bold select-all">{pullUri}</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      <strong>PKCE Challenge (S256):</strong> <span className="text-emerald-400 select-all">{pkceChallenge}</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      <strong>Computed Header Digest:</strong> <span className="text-sky-300 select-all break-all">{computedHmac}</span>
+                    </div>
+                  </div>
+
+                  {/* Side-by-Side Schema Diff */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs font-mono">
+                    <div className="liquid-glass-card rounded-[14px] overflow-hidden">
+                      <div className="px-3.5 py-2 border-b border-[var(--glass-border)] glass-well font-semibold text-emerald-600 dark:text-emerald-400 flex justify-between">
+                        <span>1. Authoritative XML Master</span>
+                        <span className="text-[10px] text-[var(--text-muted)]">State Gateway Master</span>
+                      </div>
+                      <pre className="p-3 text-[11px] overflow-x-auto whitespace-pre leading-relaxed bg-black/5 dark:bg-black/30">
+                        {activePreset.authoritativeXml}
+                      </pre>
+                    </div>
+
+                    <div className="liquid-glass-card rounded-[14px] overflow-hidden">
+                      <div className="px-3.5 py-2 border-b border-[var(--glass-border)] glass-well font-semibold text-sky-600 dark:text-sky-400 flex justify-between">
+                        <span>2. Extracted Document Record</span>
+                        <span className="text-[10px] text-[var(--text-muted)]">Applicant Submission</span>
+                      </div>
+                      <pre className="p-3 text-[11px] overflow-x-auto whitespace-pre leading-relaxed bg-black/5 dark:bg-black/30">
+                        {activePreset.uploadedJson}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
         )}
 
         {/* Console View 2: EPFO ECR 2.0 & 50% Basic Wage Rule Inspector */}
@@ -1307,12 +1322,32 @@ export default function AuthorityBridgePage() {
                 <span className="text-xs text-[var(--text-muted)] font-mono">ECDSA secp256r1 (88ms latency)</span>
               </div>
 
-              <div className="p-4 sm:p-5 rounded-[18px] bg-slate-950/90 text-slate-200 font-mono text-xs overflow-x-auto break-all sm:break-normal space-y-2 border border-white/10 shadow-xl">
-                <div className="text-slate-500">
-                  // Decoded JSON Web Signature (JWS) Payload from Fire NOC 2D QR Code Matrix
+              {/* Cryptographic Result Card */}
+              <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-900 dark:text-emerald-200 flex items-start gap-2.5">
+                <CheckCircle2 className="w-4.5 h-4.5 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
+                <div className="leading-relaxed">
+                  <strong>Cryptographic Integrity Verified:</strong> The QR matrix holds an authentic State CA ECDSA signature proving the document was originally issued with validity ending <strong>30-06-2024</strong>. This conclusively proves the printed PDF body date of 2027 was spliced post-issuance!
                 </div>
-                <div className="text-emerald-400 leading-relaxed">
-                  {`{
+              </div>
+
+              {/* Collapsible Raw JWS */}
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setShowRawJws(!showRawJws)}
+                  className="px-3.5 py-2 rounded-xl glass-well text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer inline-flex items-center gap-1.5"
+                >
+                  <FileCode className="w-3.5 h-3.5" />
+                  <span>{showRawJws ? 'Hide Decoded JWS Signature ▲' : 'Inspect Raw JWS Signature & Claims ▼'}</span>
+                </button>
+
+                {showRawJws && (
+                  <div className="p-4 sm:p-5 rounded-[18px] bg-slate-950/90 text-slate-200 font-mono text-xs overflow-x-auto break-all sm:break-normal space-y-2 border border-white/10 shadow-xl animate-glass-in">
+                    <div className="text-slate-500">
+                      // Decoded JSON Web Signature (JWS) Payload from Fire NOC 2D QR Code Matrix
+                    </div>
+                    <div className="text-emerald-400 leading-relaxed whitespace-pre">
+{`{
   "alg": "ES256",
   "typ": "JWT",
   "x5u": "https://edistrict.haryana.gov.in/certs/state-ca-secp256r1.crt",
@@ -1327,14 +1362,9 @@ export default function AuthorityBridgePage() {
   "signatureStatus": "VALID_CRYPTOGRAPHIC_SIGNATURE",
   "issuerSubject": "CN=State e-District Root CA, O=Govt of Haryana, C=IN"
 }`}
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-900 dark:text-emerald-200 flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
-                <div className="leading-relaxed">
-                  <strong>Cryptographic Integrity Verified:</strong> The QR matrix holds an authentic State CA ECDSA signature proving the document was originally issued with validity ending <strong>30-06-2024</strong>. This conclusively proves the printed PDF body date of 2027 was spliced post-issuance!
-                </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

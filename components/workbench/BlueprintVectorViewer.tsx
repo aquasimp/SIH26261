@@ -286,7 +286,7 @@ export function BlueprintVectorViewer({
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
             }`}
           >
-            Mask2Former (AP: 0.62)
+            Room Polygons
           </button>
           <button
             onClick={() => setShowRmbgWalls(!showRmbgWalls)}
@@ -296,7 +296,7 @@ export function BlueprintVectorViewer({
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
             }`}
           >
-            RMBG-1.4 Walls
+            Structural Walls
           </button>
           <button
             onClick={() => setShowPcpRecalib(!showPcpRecalib)}
@@ -306,7 +306,7 @@ export function BlueprintVectorViewer({
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
             }`}
           >
-            PCP-Net SGP
+            Corridor Guides
           </button>
           <button
             onClick={() => setShowRdpVertices(!showRdpVertices)}
@@ -316,7 +316,7 @@ export function BlueprintVectorViewer({
                 : 'text-slate-400 border-slate-200 dark:border-slate-800'
             }`}
           >
-            RDP (ε=2.0px) Vertices
+            Corner Handles
           </button>
         </div>
 
@@ -477,7 +477,7 @@ export function BlueprintVectorViewer({
                     textAnchor="middle"
                     fill="#FFFFFF"
                     fontSize="11"
-                    fontFamily="Plus Jakarta Sans"
+                    fontFamily="Inter, -apple-system, sans-serif"
                     fontWeight="bold"
                     pointerEvents="none"
                   >
@@ -565,7 +565,7 @@ export function BlueprintVectorViewer({
       <div className="p-3 border-t border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 text-xs">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[10px]">
-            Live Shoelace Geometric Calculation vs APH 2024–27 Norm:
+            Calculated Boundary Area vs APH 2024–27 Norm:
           </span>
           {activeRoom.status === 'INFLATED_LABEL' && (
             <span className="px-2 py-0.5 rounded bg-red-600 text-white font-mono text-[10px] font-bold animate-pulse">
@@ -584,7 +584,7 @@ export function BlueprintVectorViewer({
             <span className="font-bold text-slate-800 dark:text-slate-200">{activeRoom.declaredAreaSqm.toFixed(1)} m²</span>
           </div>
           <div className="p-2 rounded bg-slate-100 dark:bg-slate-800">
-            <span className="text-slate-400 block text-[9.5px]">CV Shoelace Area</span>
+            <span className="text-slate-400 block text-[9.5px]">Calculated Area</span>
             <span
               className={`font-bold ${
                 activeRoom.status === 'INFLATED_LABEL' ? 'text-red-600 dark:text-red-400' : 'text-emerald-600'

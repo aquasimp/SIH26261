@@ -179,7 +179,7 @@ const SLANET_HTML_TREE_STRING = `<table class="slanet-reconstructed-dom" teds="0
 </table>`;
 
 const SLANET_JSON_GRAPH_STRING = `{
-  "subsystem": "PP-StructureV3 + Improved SLANet-LCNetV2 (Mish + EOS)",
+  "subsystem": "Extracted Document Tables (Mish + EOS)",
   "metrics": {
     "teds_score": 0.9667,
     "tree_edit_distance": 0.0333,
@@ -249,10 +249,10 @@ export default function ScrutinyWorkbenchPage() {
     return [
       {
         name: 'trufor-sentinel',
-        title: 'TruFor AI Sentinel',
+        title: 'Forensic Tamper Sentinel',
         text: topAnom
-          ? `[FORENSIC ALERT] Multi-spectral TruFor Noiseprint++ & DCT localized anomaly in ${topAnom.documentTitle} with ${(topAnom.tamperProbability * 100).toFixed(1)}% tamper probability. Bounding box: [${topAnom.boundingBox.join(', ')}].`
-          : `[FORENSIC OK] Multi-spectral TruFor Noiseprint++ and DCT analysis localized 0 pixel anomalies across uploaded institutional filings.`,
+          ? `[FORENSIC ALERT] Forensic tamper analysis localized anomaly in ${topAnom.documentTitle} with ${(topAnom.tamperProbability * 100).toFixed(1)}% confidence. Bounding box: [${topAnom.boundingBox.join(', ')}].`
+          : `[FORENSIC OK] Forensic tamper analysis localized 0 pixel anomalies across uploaded institutional filings.`,
         time: '10:14 AM',
       },
       {
@@ -268,7 +268,7 @@ export default function ScrutinyWorkbenchPage() {
         title: 'Dr. A. Sharma (EVC)',
         text: labDeficit
           ? `[EVC PRE-CHECK] Physical floor vector inspection: Instructional Area shortfall detected (${app.landAndBuiltUp.inaAvailableSqm} m² actual vs ${app.landAndBuiltUp.inaRequiredSqm} m² mandated). Lab carpet area boundaries do not conform to APH Chapter VII.`
-          : `[EVC PRE-CHECK] Architectural floor boundary polygon verified via Mask2Former Shoelace integration: Total built-up ${app.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()} m² conforms to AICTE APH 2024-27 norms.`,
+          : `[EVC PRE-CHECK] Architectural floor boundary polygon verified via vector geometry calculation: Total built-up ${app.landAndBuiltUp.totalBuiltUpAvailableSqm.toLocaleString()} m² conforms to AICTE APH 2024-27 norms.`,
         time: '10:25 AM',
       },
       {
@@ -436,16 +436,18 @@ export default function ScrutinyWorkbenchPage() {
         15,
         'Auto-compiled APH Chapter VII shortfall notice dispatched to institutional portal.'
       );
+      router.push(`/deficiencies?appId=${application.id}&form=A`);
     } else {
       await escalateToStandingHearingCommittee(
         application.id,
-        'Fatal fraud flag confirmed via TruFor & API Setu. Hearing summons drafted under APH Chapter VIII.'
+        'Fatal discrepancy confirmed via forensic analysis & national authority verification. Hearing summons drafted under APH Chapter VIII.'
       );
+      router.push(`/deficiencies?appId=${application.id}&form=B`);
     }
   };
 
   return (
-    <div className="space-y-4 animate-glass-in">
+    <div className="space-y-6 animate-glass-in">
       {/* Top Workbench Control Bar */}
       <div className="p-4 sm:p-5 liquid-glass-card rounded-[18px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
         {/* Left: Institution Selector & Badges */}
@@ -533,7 +535,7 @@ export default function ScrutinyWorkbenchPage() {
       )}
 
       {/* Document Tab Switcher */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold">
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-xs font-semibold">
         {application.documents.map((doc) => {
           const tabKey = docTypeToTab[doc.docType] || 'fire_noc';
           const isSelected = activeDocumentTab === tabKey;
@@ -593,7 +595,7 @@ export default function ScrutinyWorkbenchPage() {
       </div>
 
       {/* Synchronized Split-Pane Workstation */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 min-h-[750px]">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6 min-h-[750px]">
         {/* Left Pane (7 cols / 55%): Interactive Multi-Spectral Document Viewer / Blueprint CAD */}
         <div className={`xl:col-span-7 flex flex-col h-[750px] ${mobileActivePane === 'canvas' ? 'block' : 'hidden xl:block'}`}>
           {activeDocument.docType === 'BLUEPRINT' ? (
@@ -646,7 +648,7 @@ export default function ScrutinyWorkbenchPage() {
                     ? 'btn-liquid-primary shadow-xs font-bold'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
-                title="Cross-Institutional RetinaFace / ArcFace Ghost Faculty Search"
+                title="Cross-Institutional Biometric Faculty Verification"
               >
                 {t.tabGhostFaculty}
               </button>
@@ -657,7 +659,7 @@ export default function ScrutinyWorkbenchPage() {
                     ? 'btn-liquid-primary shadow-xs font-bold'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
-                title="PP-StructureV3 + Improved SLANet Table DOM & LayoutLMv3 KIE"
+                title="Extracted Document Tables & Data Attributes"
               >
                 {t.tabTableExtractor}
               </button>
@@ -879,7 +881,7 @@ export default function ScrutinyWorkbenchPage() {
                   <span>Cross-Institutional Ghost Faculty Detections</span>
                 </h3>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
-                  RetinaFace 5-point alignment + ArcFace 512-D vector search across 1.2M national faculty index
+                  Cross-referenced across national AICTE faculty database and EPFO provident fund records.
                 </p>
               </div>
 
@@ -913,7 +915,7 @@ export default function ScrutinyWorkbenchPage() {
                         </div>
 
                         <div className="text-right text-[10px]">
-                          <span className="text-[var(--text-faint)]">ArcFace Cosine: </span>
+                          <span className="text-[var(--text-faint)]">Biometric Match Score: </span>
                           <span className={`font-bold tabular-nums ${isDual ? 'text-rose-600 dark:text-rose-400' : 'text-[var(--text-secondary)]'}`}>
                             {fac.arcFaceSimilarityMax.toFixed(3)}
                           </span>
@@ -957,24 +959,24 @@ export default function ScrutinyWorkbenchPage() {
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-1.5 text-xs">
                     <TableIcon className="w-4 h-4 text-indigo-600" />
-                    <span>PP-StructureV3 + Improved SLANet-LCNetV2</span>
+                    <span>Structured Table Extraction &amp; Validation</span>
                   </span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold border border-indigo-500/20">
-                    TEDS: 96.67%
+                    Precision: 96.7%
                   </span>
                 </div>
                 <p className="text-[11px] text-[var(--text-muted)]">
-                  Mish activation + EOS dynamic termination &amp; LayoutLMv3 Token BIO sequence labeling
+                  Verified tabular extraction with cell-level confidence and regulatory field association.
                 </p>
                 <div className="flex flex-wrap gap-1.5 pt-1 text-[10px]">
                   <span className="px-2 py-0.5 rounded-lg bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
                     Doc: <strong>{activeDocument.titleEn.substring(0, 24)}...</strong>
                   </span>
                   <span className="px-2 py-0.5 rounded-lg bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
-                    LayoutLMv3 F1: <strong>94.2%</strong>
+                    Accuracy: <strong>94.2%</strong>
                   </span>
                   <span className="px-2 py-0.5 rounded-lg bg-white/40 dark:bg-black/20 border border-[var(--glass-well-border)]">
-                    Topology: <strong>Closed Manifold 5×5</strong>
+                    Layout: <strong>Verified 5×5 Grid</strong>
                   </span>
                 </div>
               </div>
@@ -990,7 +992,7 @@ export default function ScrutinyWorkbenchPage() {
                         : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                     }`}
                   >
-                    Visual Table DOM
+                    Structured Table
                   </button>
                   <button
                     onClick={() => setSlanetViewMode('HTML_DOM')}
@@ -1000,7 +1002,7 @@ export default function ScrutinyWorkbenchPage() {
                         : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                     }`}
                   >
-                    HTML DOM Tree
+                    HTML View
                   </button>
                   <button
                     onClick={() => setSlanetViewMode('TOKEN_GRAPH')}
@@ -1010,7 +1012,7 @@ export default function ScrutinyWorkbenchPage() {
                         : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                     }`}
                   >
-                    LayoutLMv3 JSON
+                    JSON Data
                   </button>
                 </div>
 
@@ -1020,7 +1022,7 @@ export default function ScrutinyWorkbenchPage() {
                       const textToCopy = slanetViewMode === 'HTML_DOM' ? SLANET_HTML_TREE_STRING : SLANET_JSON_GRAPH_STRING;
                       navigator.clipboard.writeText(textToCopy);
                       setCopiedType(slanetViewMode);
-                      toast.success(`Copied ${slanetViewMode === 'HTML_DOM' ? 'HTML DOM Tree' : 'LayoutLMv3 JSON Graph'} to clipboard`);
+                      toast.success(`Copied ${slanetViewMode === 'HTML_DOM' ? 'HTML Table' : 'Extracted Field Graph'} to clipboard`);
                       setTimeout(() => setCopiedType(null), 2000);
                     }}
                     className="btn-liquid-secondary px-2.5 py-1 rounded-xl text-xs font-semibold inline-flex items-center gap-1 cursor-pointer shrink-0 shadow-2xs"
@@ -1124,7 +1126,7 @@ export default function ScrutinyWorkbenchPage() {
                   </div>
 
                   <div className="text-[11px] text-[var(--text-muted)] font-medium">
-                    * Click any cell to inspect LayoutLMv3 BIO sequence tokens, normalized coordinates [x0, y0, x1, y1], and sub-word OCR confidence.
+                    * Click any cell to inspect bounding coordinates [x0, y0, x1, y1] and extraction confidence.
                   </div>
                 </div>
               )}
@@ -1133,7 +1135,7 @@ export default function ScrutinyWorkbenchPage() {
               {slanetViewMode === 'HTML_DOM' && (
                 <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-slate-200 font-mono text-[11px] overflow-x-auto space-y-2">
                   <div className="text-[10px] text-indigo-400 uppercase font-bold border-b border-slate-800 pb-1.5 flex justify-between">
-                    <span>Reconstructed HTML DOM Structure (PP-StructureV3 SLANet)</span>
+                    <span>Reconstructed Table Structure</span>
                     <span>TEDS: 96.67%</span>
                   </div>
                   <pre className="whitespace-pre text-slate-300 leading-relaxed font-mono">
@@ -1146,7 +1148,7 @@ export default function ScrutinyWorkbenchPage() {
               {slanetViewMode === 'TOKEN_GRAPH' && (
                 <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-slate-200 font-mono text-[11px] overflow-x-auto space-y-2">
                   <div className="text-[10px] text-indigo-400 uppercase font-bold border-b border-slate-800 pb-1.5 flex justify-between">
-                    <span>LayoutLMv3 Multimodal Token Graph (BIO Sequence Tagging)</span>
+                    <span>Extracted Field Token Graph</span>
                     <span>Tokens: 10 • F1: 94.2%</span>
                   </div>
                   <pre className="whitespace-pre text-slate-300 leading-relaxed font-mono">
@@ -1172,7 +1174,7 @@ export default function ScrutinyWorkbenchPage() {
                       </span>
                     </h4>
                     <p className="text-[10px] text-[var(--text-muted)]">
-                      Statutory quorum: RO-04 Verma, EVC Sharma, TruFor AI Sentinel, DPI Auditor
+                      Statutory quorum: RO-04 Verma, EVC Sharma, Forensic Sentinel, DPI Auditor
                     </p>
                   </div>
                 </div>
